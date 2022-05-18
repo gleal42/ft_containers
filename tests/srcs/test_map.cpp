@@ -6,13 +6,13 @@
 /*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:46:55 by gleal             #+#    #+#             */
-/*   Updated: 2022/05/16 23:31:09 by gleal            ###   ########.fr       */
+/*   Updated: 2022/05/17 16:14:21 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.hpp"
 
-void    test_stack()
+void    test_map()
 {
 	ft::map<int, int> map_int;
 	for (int i = 0; i < COUNT; ++i)
