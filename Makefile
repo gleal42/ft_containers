@@ -6,7 +6,7 @@
 #    By: gleal <gleal@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/16 17:10:14 by gleal             #+#    #+#              #
-#    Updated: 2022/05/17 19:56:09 by gleal            ###   ########.fr        #
+#    Updated: 2022/05/18 16:36:31 by gleal            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,11 +37,10 @@ TESTS := $(addprefix $(TESTDIR), $(TESTS))
 FT_OBJS := $(addprefix $(OBJDIR), $(FT_OBJS))
 FT_DEPS := $(addprefix $(DEPDIR), $(FT_DEPS))
 FT_DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)ft_$*.d
-
-
 STD_OBJS := $(addprefix $(OBJDIR), $(STD_OBJS))
 STD_DEPS := $(addprefix $(DEPDIR), $(STD_DEPS))
 STD_DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)std_$*.d
+
 
 all: $(NAME_STD) $(NAME_FT)
 
@@ -50,6 +49,7 @@ $(OBJDIR): ; mkdir -p $@
 
 $(NAME_FT): $(FT_OBJS)
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(FT_OBJS) $(FT) -o $@
+
 bin/ft_%.o : %.cpp deps/ft_%.d Makefile | $(OBJDIR) $(DEPDIR)
 	$(CXX) $(FT_DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(FT) -c -o $@ $<
 bin/ft_%.o : tests/srcs/%.cpp deps/ft_%.d Makefile | $(OBJDIR) $(DEPDIR)
@@ -68,8 +68,7 @@ $(FT_DEPS) $(STD_DEPS): Makefile
 
 clean:
 	$(RM) $(FT_OBJS) $(STD_OBJS)
-	$(RM) $(FT_DEPS)
-	$(RM) $(STD_DEPS)
+	$(RM) $(FT_DEPS) $(STD_DEPS)
 
 fclean: clean
 	$(RM) $(NAME_FT) $(NAME_STD)
