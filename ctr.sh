@@ -7,17 +7,17 @@ echo ft_containers:
 # echo std_containers:
 # ./std_containers $VAL ;
 
-echo
-echo DIFFERENCE between them:
 
 ./ft_containers $VAL > temp_ft
 ./std_containers $VAL > temp_std
 
 DIFF=$(diff temp_ft temp_std)
 
+echo $DIFF
+echo DIFFERENCE between them:
 if [ "$DIFF" ]
 then
-    echo $DIFF
+    echo "$DIFF\n"
 else
     echo "They are the same"
 fi

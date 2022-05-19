@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:46:22 by gleal             #+#    #+#             */
-/*   Updated: 2022/05/18 18:59:18 by gleal            ###   ########.fr       */
+/*   Updated: 2022/05/18 20:21:48 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,23 @@ void test_stack_gen()
 	std::cout << "Original >= Copy? " << (stack_int >= stack_int_cpy ? "true" : "false") << std::endl;
 }
 
+// Testing the usage of the member types
+
+void	test_stack_mem_types()
+{
+	ft::stack<int> stack_int;
+	ft::stack<int>::container_type dq;
+	stack_int.push(5);
+	ft::stack<int>::container_type type = dq;
+	ft::stack<int>::value_type value;
+	value = stack_int.top();
+	ft::stack<int>::size_type size;
+	size = stack_int.size();
+	ft::stack<int>::reference ref = stack_int.top();
+	ft::stack<int>::const_reference cref = stack_int.top();
+	ref = cref;
+}
+
 void test_stack_class()
 {
 	ft::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;	
@@ -81,6 +98,7 @@ void test_stack_inherit()
 void    test_stack()
 {
 	test_stack_gen();
+	test_stack_mem_types();
 	test_stack_class();
 	test_stack_map();
 	test_stack_inherit();

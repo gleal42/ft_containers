@@ -1,20 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_stack.hpp                                     :+:      :+:    :+:   */
+/*   test_iterator_traits.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/16 21:34:34 by gleal             #+#    #+#             */
-/*   Updated: 2022/05/16 22:41:15 by gleal            ###   ########.fr       */
+/*   Created: 2022/05/19 02:04:06 by gleal             #+#    #+#             */
+/*   Updated: 2022/05/19 02:06:48 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TEST_STACK_HPP
-# define TEST_STACK_HPP
+#include "all.hpp"
 
-# include "ft.hpp"
+/*
+    Check examples:
+    https://en.cppreference.com/w/cpp/iterator/iterator_traits
+    https://www.cplusplus.com/reference/iterator/iterator_traits/
+*/
 
-void    test_stack();
-
-#endif
+void    test_iterator_traits()
+{
+    
+}

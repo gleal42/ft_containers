@@ -1,39 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   all.hpp                                            :+:      :+:    :+:   */
+/*   vector_iterator.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/16 21:35:51 by gleal             #+#    #+#             */
-/*   Updated: 2022/05/18 19:09:49 by gleal            ###   ########.fr       */
+/*   Created: 2022/05/18 23:18:17 by gleal             #+#    #+#             */
+/*   Updated: 2022/05/19 02:21:56 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ALL_HPP
-# define ALL_HPP
+#ifndef VECTOR_ITERATOR_HPP
+# define VECTOR_ITERATOR_HPP
 
-#include <iostream>
-#include <string>
-#include <deque>
+#include "iterator_traits.hpp"
 
-#include "ft.hpp"
-#include "MutantStack.hpp"
+// Needs to be LegacyRandomAccessIterator and LegacyContiguousIterator (LegacyIterator) at the same time
 
-#include <stdlib.h>
-
-#define MAX_RAM 4294967296
-#define BUFFER_SIZE 4096
-
-struct Buffer
+namespace ft
 {
-	int idx;
-	char buff[BUFFER_SIZE];
+    struct VectorIterator
+    {
+        
+    }
+
+
+
+
+
+
+
 };
-
-#define COUNT (MAX_RAM / (int)sizeof(Buffer))
-
-void    test_stack();
-void    test_vector();
 
 #endif

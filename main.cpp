@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 17:12:09 by gleal             #+#    #+#             */
-/*   Updated: 2022/05/16 22:04:25 by gleal            ###   ########.fr       */
+/*   Updated: 2022/05/18 20:25:45 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int main(int argc, char** argv) {
 	}
 	const int seed = atoi(argv[1]);
 	srand(seed);
-	test_stack();
+	// test_stack();
+	test_vector();
 	return (0);
 }
