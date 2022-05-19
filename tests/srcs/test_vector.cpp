@@ -6,11 +6,43 @@
 /*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
-/*   Updated: 2022/05/16 21:55:25 by gleal            ###   ########.fr       */
+/*   Updated: 2022/05/19 22:31:05 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.hpp"
+
+void test_vector_iterator()
+{
+	// X b(a);
+	// b = a;
+	// ++a
+	// a++
+	// a == b
+	// a != b
+	// *a
+	// a->m
+	// *a = t
+	// *a++ = t
+	// 	X a;
+	// X()
+	// { b=a; *a++; *b; }
+	// --a
+	// a--
+	// *a--
+	// a + 5
+	// 5 + a
+	// a - 5
+	// 5 - a
+	// a < b
+	// a > b
+	// a <= b
+	// a >= b
+	// a += n
+	// a -= n
+	// a[n]
+}
+	// Where X is an iterator type, a and b are objects of this iterator type, t is an object of the type pointed by the iterator type, and n is an integer value.
 
 void    test_vector()
 {

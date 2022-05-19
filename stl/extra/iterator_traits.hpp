@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 01:04:47 by gleal             #+#    #+#             */
-/*   Updated: 2022/05/19 02:03:01 by gleal            ###   ########.fr       */
+/*   Updated: 2022/05/19 18:34:47 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,29 @@
 # define ITERATOR_TRAITS_HPP
 
 #include <cstddef>
+#include <iterator>
+
+// Criar testes a usar std::distance/std::advance para provar a utilidade dos tags
 
 namespace ft
 {
     /* ---------------------------------- Tags ---------------------------------- */
-    struct input_iterator_tag { };
-    struct output_iterator_tag { };
-    struct forward_iterator_tag : public input_iterator_tag { };
-    struct bidirectional_iterator_tag : public forward_iterator_tag { };
-    struct random_access_iterator_tag : public bidirectional_iterator_tag { };
+    typedef	std::input_iterator_tag		input_iterator_tag;
+    typedef	std::output_iterator_tag		output_iterator_tag;
+    typedef	std::forward_iterator_tag		forward_iterator_tag;
+    typedef	std::bidirectional_iterator_tag		bidirectional_iterator_tag;
+    typedef	std::random_access_iterator_tag		random_access_iterator_tag;
 
     /* --------------------- Non specialized Iterator_traits -------------------- */
 
     template< class Iter >
     struct iterator_traits
     {
-        typedef Iter::difference_type   difference_type;
-        typedef Iter::value_type        value_type;
-        typedef Iter::pointer           pointer;
-        typedef Iter::reference         reference;
-        typedef Iter::iterator_category iterator_category;
+        typedef typename Iter::difference_type   difference_type;
+        typedef typename Iter::value_type        value_type;
+        typedef typename Iter::pointer           pointer;
+        typedef typename Iter::reference         reference;
+        typedef typename Iter::iterator_category iterator_category;
     };
 
     /* ----------------------- Specialized Iterator_traits ---------------------- */
