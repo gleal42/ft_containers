@@ -6,7 +6,7 @@
 #    By: gleal <gleal@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/16 17:10:14 by gleal             #+#    #+#              #
-#    Updated: 2022/05/18 16:36:31 by gleal            ###   ########.fr        #
+#    Updated: 2022/05/18 20:22:02 by gleal            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ DEPDIR := deps/
 TESTDIR := tests/$(SRCDIR)
 
 SRCS := main.cpp
-TESTS := test_stack.cpp
+TESTS := test_stack.cpp \
+		test_vector.cpp
 
 OBJS := $(SRCS:.cpp=.o) $(TESTS:.cpp=.o)
 FT_OBJS := $(addprefix ft_, $(OBJS))
@@ -37,6 +38,8 @@ TESTS := $(addprefix $(TESTDIR), $(TESTS))
 FT_OBJS := $(addprefix $(OBJDIR), $(FT_OBJS))
 FT_DEPS := $(addprefix $(DEPDIR), $(FT_DEPS))
 FT_DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)ft_$*.d
+
+
 STD_OBJS := $(addprefix $(OBJDIR), $(STD_OBJS))
 STD_DEPS := $(addprefix $(DEPDIR), $(STD_DEPS))
 STD_DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)std_$*.d
