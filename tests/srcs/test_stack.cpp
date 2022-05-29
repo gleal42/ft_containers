@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_stack.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:46:22 by gleal             #+#    #+#             */
-/*   Updated: 2022/05/18 20:21:48 by gleal            ###   ########.fr       */
+/*   Updated: 2022/05/29 19:48:03 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	test_stack_mem_types()
 	ft::stack<int>::reference ref = stack_int.top();
 	ft::stack<int>::const_reference cref = stack_int.top();
 	ref = cref;
+	std::cout << size << " " << value << std::endl;
 }
 
 void test_stack_class()
