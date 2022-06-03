@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
-/*   Updated: 2022/05/21 01:44:55 by gleal            ###   ########.fr       */
+/*   Updated: 2022/06/03 01:05:16 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,14 @@ void	test_vector_iterator()
 
 void    test_vector()
 {
-	test_vector_iterator();
-	// ft::vector<std::string> vector_str;
-	// ft::vector<int> vector_int;
+	ft::vector<std::string> vector_str;
+	ft::vector<int> vector_int;
+
+	ft::vector<int> multi_nbr(10, 5);
+
+	ft::vector<int>::iterator begin = multi_nbr.begin();
+
+	std::cout << *begin << std::endl;
 
 	// ft::vector<Buffer> vector_buffer;
     
@@ -88,4 +93,6 @@ void    test_vector()
 	// {
 	// 	//NORMAL ! :P
 	// }
+	
+	test_vector_iterator();
 }
