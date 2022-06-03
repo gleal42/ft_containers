@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 23:18:17 by gleal             #+#    #+#             */
-/*   Updated: 2022/05/21 01:42:21 by gleal            ###   ########.fr       */
+/*   Updated: 2022/06/03 01:47:07 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ namespace ft
 			typedef typename iterator_traits<T>::pointer			pointer;
 			typedef typename iterator_traits<T>::reference			reference;
 		/* ---------------------------- General Iterator ---------------------------- */
+            Random_Access_Iterator(const pointer point);
             Random_Access_Iterator(const Random_Access_Iterator &ra_iter);
             Random_Access_Iterator &operator=(const Random_Access_Iterator &ra_iter);
             ~Random_Access_Iterator();
@@ -85,6 +86,12 @@ namespace ft
     };
 
 	/* ---------------------------- General Iterator ---------------------------- */
+
+    template< class T >
+	Random_Access_Iterator<T>::Random_Access_Iterator(const pointer point)
+	: ptr(point)
+	{
+	}
 
     template< class T >
     Random_Access_Iterator<T>::Random_Access_Iterator(const Random_Access_Iterator<T> &ra_iter)
