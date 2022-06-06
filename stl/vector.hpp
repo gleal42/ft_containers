@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:34:59 by gleal             #+#    #+#             */
-/*   Updated: 2022/06/03 01:50:13 by gleal            ###   ########.fr       */
+/*   Updated: 2022/06/06 01:40:04 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "vector_iterator.hpp"
 #include <memory>
+#include "enable_if.hpp"
 
 namespace ft
 {
@@ -52,20 +53,21 @@ namespace ft
 				}
 				_end_of_storage = _finish;
 			}
-			// template <class InputIterator>
-			// vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) : _alloc(alloc)
-			// {
-			// 	size_type range_size = last - first;
-			// 	_start = _alloc.allocate(range_size);
-			// 	_finish = _start;
-			// 	while (first < last)
-			// 	{
-			// 		alloc.construct(_finish, *first);
-			// 		_finish++;
-			// 		first++;
-			// 	}
-			// 	_end_of_storage = _finish;
-			// }
+			template < class InputIterator>
+			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
+			typename enable_if<!is_integral<InputIterator>::value >::type* = 0) : _alloc(alloc)
+			{
+				size_type range_size = last - first;
+				_start = _alloc.allocate(range_size);
+				_finish = _start;
+				while (first < last)
+				{
+					alloc.construct(_finish, *first);
+					_finish++;
+					first++;
+				}
+				_end_of_storage = _finish;
+			}
 			vector (const vector& x)
 			{
 				_start = _alloc.allocate(x.capacity());

@@ -24,3 +24,16 @@ https://www.cplusplus.com/reference/iterator/reverse_iterator/
 
 Operator overload
 https://en.cppreference.com/w/cpp/language/operators
+
+Vector Contructors
+Iterator constructor being called even for numbers (not iterators), because it is specialization
+https://stackoverflow.com/questions/14035520/choose-which-constructor-in-c
+
+enableif
+https://www.youtube.com/watch?v=H-m23Vvzcug
+https://stackoverflow.com/questions/11055923/stdenable-if-parameter-vs-template-parameter
+https://stackoverflow.com/questions/29040059/enable-if-to-add-a-function-parameter-that-has-a-default-argument
+https://en.cppreference.com/w/cpp/types/enable_if
+
+is_integral
+https://stackoverflow.com/questions/43571962/how-is-stdis-integral-implemented/43571992#43571992
