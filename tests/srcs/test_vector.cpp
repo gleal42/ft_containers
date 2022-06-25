@@ -6,13 +6,11 @@
 /*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
-/*   Updated: 2022/06/08 17:08:07 by gleal            ###   ########.fr       */
+/*   Updated: 2022/06/08 17:21:24 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.hpp"
-
-#include <type_traits>
 
 // difference_type operator-(const Random_Access_Iterator &it) const;
 // friend difference_type operator-(const Random_Access_Iterator &a, const Random_Access_Iterator &b);
@@ -105,7 +103,6 @@ void	test_vec_fts()
 	//                  const allocator_type& alloc = allocator_type());
 
 		ft::vector<std::string> vector6(5, "Hello");
-		// std::cout << std::is_const<ft::vector<std::string> >::value_type << std::endl;
 	
 		ft::vector<int> vector7(10, 5);
 		ft::vector<char> vector8(3, 'k');
