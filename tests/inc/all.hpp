@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   all.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:35:51 by gleal             #+#    #+#             */
-/*   Updated: 2022/05/21 00:00:31 by gleal            ###   ########.fr       */
+/*   Updated: 2022/09/25 22:53:47 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include "MutantStack.hpp"
 
 #include <stdlib.h>
+#include <typeinfo>
 
 #define MAX_RAM 4294967296
 #define BUFFER_SIZE 4096
@@ -35,5 +36,11 @@ struct Buffer
 
 void    test_stack();
 void    test_vector();
+
+#ifdef DEBUG
+#define LOG( x ) std::cout << x
+#else
+#define LOG( x ) 
+#endif
 
 #endif

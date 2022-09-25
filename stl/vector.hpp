@@ -3,16 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:34:59 by gleal             #+#    #+#             */
-/*   Updated: 2022/06/08 17:11:32 by gleal            ###   ########.fr       */
+/*   Updated: 2022/09/25 23:46:32 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// TODO: Implement is_const
 
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
+#include "macros.hpp"
 #include "vector_iterator.hpp"
 #include <memory>
 #include "enable_if.hpp"
@@ -37,17 +40,20 @@ namespace ft
             typedef typename std::ptrdiff_t                                 difference_type;
             typedef typename std::size_t                                    size_type;
             /* ---------------------------- Member Functions ---------------------------- */
-            // vector(); //(1) (not clear if C++98)
 
-			/* ------------------------------ (constructor) ----------------------------- */
+			/* -------------------------------------------------------------------------- */
+			/*                                 CONSTRUCTOR                                */
+			/* -------------------------------------------------------------------------- */
 			explicit vector (const allocator_type& alloc = allocator_type())
 			: _start(0), _finish(0), _end_of_storage(0), _alloc(alloc)
 			{
-				// std::cout << "default constructor called" << std::endl;
+				LOG("default constructor called for vector of type [" << typeid(T).name() << "]" << std::endl);
+				LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
 			}
 			explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _alloc(alloc)
 			{
-				// std::cout << "fill constructor called" << std::endl;
+				LOG("fill constructor called" << std::endl);
+				LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
 				_start = _alloc.allocate(n);
 				_finish = _start;
 				for (size_type vec_size = 0; vec_size < n; vec_size++)
@@ -62,7 +68,8 @@ namespace ft
 			typename enable_if<!is_integral<InputIterator>::value >::type* = 0)
 			: _alloc(alloc)
 			{
-				// std::cout << "range constructor called" << std::endl;
+				LOG("range constructor called" << std::endl);
+				LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
 				size_type range_size = last - first;
 				_start = _alloc.allocate(range_size);
 				_finish = _start;
@@ -74,24 +81,27 @@ namespace ft
 				}
 				_end_of_storage = _finish;
 			}
-			vector (const vector& x)
+			vector (const vector& other)
 			{
-				std::cout << "copy constructor called" << std::endl;
-				_start = _alloc.allocate(x.capacity());
+				LOG("copy constructor called" << std::endl);
+				LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
+				_start = _alloc.allocate(other.capacity());
 				_finish = _start;
-				iterator x_begin = x.begin();
-				iterator x_end = x.end();
-				while (x_begin < x_end)
+				const_iterator other_begin = other.begin();
+				const_iterator other_end = other.end();
+				while (other_begin < other_end)
 				{
-					_alloc.construct(_finish, *x_begin);
+					_alloc.construct(_finish, *other_begin);
 					_finish++;
-					x_begin++;
+					other_begin++;
 				}
-				_end_of_storage = _start + x.capacity();
+				_end_of_storage = _start + other.capacity();
 			}
 			/* ------------------------------ (destructor) ------------------------------ */
 			~vector()
 			{
+				LOG("destructor called" << std::endl);
+				LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
 				size_type count = _finish-_start;
 				while (_finish-_start > 0)
 				{
@@ -104,6 +114,8 @@ namespace ft
 
 			vector& operator= (const vector& x)
 			{
+				LOG("Assignment operator called" << std::endl);
+				LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant"));
 				size_type count = _finish -_start;
 				while (_finish-_start > 0)
 				{
@@ -132,19 +144,23 @@ namespace ft
 			/* ---------------------------------- begin --------------------------------- */
 			iterator begin()
 			{
+				LOG("iterator begin() called" << std::endl);
 				return (iterator(_start));
 			}
 			const_iterator begin() const
 			{
+				LOG("const_iterator begin() called" << std::endl);
 				return (const_iterator(_start));
 			}
 			/* ----------------------------------- end ---------------------------------- */
 			iterator end()
 			{
+				LOG("iterator end() called" << std::endl);
 				return (iterator(_finish));
 			}
 			const_iterator end() const
 			{
+				LOG("const_iterator end() called" << std::endl);
 				return (const_iterator(_finish));
 			}
 			/* --------------------------------- rbegin --------------------------------- */
@@ -178,15 +194,29 @@ namespace ft
 			{
 				return(_alloc.max_size());
 			}
-			void resize (size_type n, value_type val = value_type())
-			{
+			// void resize (size_type n, value_type val = value_type())
+			// {
 				
+			// }
+
+			size_type capacity() const
+			{
+				return (_end_of_storage - _start);
+			}
+
+			/* -------------------------------------------------------------------------- */
+			/*                               Element access                               */
+			/* -------------------------------------------------------------------------- */
+			T* data()
+			{
+				return _start;
 			}
         private:
             pointer		_start;
             pointer		_finish;
 			pointer		_end_of_storage;
             allocator_type	_alloc;
+			friend void	vector_custom_tests();
     };
 };
 

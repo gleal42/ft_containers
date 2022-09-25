@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 17:12:09 by gleal             #+#    #+#             */
-/*   Updated: 2022/05/19 23:39:17 by gleal            ###   ########.fr       */
+/*   Updated: 2022/09/24 17:19:09 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <random>
 
 int main(int argc, char** argv) {
+	(void)argc;
+	(void)argv;
 	if (argc != 2)
 	{
 		std::cerr << "Usage: ./test seed" << std::endl;

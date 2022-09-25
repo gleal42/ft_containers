@@ -6,7 +6,7 @@
 #    By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/16 17:10:14 by gleal             #+#    #+#              #
-#    Updated: 2022/05/29 20:48:10 by gleal            ###   ########.fr        #
+#    Updated: 2022/09/25 22:58:20 by gleal            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,9 @@ vpath %.cpp tests/srcs/
 
 all: $(NAME_STD) $(NAME_FT)
 
+debug: CXXFLAGS += -DDEBUG
+debug: all
+
 $(DEP_D): ; mkdir -p $@
 $(OBJ_D): ; mkdir -p $@
 
@@ -71,4 +74,4 @@ resetclean: fclean clean
 
 re: fclean all
 
-.PHONY: all clean fclean resetclean re
+.PHONY: all debug clean fclean resetclean re
