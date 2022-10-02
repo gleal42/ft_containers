@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   iterator_traits.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 01:04:47 by gleal             #+#    #+#             */
-/*   Updated: 2022/05/19 18:34:47 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/02 16:49:19 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,21 @@ namespace ft
     template< class T >
     struct iterator_traits<T*>
     {
-        typedef std::ptrdiff_t              difference_type;
-        typedef T                           value_type;
-        typedef T*                          pointer;
-        typedef T&                          reference;
-        typedef random_access_iterator_tag  iterator_category;
+        typedef std::ptrdiff_t                  difference_type;
+        typedef T                            value_type;
+        typedef T*                           pointer;
+        typedef T&                           reference;
+        typedef random_access_iterator_tag      iterator_category;
     };
 
     template< class T >
     struct iterator_traits<const T*>
     {
-        typedef std::ptrdiff_t              difference_type;
+        typedef std::ptrdiff_t                  difference_type;
         typedef T							value_type;
-		typedef const T*					pointer;
-		typedef const T&					reference;
-		typedef random_access_iterator_tag	iterator_category;
+		typedef const T*					    pointer;
+		typedef const T&					    reference;
+		typedef random_access_iterator_tag	    iterator_category;
     };
 };
 

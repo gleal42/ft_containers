@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:34:59 by gleal             #+#    #+#             */
-/*   Updated: 2022/09/25 23:46:32 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/02 17:02:43 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,52 @@ namespace ft
 			/* -------------------------------------------------------------------------- */
 			/*                               Element access                               */
 			/* -------------------------------------------------------------------------- */
+
+			reference at( size_type pos )
+			{
+				size_type size_vec = size();
+				if (size_vec && pos < size_vec)
+					return (_start[pos]);
+				throw std::out_of_range("vector");
+			}
+			const_reference at( size_type pos ) const
+			{
+				size_type size_vec = size();
+				if (size_vec && pos < size_vec)
+					return (_start[pos]);
+				throw std::out_of_range("vector");	
+			}
+
+			reference operator[]( size_type pos )
+			{
+				return this->_start[pos];
+			}
+
+			const_reference operator[]( size_type pos ) const
+			{
+				return this->_start[pos];
+			}
+			reference front()
+			{
+				return *this->_start;
+			}
+			const_reference front() const
+			{
+				return *this->_start;
+			}	
+			reference back()
+			{
+				return *(this->_finish - 1);
+			}
+			const_reference back() const
+			{
+				return *(this->_finish - 1);
+			}
 			T* data()
+			{
+				return _start;
+			}
+			const T* data() const
 			{
 				return _start;
 			}

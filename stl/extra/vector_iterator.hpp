@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector_iterator.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gleal <gleal@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 23:18:17 by gleal             #+#    #+#             */
-/*   Updated: 2022/06/03 01:47:07 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/02 21:07:31 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ namespace ft
 	{
 		*this = ra_iter;
 	}
-	
+	// TODO: Check if this works (because of private pointer)
     template< class T >
     Random_Access_Iterator<T> &Random_Access_Iterator<T>::operator=(const Random_Access_Iterator<T> &ra_iter)
 	{
@@ -164,6 +164,7 @@ namespace ft
     Random_Access_Iterator<T> &Random_Access_Iterator<T>::operator--()
 	{
 		--(this->ptr);
+		return ptr;
 	}
 	
 	template< class T >

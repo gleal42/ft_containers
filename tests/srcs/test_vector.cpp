@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
-/*   Updated: 2022/09/25 23:27:44 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/02 16:24:54 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void test_vec_42()
  * explicit vector (const allocator_type& alloc = allocator_type());
  */
 
-static void vector_default_constructor(void)
+void vector_default_constructor(void)
 {
 	std::cout << "\n[TESTING DEFAULT CONSTRUCTOR FOR DIFFERENT TYPES]" << std::endl;
 	std::cout << "_______________________________________\n" << std::endl;
@@ -126,12 +126,17 @@ static void vector_default_constructor(void)
 
 void vector_fill_constructor( void )
 {
-	ft::vector<std::string> vector6(5, "Hello");
-	ft::vector<int> vector7(10, 5);
-	ft::vector<char> vector8(3, 'k');
-	char a[] = "Okay";
-	ft::vector<char *> vector9(4, a);
-	ft::vector<const int> vector10(2, 4);	
+	std::cout << "\n[TESTING FILL CONSTRUCTOR FOR DIFFERENT TYPES]" << std::endl;
+	std::cout << "_______________________________________\n" << std::endl;
+
+	ft::vector<std::string> vector_str(5, "Example String");
+	std::cout << "vector<std::string>.at[3] [" << vector_str.at(3) << "]" << std::endl;
+	try { std::cout << "try vector<std::string>.at[5]: " << vector_str.at(5) << std::endl;}
+	catch (std::out_of_range & exc) {std::cout << exc.what() << std::endl;}
+	std::cout << "vector<std::string> vector_str[3] [" << vector_str[3] << "]" << std::endl;
+	std::cout << "vector<std::string>.front() [" << vector_str.front() << "]" << std::endl;
+	std::cout << "vector<std::string>.back() [" << vector_str.back() << "]" << std::endl;
+	std::cout << "vector<std::string>.data() [" << *vector_str.data() << "]" << std::endl;
 }
 
 // range (3)
@@ -179,8 +184,8 @@ void vector_copy_constructor( void )
 
 void vector_custom_tests()
 {
-	vector_default_constructor();
-	// vector_fill_constructor();
+	// vector_default_constructor();
+	vector_fill_constructor();
 	// vector_range_constructor();
 	// vector_copy_constructor();
 
