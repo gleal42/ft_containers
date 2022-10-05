@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:34:59 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/02 17:02:43 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/05 23:37:28 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 #include "macros.hpp"
 #include "vector_iterator.hpp"
+#include "vector_reverse_iterator.hpp"
 #include <memory>
 #include "enable_if.hpp"
 
@@ -35,8 +36,8 @@ namespace ft
             typedef typename allocator_type::const_pointer  	    		const_pointer;
             typedef Random_Access_Iterator<pointer>				     	    iterator;
             typedef Random_Access_Iterator<const_pointer>	        		const_iterator;
-            // typedef Reverse_Iterator<iterator>			                reverse_iterator;
-            // typedef Reverse_Iterator<const_iterator>		              	const_reverse_iterator;
+            typedef Reverse_Iterator<iterator>			               		reverse_iterator;
+            typedef Reverse_Iterator<const_iterator>						const_reverse_iterator;
             typedef typename std::ptrdiff_t                                 difference_type;
             typedef typename std::size_t                                    size_type;
             /* ---------------------------- Member Functions ---------------------------- */
@@ -136,6 +137,34 @@ namespace ft
 				}
 				_end_of_storage = _start + x.capacity();
 			}
+			// TODO: HEEEEEEEEEEEEEERE last time
+			void assign( size_type count, const T& value )
+			{
+				LOG("Assign function called" << std::endl);
+
+				if (count > this->capacity())
+				{
+					while (_finish-_start > 0)
+					{
+						_alloc.destroy(_start);
+						_finish--;
+					}
+					_alloc.deallocate(_start, capacity());
+					_start = _alloc.allocate(count);
+					_finish = _start;
+				}
+				while ((_finish - _start) < count)
+				{
+					_alloc.construct(_finish, value);
+					_finish++;
+				}
+				_end_of_storage = _start + count;	
+			}
+			// template< class InputIt >
+			// void assign( InputIt first, InputIt last )
+			// {
+				
+			// }
 
 			/* -------------------------------------------------------------------------- */
 			/*                                  Iterators                                 */

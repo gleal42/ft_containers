@@ -6,7 +6,7 @@
 #    By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/16 17:10:14 by gleal             #+#    #+#              #
-#    Updated: 2022/09/25 22:58:20 by gleal            ###   ########.fr        #
+#    Updated: 2022/10/05 16:22:52 by gleal            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ DEP_D := deps/
 
 SRCS := main.cpp \
 		test_stack.cpp \
-		test_vector.cpp
+		test_vector.cpp \
+		test_reverse_vector_iterator.cpp
 OBJS := $(SRCS:.cpp=.o)
 
 FT_OBJS := $(addprefix ft_, $(OBJS))

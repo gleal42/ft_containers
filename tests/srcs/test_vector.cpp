@@ -6,11 +6,17 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/02 16:24:54 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/05 23:38:59 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.hpp"
+
+/**
+ * TODO: Make tests to check if assign and assignment operator adjust capacity
+ * if new contents are smaller or this resizing is only done in case the size
+ * is not enough
+ */
 
 // difference_type operator-(const Random_Access_Iterator &it) const;
 // friend difference_type operator-(const Random_Access_Iterator &a, const Random_Access_Iterator &b);
@@ -210,11 +216,12 @@ void vector_custom_tests()
 	// Capacity
 }
 
-void test_vector()
+int test_vector()
 {
-	// test_vec_42();
+	test_vec_42();
 	std::cout << "\nRunning custom tests\n" << std::endl;
 	vector_custom_tests();
 	// main from 42
-	// test_vector_iterator();
+	test_vector_iterator();
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:35:51 by gleal             #+#    #+#             */
-/*   Updated: 2022/09/25 22:53:47 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/05 23:38:44 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ struct Buffer
 #define COUNT (MAX_RAM / (int)sizeof(Buffer))
 
 void    test_stack();
-void    test_vector();
+int    	test_vector();
 
 #ifdef DEBUG
 #define LOG( x ) std::cout << x
