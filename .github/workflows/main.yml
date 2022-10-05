@@ -22,9 +22,15 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
       # Runs a single command using the runners shell
-      - name: Running the main to check for errors
-        run: |
+      - name: Building program
+        run:
           make
+  run_tests:
+    needs: build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Running the main to check for errors
+        run:
           bash ./ctr.sh
