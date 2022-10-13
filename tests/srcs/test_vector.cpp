@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/05 23:38:59 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/13 23:08:51 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,10 @@ void vector_fill_constructor( void )
 	std::cout << "vector<std::string>.front() [" << vector_str.front() << "]" << std::endl;
 	std::cout << "vector<std::string>.back() [" << vector_str.back() << "]" << std::endl;
 	std::cout << "vector<std::string>.data() [" << *vector_str.data() << "]" << std::endl;
+
+
+
+
 }
 
 // range (3)
@@ -153,14 +157,25 @@ void vector_fill_constructor( void )
 void vector_range_constructor( void )
 {
 	// Replace these with different push_back, insert created, etc
-	ft::vector<std::string> vector6(5, "Hello");
+	ft::vector<std::string> vector_str(1, "Hello");
+	vector_str.push_back("my");
+	vector_str.push_back("name");
+	vector_str.push_back("is");
+	vector_str.push_back("Gonçalo");
+	std::cout << vector_str[0] << std::endl;
+	std::cout << vector_str[1] << std::endl;
+	std::cout << vector_str[2] << std::endl;
+	std::cout << vector_str[3] << std::endl;
+	std::cout << vector_str[4] << std::endl;
+
 	ft::vector<int> vector7(10, 5);
 	ft::vector<char> vector8(3, 'k');
 	char a[] = "Okay";
 	ft::vector<char *> vector9(4, a);
 	ft::vector<const int> vector10(2, 4);	
 
-	ft::vector<std::string> vector11(vector6.begin(), vector6.end());
+	ft::vector<std::string> vector_str_range(vector_str.begin(), vector_str.end());
+
 	ft::vector<int> vector12(vector7.begin(), vector7.end());
 	int myints[] = {16, 2, 77, 29};
 	ft::vector<int> vector13(myints, myints + sizeof(myints) / sizeof(int));
@@ -191,8 +206,8 @@ void vector_copy_constructor( void )
 void vector_custom_tests()
 {
 	// vector_default_constructor();
-	vector_fill_constructor();
-	// vector_range_constructor();
+	// vector_fill_constructor();
+	vector_range_constructor();
 	// vector_copy_constructor();
 
 
@@ -218,10 +233,10 @@ void vector_custom_tests()
 
 int test_vector()
 {
-	test_vec_42();
+	// test_vec_42();
 	std::cout << "\nRunning custom tests\n" << std::endl;
 	vector_custom_tests();
 	// main from 42
-	test_vector_iterator();
+	// test_vector_iterator();
 	return (0);
 }
