@@ -20,6 +20,7 @@
 #include "vector_reverse_iterator.hpp"
 #include <memory>
 #include "enable_if.hpp"
+#include <typeinfo>
 
 namespace ft
 {
@@ -52,12 +53,12 @@ public:
 	: _start(0), _finish(0), _end_of_storage(0), _alloc(alloc)
 	{
 		LOG("default constructor called for vector of type [" << typeid(T).name() << "]" << std::endl);
-		LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
+		// LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
 	}
 	explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _alloc(alloc)
 	{
 		LOG("fill constructor called" << std::endl);
-		LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
+		// LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
 		_start = _alloc.allocate(n);
 		_finish = _start;
 		for (size_type vec_size = 0; vec_size < n; vec_size++)
@@ -73,7 +74,7 @@ public:
 	: _alloc(alloc)
 	{
 		LOG("range constructor called" << std::endl);
-		LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
+		// LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
 		size_type range_size = last - first;
 		_start = _alloc.allocate(range_size);
 		_finish = _start;
@@ -88,7 +89,7 @@ public:
 	vector (const vector& other)
 	{
 		LOG("copy constructor called" << std::endl);
-		LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
+		// LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
 		_start = _alloc.allocate(other.capacity());
 		_finish = _start;
 		const_iterator other_begin = other.begin();
@@ -105,7 +106,7 @@ public:
 	~vector()
 	{
 		LOG("destructor called" << std::endl);
-		LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
+		// LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
 		dealloc_contents();
 	}
 	/* -------------------------------- operator= ------------------------------- */
@@ -113,7 +114,7 @@ public:
 	vector& operator= (const vector& x)
 	{
 		LOG("Assignment operator called" << std::endl);
-		LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant"));
+		// LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant"));
 		size_type count = _finish -_start;
 		while (_finish-_start > 0)
 		{

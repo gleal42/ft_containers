@@ -13,7 +13,7 @@
 #include "all.hpp"
 
 #include <iostream>
-#include <random>
+#include <stdio.h>
 
 int main(int argc, char** argv) {
 	(void)argc;

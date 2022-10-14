@@ -18,8 +18,10 @@ echo DIFFERENCE between them:
 if [ "$DIFF" ]
 then
     echo "$DIFF\n"
+    rm -f temp_std temp_ft
+    exit 1
 else
     echo "They are the same"
+    rm -f temp_std temp_ft
+    exit 0
 fi
-
-rm -f temp_std temp_ft

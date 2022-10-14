@@ -121,9 +121,9 @@ void vector_default_constructor(void)
 	std::cout << "and corresponding value type is [" << typeid(ft::vector<char *>::value_type).name() << "]" << std::endl;
 
 	std::cout << "_______________________________________\n" << std::endl;
-	ft::vector<const int> vector5;
-	std::cout << "Data of vector char pointer is [" << typeid(vector5.data()).name() << "]" << std::endl;
-	std::cout << "and corresponding value type is [" << typeid(ft::vector<const int>::value_type).name() << "]" << std::endl;
+	// ft::vector<const int> vector5;
+	// std::cout << "Data of vector char pointer is [" << typeid(vector5.data()).name() << "]" << std::endl;
+	// std::cout << "and corresponding value type is [" << typeid(ft::vector<const int>::value_type).name() << "]" << std::endl;
 }
 
 // fill (2)
@@ -157,6 +157,8 @@ void vector_fill_constructor( void )
 void vector_range_constructor( void )
 {
 	// Replace these with different push_back, insert created, etc
+	std::cout << "[VECTOR RANGE CONSTRUCTOR]" << std::endl;
+
 	ft::vector<std::string> vector_str(1, "Hello");
 	vector_str.push_back("my");
 	vector_str.push_back("name");
@@ -172,7 +174,7 @@ void vector_range_constructor( void )
 	ft::vector<char> vector8(3, 'k');
 	char a[] = "Okay";
 	ft::vector<char *> vector9(4, a);
-	ft::vector<const int> vector10(2, 4);	
+	// ft::vector<const int> vector10(2, 4);
 
 	ft::vector<std::string> vector_str_range(vector_str.begin(), vector_str.end());
 
@@ -181,7 +183,7 @@ void vector_range_constructor( void )
 	ft::vector<int> vector13(myints, myints + sizeof(myints) / sizeof(int));
 	ft::vector<char> vector14(vector8.begin(), vector8.end());
 	ft::vector<char *> vector15(vector9.begin(), vector9.end());
-	ft::vector<const int> vector16(vector10.begin(), vector10.end());	
+	// ft::vector<const int> vector16(vector10.begin(), vector10.end());	
 }
 
 // copy (4)
@@ -194,13 +196,13 @@ void vector_copy_constructor( void )
 	ft::vector<char> vector8(3, 'k');
 	char a[] = "Okay";
 	ft::vector<char *> vector9(4, a);
-	ft::vector<const int> vector10(2, 4);	
+	// ft::vector<const int> vector10(2, 4);	
 
 	ft::vector<std::string> vector17(vector6);
 	ft::vector<int> vector18(vector7);
 	ft::vector<char> vector20(vector8);
 	ft::vector<char *> vector21(vector9);
-	ft::vector<const int> vector22(vector10);
+	// ft::vector<const int> vector22(vector10);
 }
 
 void vector_custom_tests()

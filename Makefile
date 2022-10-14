@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CXX := c++
-CXXFLAGS := -Wall -Wextra -Werror -std=c++98 -g
+CXXFLAGS := -Wall -Wextra -Werror -g -std=c++98
 CPPFLAGS := -Istl -Itests/inc -Istl/extra
 FT := -DFT=1
 STD := -DFT=0
@@ -44,8 +44,10 @@ vpath %.cpp tests/srcs/
 
 all: $(NAME_STD) $(NAME_FT)
 
-debug: CXXFLAGS += -DDEBUG
-debug: all
+debug_ft: CXXFLAGS+=-DDEBUG
+debug_ft: ft_containers
+
+debug: debug_ft $(NAME_STD)
 
 $(DEP_D): ; mkdir -p $@
 $(OBJ_D): ; mkdir -p $@
@@ -75,4 +77,4 @@ resetclean: fclean clean
 
 re: fclean all
 
-.PHONY: all debug clean fclean resetclean re
+.PHONY: all debug clean fclean resetclean re debug_ft debug_std CXXFLAGS+=-DDEBUG
