@@ -6,11 +6,12 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/13 23:08:51 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/15 19:05:41 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.hpp"
+#include <algorithm>
 
 /**
  * TODO: Make tests to check if assign and assignment operator adjust capacity
@@ -137,14 +138,19 @@ void vector_fill_constructor( void )
 
 	ft::vector<std::string> vector_str(5, "Example String");
 	std::cout << "vector<std::string>.at[3] [" << vector_str.at(3) << "]" << std::endl;
-	try { std::cout << "try vector<std::string>.at[5]: " << vector_str.at(5) << std::endl;}
-	catch (std::out_of_range & exc) {std::cout << exc.what() << std::endl;}
+	try
+	{
+		std::cout << "try vector<std::string>.at[5]: " << vector_str.at(5) << std::endl;
+	}
+	catch (std::out_of_range & exc)
+	{
+		std::cout << "WHOOPS [" << exc.what() << "]"  << std::endl;
+		std::cout << exc.what() << std::endl;
+	}
 	std::cout << "vector<std::string> vector_str[3] [" << vector_str[3] << "]" << std::endl;
 	std::cout << "vector<std::string>.front() [" << vector_str.front() << "]" << std::endl;
 	std::cout << "vector<std::string>.back() [" << vector_str.back() << "]" << std::endl;
 	std::cout << "vector<std::string>.data() [" << *vector_str.data() << "]" << std::endl;
-
-
 
 
 }
@@ -164,17 +170,13 @@ void vector_range_constructor( void )
 	vector_str.push_back("name");
 	vector_str.push_back("is");
 	vector_str.push_back("Gonçalo");
-	std::cout << vector_str[0] << std::endl;
-	std::cout << vector_str[1] << std::endl;
-	std::cout << vector_str[2] << std::endl;
-	std::cout << vector_str[3] << std::endl;
-	std::cout << vector_str[4] << std::endl;
+	print_container(vector_str);
 
 	ft::vector<int> vector7(10, 5);
 	ft::vector<char> vector8(3, 'k');
 	char a[] = "Okay";
-	ft::vector<char *> vector9(4, a);
-	// ft::vector<const int> vector10(2, 4);
+ft::vector<char *> vector9(4, a);
+	// ft::vector<const int> vector10(2, 4); // const elements not allowed
 
 	ft::vector<std::string> vector_str_range(vector_str.begin(), vector_str.end());
 
@@ -184,6 +186,9 @@ void vector_range_constructor( void )
 	ft::vector<char> vector14(vector8.begin(), vector8.end());
 	ft::vector<char *> vector15(vector9.begin(), vector9.end());
 	// ft::vector<const int> vector16(vector10.begin(), vector10.end());	
+
+	// TODO: Test assign with more capacity than size and then assign and check new size.
+
 }
 
 // copy (4)
@@ -205,14 +210,62 @@ void vector_copy_constructor( void )
 	// ft::vector<const int> vector22(vector10);
 }
 
+void vector_assign()
+{
+	std::cout << "TESTING VECTOR ASSIGN" << std::endl;
+
+	ft::vector<std::string> vector_str(1, "Hello");
+	vector_str.push_back("my");
+	vector_str.push_back("name");
+	vector_str.push_back("is");
+	vector_str.push_back("Gonçalo");
+	
+	ft::vector<std::string> temp(vector_str);
+	
+	std::cout << "VECTOR BEFORE ASSIGN" << std::endl;
+	print_container(vector_str);
+	vector_str.reserve(vector_str.size() + 3);
+	std::cout << "SIZE: [" << vector_str.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
+
+	vector_str.assign(3, "YO");
+	std::cout << "VECTOR SIMPLE ASSIGN with size smaller than capacity" << std::endl;
+	print_container(vector_str);
+	std::cout << "SIZE: [" << vector_str.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
+
+	std::cout << "VECTOR RANGE ASSIGN" << std::endl;
+	temp.push_back("these");
+	temp.push_back("are");
+	temp.push_back("some");
+	temp.push_back("extra");
+	temp.push_back("super");
+	temp.push_back("crazily");
+	temp.push_back("amazinglt");
+	temp.push_back("small");
+	temp.push_back("words");
+	temp.push_back("to");
+	temp.push_back("use");
+	temp.push_back("big");
+	temp.push_back("range");
+	
+	ft::vector<std::string>::iterator first = std::find(temp.begin(), temp.end(), "are");
+	ft::vector<std::string>::iterator last = std::find(temp.begin(), temp.end(), "big");
+	std::cout << "The range will be from [" << *first << "] which is in " << (first - temp.begin()) << " position"<< std::endl;
+	std::cout << "to [" << *last << "] which is in " << (last - temp.begin()) << " position." << std::endl;
+	vector_str.assign(first, last);
+	std::cout << "SIZE: [" << vector_str.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
+}
+
 void vector_custom_tests()
 {
-	// vector_default_constructor();
-	// vector_fill_constructor();
+	vector_default_constructor();
+	vector_fill_constructor();
 	vector_range_constructor();
-	// vector_copy_constructor();
+	vector_copy_constructor();
 
-
+	vector_assign();
 
 	// (destructor)
 	// ~vector();

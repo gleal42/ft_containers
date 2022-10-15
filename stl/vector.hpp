@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:34:59 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/13 23:06:07 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/15 19:05:19 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@
 #include "vector_reverse_iterator.hpp"
 #include <memory>
 #include "enable_if.hpp"
+#include "is_const.hpp"
 #include <typeinfo>
+#include <sstream>
 
 namespace ft
 {
@@ -53,12 +55,12 @@ public:
 	: _start(0), _finish(0), _end_of_storage(0), _alloc(alloc)
 	{
 		LOG("default constructor called for vector of type [" << typeid(T).name() << "]" << std::endl);
-		// LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
+		LOG( (is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
 	}
 	explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _alloc(alloc)
 	{
 		LOG("fill constructor called" << std::endl);
-		// LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
+		LOG( (is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
 		_start = _alloc.allocate(n);
 		_finish = _start;
 		for (size_type vec_size = 0; vec_size < n; vec_size++)
@@ -74,7 +76,7 @@ public:
 	: _alloc(alloc)
 	{
 		LOG("range constructor called" << std::endl);
-		// LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
+		// LOG( (is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
 		size_type range_size = last - first;
 		_start = _alloc.allocate(range_size);
 		_finish = _start;
@@ -89,7 +91,7 @@ public:
 	vector (const vector& other)
 	{
 		LOG("copy constructor called" << std::endl);
-		// LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
+		LOG( (is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
 		_start = _alloc.allocate(other.capacity());
 		_finish = _start;
 		const_iterator other_begin = other.begin();
@@ -106,25 +108,19 @@ public:
 	~vector()
 	{
 		LOG("destructor called" << std::endl);
-		// LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
-		dealloc_contents();
+		LOG( (is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
+		destroy_contents();
+		dealloc();
 	}
 	/* -------------------------------- operator= ------------------------------- */
 
 	vector& operator= (const vector& x)
 	{
 		LOG("Assignment operator called" << std::endl);
-		// LOG( (std::is_const<T>::value ? "It IS constant " : "It is NOT constant"));
-		size_type count = _finish -_start;
-		while (_finish-_start > 0)
-		{
-			_alloc.destroy(_start);
-			_finish--;
-		}
-		_alloc.deallocate(_start, count);
-
-		_start = _alloc.allocate(x.capacity());
-		_finish = _start;
+		LOG( (is_const<T>::value ? "It IS constant " : "It is NOT constant"));
+		destroy_contents();
+		dealloc();
+		alloc_empty(x.capacity());
 		pointer x_begin = x.begin();
 		pointer x_end = x.end();
 		while (x_begin < x_end)
@@ -133,38 +129,45 @@ public:
 			_finish++;
 			x_begin++;
 		}
-		_end_of_storage = _start + x.capacity();
 	}
 
 	void assign( size_type count, const T& value )
 	{
-		LOG("Assign function called" << std::endl);
-
+		LOG("Assign(size_type count, const T& value) called" << std::endl);
+		destroy_contents();
 		if (count > this->capacity())
 		{
-			while (_finish-_start > 0)
-			{
-				_alloc.destroy(_start);
-				_finish--;
-			}
-			_alloc.deallocate(_start, capacity());
-			_start = _alloc.allocate(count);
-			_finish = _start;
+			dealloc();
+			alloc_empty(count);
 		}
-		while ((_finish - _start) < count)
+		while (count > 0)
 		{
 			_alloc.construct(_finish, value);
 			_finish++;
+			count--;
 		}
-		_end_of_storage = _finish;	
 	}
-	// TODO: HEEEEEEEEEEEEEERE last time
 
-	// template< class InputIt >
-	// void assign( InputIt first, InputIt last )
-	// {
-		
-	// }
+	template< class InputIt >
+	void assign( InputIt first, InputIt last ,
+	typename enable_if<!is_integral<InputIt>::value >::type* = 0)
+	{
+		LOG("assign( InputIt first, InputIt last) called" << std::endl);
+
+		size_type count = last - first;
+		destroy_contents();
+		if (count > this->capacity())
+		{
+			dealloc();
+			alloc_empty(count);
+		}
+		while ((last - first) > 0)
+		{
+			_alloc.construct(_finish, *first);
+			_finish++;
+			first++;
+		}
+	}
 
 	/* -------------------------------------------------------------------------- */
 	/*                                  Iterators                                 */
@@ -193,24 +196,24 @@ public:
 		return (const_iterator(_finish));
 	}
 	/* --------------------------------- rbegin --------------------------------- */
-	// reverse_iterator rbegin()
-	// {
-	// 	return (reverse_iterator(_start));
-	// }
-	// const_reverse_iterator rbegin() const
-	// {
-	// 	return (const_reverse_iterator(_start));
-	// }
+	reverse_iterator rbegin()
+	{
+		return (reverse_iterator(_finish));
+	}
+	const_reverse_iterator rbegin() const
+	{
+		return (const_reverse_iterator(_finish));
+	}
 
 	/* ---------------------------------- rend ---------------------------------- */
-	// reverse_iterator rend()
-	// {
-	// 	return (reverse_iterator(_finish));
-	// }
-	// const_reverse_iterator rend() const
-	// {
-	// 	return (const_reverse_iterator(_finish));
-	// }
+	reverse_iterator rend()
+	{
+		return (reverse_iterator(_start));
+	}
+	const_reverse_iterator rend() const
+	{
+		return (const_reverse_iterator(_start));
+	}
 
 	/* -------------------------------------------------------------------------- */
 	/*                                  Capacity                                  */
@@ -223,16 +226,33 @@ public:
 	{
 		return(_alloc.max_size());
 	}
-	// void resize (size_type n, value_type val = value_type())
-	// {
-		
-	// }
+	void resize (size_type n, value_type val = value_type())
+	{
+		while (n < size())
+		{
+			_alloc.destroy(_finish);
+			_finish--;
+		}
+		if (n > capacity())
+			realloc_copy(n);
+		while (size() < n)
+		{
+			_alloc.constroy(_finish, val);
+			_finish++;
+		}
+	}
 
 	size_type capacity() const
 	{
 		return (_end_of_storage - _start);
 	}
 
+	void reserve (size_type n)
+	{
+		if (n > capacity())
+			realloc_copy(n);
+	}
+	
 	/* -------------------------------------------------------------------------- */
 	/*                               Element access                               */
 	/* -------------------------------------------------------------------------- */
@@ -242,14 +262,14 @@ public:
 		size_type size_vec = size();
 		if (size_vec && pos < size_vec)
 			return (_start[pos]);
-		throw std::out_of_range("vector");
+		throw std::out_of_range(at_error(pos));
 	}
 	const_reference at( size_type pos ) const
 	{
 		size_type size_vec = size();
 		if (size_vec && pos < size_vec)
 			return (_start[pos]);
-		throw std::out_of_range("vector");	
+		throw std::out_of_range(at_error(pos));	
 	}
 
 	reference operator[]( size_type pos )
@@ -291,47 +311,65 @@ public:
 	/* -------------------------------------------------------------------------- */
 	
 	// TODO: Checkar melhor / Test
+	// TODO: T must meet the requirements of CopyInsertable in order to use overload (1).
+	// TODO: exception for max_capacity:
 	void push_back( const T& value )
 	{
 		if (_finish == _end_of_storage)
-		{
-			// TODO: T must meet the requirements of CopyInsertable in order to use overload (1).
-			// TODO: exception for max_capacity:
-			size_type new_size = _end_of_storage - _start + 1;
-			pointer new_start = _alloc.allocate(new_size);
-			pointer new_finish = new_start;
-			const_pointer iterate_current = _start;
-			while (iterate_current < _finish)
-			{
-				_alloc.construct(new_finish, *iterate_current);
-				new_finish++;
-				iterate_current++;
-			}
-			dealloc_contents();
-			_start = new_start;
-			_finish = new_finish;
-			_end_of_storage = new_start + new_size;
-		}
+			realloc_copy(_end_of_storage - _start + 1);
 		_alloc.construct(_finish, value);
 		_finish++;
 	}
 	
 private:
-	void dealloc_contents()
+	void destroy_contents( void )
 	{
 		while (_finish-_start > 0)
 		{
 			_alloc.destroy(_start);
 			_finish--;
 		}
+	}
+	void dealloc()
+	{
 		_alloc.deallocate(_start, capacity());
-		_end_of_storage = _finish;
+		_end_of_storage = _start;
+	}
+	void alloc_empty(size_t n)
+	{
+		_start = _alloc.allocate(n);
+		_finish = _start;
+		_end_of_storage = _start + n;
+	}
+
+	void realloc_copy(size_t n)
+	{
+		pointer new_start = _alloc.allocate(n);
+		pointer new_finish = new_start;
+		const_pointer iterate_current = _start;
+		while (iterate_current < _finish)
+		{
+			_alloc.construct(new_finish, *iterate_current);
+			new_finish++;
+			iterate_current++;
+		}
+		destroy_contents();
+		dealloc();
+		_start = new_start;
+		_finish = new_finish;
+		_end_of_storage = new_start + n;
 	}
 	pointer		_start;
 	pointer		_finish;
 	pointer		_end_of_storage;
 	allocator_type	_alloc;
 	friend void	vector_custom_tests();
+	std::string at_error( size_type pos )
+	{
+		std::stringstream ss;
+		ss << "vector::_M_range_check: __n (which is " << pos << ") >= this->size() (which is " << size() << ")";
+		return (ss.str());
+	}
 	
 }; // class vector
 }; // namespace ft
