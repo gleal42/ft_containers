@@ -26,11 +26,4 @@ jobs:
       - name: Building program
         run:
           make
-  run_tests:
-    needs: build
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Running the main to check for errors
-        run:
           bash ./ctr.sh
