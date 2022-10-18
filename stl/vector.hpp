@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:34:59 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/18 15:44:18 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/18 15:46:53 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -350,6 +350,7 @@ private:
 	#else
 	std::string at_error( size_type pos )
 	{
+		(void)pos;
 		return ("vector");
 	}
 	#endif
