@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/18 15:44:06 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/18 21:17:00 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,32 @@ void vector_assign()
 	std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
 }
 
+void	vector_insert()
+{
+	std::cout << "TESTING VECTOR INSERT" << std::endl;
+
+	ft::vector<int> vector_int(1, 1);
+	vector_int.push_back(2);
+	vector_int.push_back(3);
+	vector_int.push_back(4);
+	vector_int.push_back(5);
+	
+	ft::vector<int> temp(vector_int);
+	
+	std::cout << "VECTOR BEFORE ASSIGN" << std::endl;
+	print_container(vector_int);
+	vector_int.reserve(vector_int.size() + 10);
+	std::cout << "SIZE: [" << vector_int.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << vector_int.capacity() << "]" << std::endl;
+
+	vector_int.insert(vector_int.begin() + 3, 2, 200);
+
+	std::cout << "VECTOR INSERT first test" << std::endl;
+	print_container(vector_int);
+	std::cout << "SIZE: [" << vector_int.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << vector_int.capacity() << "]" << std::endl;
+}
+
 void vector_custom_tests()
 {
 	vector_default_constructor();
@@ -269,6 +295,9 @@ void vector_custom_tests()
 	// vector& operator= (const vector& x);
 
 	vector_assign();
+	vector_insert();
+
+
 
 	// (destructor)
 	// ~vector();

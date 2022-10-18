@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:34:59 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/18 15:46:53 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/18 21:13:53 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ public:
 		destroy_contents();
 		dealloc();
 	}
-	/* -------------------------------- operator= ------------------------------- */
 
 	// TODO: Test with empty vector before
 	vector& operator= (const vector& x)
@@ -129,6 +128,73 @@ public:
 			alloc_empty(count);
 		}
 		copy_contents_range_to_end(first, last);
+	}
+
+	allocator_type get_allocator() const
+	{
+		return _alloc;
+	}	
+
+	/* -------------------------------------------------------------------------- */
+	/*                               Element access                               */
+	/* -------------------------------------------------------------------------- */
+
+	reference at( size_type pos )
+	{
+		size_type size_vec = size();
+		if (size_vec && pos < size_vec)
+			return (_start[pos]);
+		#ifdef __linux__	
+			throw std::out_of_range(at_error(pos));
+		#else
+			throw std::out_of_range("vector");
+		#endif
+	}
+	const_reference at( size_type pos ) const
+	{
+		size_type size_vec = size();
+		if (size_vec && pos < size_vec)
+			return (_start[pos]);
+		#ifdef __linux__	
+			throw std::out_of_range(at_error(pos));
+		#else
+			throw std::out_of_range("vector");
+		#endif
+	}
+
+	reference operator[]( size_type pos )
+	{
+		return this->_start[pos];
+	}
+
+	const_reference operator[]( size_type pos ) const
+	{
+		return this->_start[pos];
+	}
+	reference front()
+	{
+		return *this->_start;
+	}
+	const_reference front() const
+	{
+		return *this->_start;
+	}	
+	// TODO: test back() on empty container
+	reference back()
+	{
+		return *(this->_finish - 1);
+	}
+	const_reference back() const
+	{
+		return *(this->_finish - 1);
+	}
+	T* data()
+	{
+		return _start;
+	}
+	const T* data() const
+	{
+		return _start;
 	}
 
 	/* -------------------------------------------------------------------------- */
@@ -180,33 +246,19 @@ public:
 	/* -------------------------------------------------------------------------- */
 	/*                                  Capacity                                  */
 	/* -------------------------------------------------------------------------- */
+
+	bool empty() const
+	{
+		return (_finish == _start);
+	}
 	size_type size() const
 	{
 		return (_finish - _start);
 	}
+	// TODO: double check
 	size_type max_size() const
 	{
 		return(_alloc.max_size());
-	}
-	void resize (size_type n, value_type val = value_type())
-	{
-		while (n < size())
-		{
-			_alloc.destroy(_finish);
-			_finish--;
-		}
-		if (n > capacity())
-			set_capacity(n);
-		while (size() < n)
-		{
-			_alloc.constroy(_finish, val);
-			_finish++;
-		}
-	}
-
-	size_type capacity() const
-	{
-		return (_end_of_storage - _start);
 	}
 
 	void reserve (size_type n)
@@ -215,57 +267,9 @@ public:
 			set_capacity(n);
 	}
 	
-	/* -------------------------------------------------------------------------- */
-	/*                               Element access                               */
-	/* -------------------------------------------------------------------------- */
-
-	reference at( size_type pos )
+	size_type capacity() const
 	{
-		size_type size_vec = size();
-		if (size_vec && pos < size_vec)
-			return (_start[pos]);
-		throw std::out_of_range(at_error(pos));
-	}
-	const_reference at( size_type pos ) const
-	{
-		size_type size_vec = size();
-		if (size_vec && pos < size_vec)
-			return (_start[pos]);
-		throw std::out_of_range(at_error(pos));	
-	}
-
-	reference operator[]( size_type pos )
-	{
-		return this->_start[pos];
-	}
-
-	const_reference operator[]( size_type pos ) const
-	{
-		return this->_start[pos];
-	}
-	reference front()
-	{
-		return *this->_start;
-	}
-	const_reference front() const
-	{
-		return *this->_start;
-	}	
-	reference back()
-	{
-		return *(this->_finish - 1);
-	}
-	const_reference back() const
-	{
-		return *(this->_finish - 1);
-	}
-	T* data()
-	{
-		return _start;
-	}
-	const T* data() const
-	{
-		return _start;
+		return (_end_of_storage - _start);
 	}
 
 	/* -------------------------------------------------------------------------- */
@@ -282,7 +286,50 @@ public:
 		_alloc.construct(_finish, value);
 		_finish++;
 	}
+
+	void resize (size_type n, value_type val = value_type())
+	{
+		while (n < size())
+		{
+			_alloc.destroy(_finish);
+			_finish--;
+		}
+		if (n > capacity())
+			set_capacity(n);
+		set_contents(n, val);
+	}
 	
+	iterator insert( const_iterator pos, const T& value )
+	{
+		if (_finish == _end_of_storage)
+			set_capacity(_end_of_storage - _start + 1);	
+		move_contents_forward_from(pos, 1);
+		_alloc.construct(pos, value);
+		++_finish;
+	}
+
+	// Not clear in cppreference but clear in cplusplus
+	void insert (iterator position, size_type n, const value_type& val)
+	{
+		if (_finish == _end_of_storage)
+			set_capacity(_end_of_storage - _start + 1);	
+		move_contents_forward_from(position, n);
+		set_contents(n, val);
+		_finish += n;
+	}
+
+	template< class InputIt >
+	iterator insert( const_iterator pos, InputIt first, InputIt last )
+	{
+
+	}
+
+	// TODO: create test erasing and checking capacity
+	void clear()
+	{
+		destroy_contents();
+	}
+
 private:
 	void destroy_contents( void )
 	{
@@ -331,6 +378,7 @@ private:
 			first++;
 		}
 	}
+
 	void	set_contents(size_type n, const value_type& val)
 	{
 		for (size_type vec_size = 0; vec_size < n; vec_size++)
@@ -340,20 +388,28 @@ private:
 		}
 	}
 
-	#ifdef __linux__
+	// [a][b][c][d][_finish][][]
+	// [a][b][c][x][][d][_new_finish]
+		
+	void	move_contents_forward_from(iterator start, size_type n)
+	{
+		iterator move_from = _finish - 1;
+		iterator move_to = move_from + n;
+		while (move_to != start)
+		{
+			_alloc.construct(&*move_to, *move_from);
+			_alloc.destroy(&*move_from);
+			--move_from;
+			--move_to;
+		}
+	}
+
 	std::string at_error( size_type pos )
 	{
 		std::stringstream ss;
 		ss << "vector::_M_range_check: __n (which is " << pos << ") >= this->size() (which is " << size() << ")";
 		return (ss.str());
 	}
-	#else
-	std::string at_error( size_type pos )
-	{
-		(void)pos;
-		return ("vector");
-	}
-	#endif
 
 /* ---------------------------- Member Variables ---------------------------- */
 	pointer		_start;

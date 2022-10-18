@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 23:18:17 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/02 21:07:31 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/18 21:14:58 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ namespace ft
     Random_Access_Iterator<T> &Random_Access_Iterator<T>::operator--()
 	{
 		--(this->ptr);
-		return ptr;
+		return *this;
 	}
 	
 	template< class T >
