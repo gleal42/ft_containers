@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:34:59 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/15 19:05:19 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/18 15:44:18 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,13 @@ public:
 		LOG("default constructor called for vector of type [" << typeid(T).name() << "]" << std::endl);
 		LOG( (is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
 	}
+
 	explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _alloc(alloc)
 	{
 		LOG("fill constructor called" << std::endl);
 		LOG( (is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
-		_start = _alloc.allocate(n);
-		_finish = _start;
-		for (size_type vec_size = 0; vec_size < n; vec_size++)
-		{
-			_alloc.construct(_finish, val);
-			_finish++;
-		}
-		_end_of_storage = _finish;
+		alloc_empty(n);
+		set_contents(n, val);
 	}
 	template < class InputIterator>
 	vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
@@ -77,32 +72,15 @@ public:
 	{
 		LOG("range constructor called" << std::endl);
 		// LOG( (is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
-		size_type range_size = last - first;
-		_start = _alloc.allocate(range_size);
-		_finish = _start;
-		while (first < last)
-		{
-			_alloc.construct(_finish, *first);
-			_finish++;
-			first++;
-		}
-		_end_of_storage = _finish;
+		alloc_empty(last - first);
+		copy_contents_range_to_end(first, last);
 	}
 	vector (const vector& other)
 	{
 		LOG("copy constructor called" << std::endl);
 		LOG( (is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
-		_start = _alloc.allocate(other.capacity());
-		_finish = _start;
-		const_iterator other_begin = other.begin();
-		const_iterator other_end = other.end();
-		while (other_begin < other_end)
-		{
-			_alloc.construct(_finish, *other_begin);
-			_finish++;
-			other_begin++;
-		}
-		_end_of_storage = _start + other.capacity();
+		alloc_empty(other.capacity());
+		copy_contents_range_to_end(other.begin(), other.end());
 	}
 	/* ------------------------------ (destructor) ------------------------------ */
 	~vector()
@@ -114,6 +92,7 @@ public:
 	}
 	/* -------------------------------- operator= ------------------------------- */
 
+	// TODO: Test with empty vector before
 	vector& operator= (const vector& x)
 	{
 		LOG("Assignment operator called" << std::endl);
@@ -121,14 +100,7 @@ public:
 		destroy_contents();
 		dealloc();
 		alloc_empty(x.capacity());
-		pointer x_begin = x.begin();
-		pointer x_end = x.end();
-		while (x_begin < x_end)
-		{
-			_alloc.construct(_finish, *x_begin);
-			_finish++;
-			x_begin++;
-		}
+		copy_contents_range_to_end(x.begin(), x.end());
 	}
 
 	void assign( size_type count, const T& value )
@@ -140,12 +112,7 @@ public:
 			dealloc();
 			alloc_empty(count);
 		}
-		while (count > 0)
-		{
-			_alloc.construct(_finish, value);
-			_finish++;
-			count--;
-		}
+		set_contents(count, value);
 	}
 
 	template< class InputIt >
@@ -161,12 +128,7 @@ public:
 			dealloc();
 			alloc_empty(count);
 		}
-		while ((last - first) > 0)
-		{
-			_alloc.construct(_finish, *first);
-			_finish++;
-			first++;
-		}
+		copy_contents_range_to_end(first, last);
 	}
 
 	/* -------------------------------------------------------------------------- */
@@ -234,7 +196,7 @@ public:
 			_finish--;
 		}
 		if (n > capacity())
-			realloc_copy(n);
+			set_capacity(n);
 		while (size() < n)
 		{
 			_alloc.constroy(_finish, val);
@@ -250,7 +212,7 @@ public:
 	void reserve (size_type n)
 	{
 		if (n > capacity())
-			realloc_copy(n);
+			set_capacity(n);
 	}
 	
 	/* -------------------------------------------------------------------------- */
@@ -316,7 +278,7 @@ public:
 	void push_back( const T& value )
 	{
 		if (_finish == _end_of_storage)
-			realloc_copy(_end_of_storage - _start + 1);
+			set_capacity(_end_of_storage - _start + 1);
 		_alloc.construct(_finish, value);
 		_finish++;
 	}
@@ -341,8 +303,7 @@ private:
 		_finish = _start;
 		_end_of_storage = _start + n;
 	}
-
-	void realloc_copy(size_t n)
+	void set_capacity(size_t n)
 	{
 		pointer new_start = _alloc.allocate(n);
 		pointer new_finish = new_start;
@@ -359,17 +320,46 @@ private:
 		_finish = new_finish;
 		_end_of_storage = new_start + n;
 	}
-	pointer		_start;
-	pointer		_finish;
-	pointer		_end_of_storage;
-	allocator_type	_alloc;
-	friend void	vector_custom_tests();
+	template< class InputIt >
+	void copy_contents_range_to_end(InputIt first, InputIt last ,
+	typename enable_if<!is_integral<InputIt>::value >::type* = 0)
+	{
+		while ((last - first) > 0)
+		{
+			_alloc.construct(_finish, *first);
+			_finish++;
+			first++;
+		}
+	}
+	void	set_contents(size_type n, const value_type& val)
+	{
+		for (size_type vec_size = 0; vec_size < n; vec_size++)
+		{
+			_alloc.construct(_finish, val);
+			_finish++;
+		}
+	}
+
+	#ifdef __linux__
 	std::string at_error( size_type pos )
 	{
 		std::stringstream ss;
 		ss << "vector::_M_range_check: __n (which is " << pos << ") >= this->size() (which is " << size() << ")";
 		return (ss.str());
 	}
+	#else
+	std::string at_error( size_type pos )
+	{
+		return ("vector");
+	}
+	#endif
+
+/* ---------------------------- Member Variables ---------------------------- */
+	pointer		_start;
+	pointer		_finish;
+	pointer		_end_of_storage;
+	allocator_type	_alloc;
+	friend void	vector_custom_tests();
 	
 }; // class vector
 }; // namespace ft

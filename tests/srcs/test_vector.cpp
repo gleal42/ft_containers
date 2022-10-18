@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/15 19:05:41 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/18 15:44:06 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,13 +265,14 @@ void vector_custom_tests()
 	vector_range_constructor();
 	vector_copy_constructor();
 
+	// operator=
+	// vector& operator= (const vector& x);
+
 	vector_assign();
 
 	// (destructor)
 	// ~vector();
 
-	// operator=
-	// vector& operator= (const vector& x);
 
 	// empty = non-empty
 
