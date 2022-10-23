@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:34:59 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/18 21:13:53 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/23 18:08:48 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
+#include "utils.hpp"
 #include "macros.hpp"
 #include "vector_iterator.hpp"
 #include "vector_reverse_iterator.hpp"
@@ -79,7 +80,7 @@ public:
 	{
 		LOG("copy constructor called" << std::endl);
 		LOG( (is_const<T>::value ? "It IS constant " : "It is NOT constant") << std::endl);
-		alloc_empty(other.capacity());
+		alloc_empty(other.size());
 		copy_contents_range_to_end(other.begin(), other.end());
 	}
 	/* ------------------------------ (destructor) ------------------------------ */
@@ -299,30 +300,39 @@ public:
 		set_contents(n, val);
 	}
 	
-	iterator insert( const_iterator pos, const T& value )
+	// Not clear in cppreference but clear in cplusplus
+	iterator insert( iterator pos, const T& value )
 	{
 		if (_finish == _end_of_storage)
 			set_capacity(_end_of_storage - _start + 1);	
 		move_contents_forward_from(pos, 1);
-		_alloc.construct(pos, value);
+		_alloc.construct(&(*pos), value);
 		++_finish;
+		return pos;
 	}
 
 	// Not clear in cppreference but clear in cplusplus
 	void insert (iterator position, size_type n, const value_type& val)
 	{
 		if (_finish == _end_of_storage)
-			set_capacity(_end_of_storage - _start + 1);	
+		{
+			size_t pos_dist = position - begin();
+			size_t new_cap = (_end_of_storage - _start) * 2;
+			// size_t new_cap = _end_of_storage - _start + n;
+			set_capacity(new_cap);
+			position = _start + pos_dist;
+		}
+		// print_container(*this);
 		move_contents_forward_from(position, n);
-		set_contents(n, val);
+		set_contents(n, val, &(*position));
 		_finish += n;
 	}
 
-	template< class InputIt >
-	iterator insert( const_iterator pos, InputIt first, InputIt last )
-	{
+	// template< class InputIt >
+	// iterator insert( const_iterator pos, InputIt first, InputIt last )
+	// {
 
-	}
+	// }
 
 	// TODO: create test erasing and checking capacity
 	void clear()
@@ -379,12 +389,22 @@ private:
 		}
 	}
 
+	// Most pos are _finish add iterator (end())
 	void	set_contents(size_type n, const value_type& val)
 	{
 		for (size_type vec_size = 0; vec_size < n; vec_size++)
 		{
 			_alloc.construct(_finish, val);
 			_finish++;
+		}
+	}
+
+	void	set_contents(size_type n, const value_type& val, pointer pos)
+	{
+		for (size_type vec_size = 0; vec_size < n; vec_size++)
+		{
+			_alloc.construct(pos, val);
+			pos++;
 		}
 	}
 
@@ -395,10 +415,15 @@ private:
 	{
 		iterator move_from = _finish - 1;
 		iterator move_to = move_from + n;
+		LOG("Move FROM is " << *move_from << std::endl);
+		LOG("Move TO is " << *move_to << std::endl);
 		while (move_to != start)
 		{
 			_alloc.construct(&*move_to, *move_from);
 			_alloc.destroy(&*move_from);
+			// print_container(*this);
+			LOG("Move FROM is" << *move_from << std::endl);
+			LOG("Move TO is" << *move_to << std::endl);
 			--move_from;
 			--move_to;
 		}

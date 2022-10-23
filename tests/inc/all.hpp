@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:35:51 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/15 16:51:28 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/23 17:01:22 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <deque>
 
 #include "ft.hpp"
+#include "utils.hpp"
 #include "MutantStack.hpp"
 
 #include <stdlib.h>
@@ -43,15 +44,5 @@ int    	test_vector();
 #define LOG( x ) 
 #endif
 
-template<typename T>
-void	print_container( const T & container)
-{
-	for (typename T::const_iterator it = container.begin();
-		it != container.end();
-		it++)
-	{
-		std::cout << *it << std::endl;
-	}	
-}
 
 #endif
