@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:34:59 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/23 18:08:48 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/29 22:56:41 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,17 +277,69 @@ public:
 	/*                                  Modifiers                                 */
 	/* -------------------------------------------------------------------------- */
 	
+	// TODO: create test erasing and checking capacity
+	void clear()
+	{
+		destroy_contents();
+	}
+
+	// Not clear in cppreference but clear in cplusplus
+	iterator insert( iterator pos, const T& value )
+	{
+		insert(pos, 1, value);
+		return pos;
+	}
+
+	// Not clear in cppreference but clear in cplusplus
+	// size_t new_cap = _end_of_storage - _start + n;
+	void insert (iterator position, size_type n, const value_type& val)
+	{
+		if (_finish + n > _end_of_storage)
+		{
+			size_t pos_dist = position - begin();
+			set_capacity((_end_of_storage - _start) * 2);
+			position = _start + pos_dist;
+		}
+		// print_container_capacity(*this);
+		move_contents_forward_from(position, n);
+		set_contents(n, val, &(*position));
+		_finish += n;
+	}
+
+	// Not clear in cppreference but clear in cplusplus
+	template< class InputIterator >
+	void	insert( iterator position, InputIterator first, InputIterator last ,
+	typename enable_if<!is_integral<InputIterator>::value >::type* = 0)
+	{
+		size_type n = last - first;
+		if (_finish + n >= _end_of_storage)
+		{
+			size_t pos_dist = position - begin();
+			size_t new_cap = (_end_of_storage - _start) * 2;
+			// size_t new_cap = _end_of_storage - _start + n;
+			set_capacity(new_cap);
+			position = _start + pos_dist;
+		}
+		// print_container_capacity(*this);
+		move_contents_forward_from(position, n);
+		while (first < last)
+		{
+			set_contents(1, *first, &(*position));
+			first++;
+			position++;
+		}
+		_finish += n;	
+	}
+
+	// HERE: erase()
+	
 	// TODO: Checkar melhor / Test
 	// TODO: T must meet the requirements of CopyInsertable in order to use overload (1).
 	// TODO: exception for max_capacity:
 	void push_back( const T& value )
 	{
-		if (_finish == _end_of_storage)
-			set_capacity(_end_of_storage - _start + 1);
-		_alloc.construct(_finish, value);
-		_finish++;
+		insert(_finish, 1, value);
 	}
-
 	void resize (size_type n, value_type val = value_type())
 	{
 		while (n < size())
@@ -300,47 +352,14 @@ public:
 		set_contents(n, val);
 	}
 	
-	// Not clear in cppreference but clear in cplusplus
-	iterator insert( iterator pos, const T& value )
-	{
-		if (_finish == _end_of_storage)
-			set_capacity(_end_of_storage - _start + 1);	
-		move_contents_forward_from(pos, 1);
-		_alloc.construct(&(*pos), value);
-		++_finish;
-		return pos;
-	}
 
-	// Not clear in cppreference but clear in cplusplus
-	void insert (iterator position, size_type n, const value_type& val)
-	{
-		if (_finish == _end_of_storage)
-		{
-			size_t pos_dist = position - begin();
-			size_t new_cap = (_end_of_storage - _start) * 2;
-			// size_t new_cap = _end_of_storage - _start + n;
-			set_capacity(new_cap);
-			position = _start + pos_dist;
-		}
-		// print_container(*this);
-		move_contents_forward_from(position, n);
-		set_contents(n, val, &(*position));
-		_finish += n;
-	}
-
-	// template< class InputIt >
-	// iterator insert( const_iterator pos, InputIt first, InputIt last )
-	// {
-
-	// }
-
-	// TODO: create test erasing and checking capacity
-	void clear()
-	{
-		destroy_contents();
-	}
 
 private:
+	void	default_increase_capacity( void )
+	{
+
+	}
+
 	void destroy_contents( void )
 	{
 		while (_finish-_start > 0)
@@ -421,7 +440,7 @@ private:
 		{
 			_alloc.construct(&*move_to, *move_from);
 			_alloc.destroy(&*move_from);
-			// print_container(*this);
+			// print_container_capacity(*this);
 			LOG("Move FROM is" << *move_from << std::endl);
 			LOG("Move TO is" << *move_to << std::endl);
 			--move_from;

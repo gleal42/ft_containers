@@ -7,6 +7,19 @@ template<typename T>
 void	print_container( const T & container)
 {
 	for (typename T::const_iterator it = container.begin();
+		it != container.end();
+		it++)
+	{
+		// it != container.end();
+		std::cout << *it << std::endl;
+	}	
+}
+
+
+template<typename T>
+void	print_container_capacity( const T & container)
+{
+	for (typename T::const_iterator it = container.begin();
 		it != (container.begin() + container.capacity());
 		it++)
 	{

@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/23 18:07:24 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/29 22:55:30 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,10 @@ void vector_range_constructor( void )
 	vector_str.push_back("name");
 	vector_str.push_back("is");
 	vector_str.push_back("Gonçalo");
+	std::cout << "print_container" << std::endl;
 	print_container(vector_str);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(vector_str);
 
 	ft::vector<int> vector7(10, 5);
 	ft::vector<char> vector8(3, 'k');
@@ -209,8 +212,11 @@ void vector_copy_constructor( void )
 	// Replace these with different push_back, insert created, etc
 	ft::vector<std::string> vec_str(5, "Hello");
 	vec_str.reserve(10);
-	
+
+	std::cout << "print_container" << std::endl;	
 	print_container(vec_str);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(vec_str);
 	std::cout << "SIZE: [" << vec_str.size() << "]" << std::endl;
 	std::cout << "CAPACITY: [" << vec_str.capacity() << "]" << std::endl;
 	ft::vector<std::string> vector_cpy_str(vec_str);
@@ -218,14 +224,21 @@ void vector_copy_constructor( void )
 	std::cout << "CAPACITY: [" << vector_cpy_str.capacity() << "]" << std::endl;
 
 	ft::vector<int> vec_int(10, 5);
+	std::cout << "print_container" << std::endl;
 	print_container(vec_int);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(vec_int);
 	std::cout << "SIZE: [" << vec_int.size() << "]" << std::endl;
 	std::cout << "CAPACITY: [" << vec_int.capacity() << "]" << std::endl;
 
 	ft::vector<int> vector18(vec_int);
 
 	ft::vector<char> vec_char(3, 'k');
+
+	std::cout << "print_container" << std::endl;
 	print_container(vec_char);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(vec_char);
 	std::cout << "SIZE: [" << vec_char.size() << "]" << std::endl;
 	std::cout << "CAPACITY: [" << vec_char.capacity() << "]" << std::endl;
 
@@ -233,7 +246,11 @@ void vector_copy_constructor( void )
 
 	char a[] = "Okay";
 	ft::vector<char *> vec_char_ptr(4, a);
+
+	std::cout << "print_container" << std::endl;
 	print_container(vec_char_ptr);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(vec_char_ptr);
 	std::cout << "SIZE: [" << vec_char_ptr.size() << "]" << std::endl;
 	std::cout << "CAPACITY: [" << vec_char_ptr.capacity() << "]" << std::endl;
 
@@ -256,14 +273,21 @@ void vector_assign()
 	ft::vector<std::string> temp(vector_str);
 	
 	std::cout << "VECTOR BEFORE ASSIGN" << std::endl;
+	std::cout << "print_container" << std::endl;
 	print_container(vector_str);
+	std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(vector_str);
 	vector_str.reserve(vector_str.size() + 3);
 	std::cout << "SIZE: [" << vector_str.size() << "]" << std::endl;
 	std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
 
 	vector_str.assign(3, "YO");
 	std::cout << "VECTOR SIMPLE ASSIGN with size smaller than capacity" << std::endl;
+	std::cout << "print_container" << std::endl;
 	print_container(vector_str);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(vector_str);
 	std::cout << "SIZE: [" << vector_str.size() << "]" << std::endl;
 	std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
 
@@ -291,6 +315,8 @@ void vector_assign()
 	std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
 }
 
+// TODO: Make more tests for each
+
 void	vector_insert()
 {
 	std::cout << "TESTING VECTOR INSERT" << std::endl;
@@ -304,51 +330,134 @@ void	vector_insert()
 	
 	size_t vec_size = vector_int.size() + 6; 
 
-	// ft::vector<int> val_insert_vec(vector_int);
-	// val_insert_vec.reserve(vec_size);
+	ft::vector<int> val_insert_vec(vector_int);
+ 
+	std::cout << "-----------------------------------" << std::endl;
+	std::cout << "VECTOR before value (single) insert" << std::endl;
+	std::cout << "-----------------------------------" << std::endl;
+	std::cout << "print_container" << std::endl;
+	print_container(val_insert_vec);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(val_insert_vec);
+	std::cout << "SIZE: [" << val_insert_vec.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << val_insert_vec.capacity() << "]" << std::endl;
 
-	// std::cout << "VECTOR before value (single) insert" << std::endl;
-	// print_container(val_insert_vec);
-	// std::cout << "SIZE: [" << val_insert_vec.size() << "]" << std::endl;
-	// std::cout << "CAPACITY: [" << val_insert_vec.capacity() << "]" << std::endl;
+	val_insert_vec.insert((val_insert_vec.begin() + 3), 200);
 
-	// val_insert_vec.insert((val_insert_vec.begin() + 3), 200);
-
-	// std::cout << "VECTOR after value (single) insert" << std::endl;
-	// print_container(val_insert_vec);
-	// std::cout << "SIZE: [" << val_insert_vec.size() << "]" << std::endl;
-	// std::cout << "CAPACITY: [" << val_insert_vec.capacity() << "]" << std::endl;
+	std::cout << "VECTOR after value (single) insert" << std::endl;
+	std::cout << "print_container" << std::endl;
+	print_container(val_insert_vec);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(val_insert_vec);
+	std::cout << "SIZE: [" << val_insert_vec.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << val_insert_vec.capacity() << "]" << std::endl;
 
 	ft::vector<int> multi_val_insert_vec(vector_int);
-	// vec_size = 0;
-	// multi_val_insert_vec.reserve(vec_size);
-	(void)vec_size;
+	multi_val_insert_vec.reserve(vec_size);
 
+	std::cout << "-----------------------------------" << std::endl;
 	std::cout << "VECTOR before multiple value insert" << std::endl;
+	std::cout << "-----------------------------------" << std::endl;
+	std::cout << "print_container" << std::endl;
 	print_container(multi_val_insert_vec);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(multi_val_insert_vec);
 	std::cout << "SIZE: [" << multi_val_insert_vec.size() << "]" << std::endl;
 	std::cout << "CAPACITY: [" << multi_val_insert_vec.capacity() << "]" << std::endl;
 
 	multi_val_insert_vec.insert(multi_val_insert_vec.begin() + 3, 3, 200);
 
 	std::cout << "VECTOR after multiple value insert" << std::endl;
+	std::cout << "print_container" << std::endl;
 	print_container(multi_val_insert_vec);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(multi_val_insert_vec);
 	std::cout << "SIZE: [" << multi_val_insert_vec.size() << "]" << std::endl;
 	std::cout << "CAPACITY: [" << multi_val_insert_vec.capacity() << "]" << std::endl;
+
+	ft::vector<int> range_insert_vec(vector_int);
+	std::cout << "--------------------------" << std::endl;
+	std::cout << "VECTOR before range insert" << std::endl;
+	std::cout << "--------------------------" << std::endl;
+	std::cout << "print_container" << std::endl;
+	print_container(range_insert_vec);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(range_insert_vec);
+	std::cout << "SIZE: [" << range_insert_vec.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << range_insert_vec.capacity() << "]" << std::endl;
+
+	range_insert_vec.insert(range_insert_vec.begin() + 2, vector_int.begin() + 1, vector_int.end()-1);
+
+	std::cout << "VECTOR after range insert" << std::endl;
+	std::cout << "print_container" << std::endl;
+	print_container(range_insert_vec);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(range_insert_vec);
+	std::cout << "SIZE: [" << range_insert_vec.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << range_insert_vec.capacity() << "]" << std::endl;
+
+	ft::vector<int> quick_test(vector_int);
+	quick_test.reserve(quick_test.size() + 1);
+	quick_test.insert(quick_test.begin(), 100);
+	std::cout << "print_container" << std::endl;
+	print_container(quick_test);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(quick_test);
+	std::cout << "SIZE: [" << quick_test.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << quick_test.capacity() << "]" << std::endl;
+}
+
+void	vector_clear()
+{
+	std::cout << "TESTING VECTOR CLEAR" << std::endl;
+
+	ft::vector<int> vector_int(1, 1);
+	vector_int.push_back(2);
+	vector_int.push_back(3);
+	
+	ft::vector<int> clear_vec(vector_int);
+ 
+	std::cout << "-------------------" << std::endl;
+	std::cout << "VECTOR before clear" << std::endl;
+	std::cout << "-------------------" << std::endl;
+	std::cout << "print_container" << std::endl;
+	print_container(clear_vec);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(clear_vec);
+	std::cout << "SIZE: [" << clear_vec.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << clear_vec.capacity() << "]" << std::endl;
+
+	clear_vec.clear();
+
+	std::cout << "VECTOR after clear" << std::endl;
+	std::cout << "print_container" << std::endl;
+	print_container(clear_vec);
+	std::cout << "print_container_capacity" << std::endl;
+	print_container_capacity(clear_vec);
+	std::cout << "SIZE: [" << clear_vec.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << clear_vec.capacity() << "]" << std::endl;
+	
+	std::cout << "VECTOR after clear and push_back (depends on end()" << std::endl;
+	clear_vec.push_back(12);
+	print_container_capacity(clear_vec);
+	std::cout << "SIZE: [" << clear_vec.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << clear_vec.capacity() << "]" << std::endl;
+	
 }
 
 void vector_custom_tests()
 {
-	// vector_default_constructor();
-	// vector_fill_constructor();
-	// vector_range_constructor();
-	// vector_copy_constructor();
+	vector_default_constructor();
+	vector_fill_constructor();
+	vector_range_constructor();
+	vector_copy_constructor();
 
 	// operator=
 	// vector& operator= (const vector& x);
 
-	// vector_assign();
+	vector_assign();
 	vector_insert();
+	vector_clear();
 
 	// (destructor)
 	// ~vector();
