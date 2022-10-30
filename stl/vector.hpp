@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:34:59 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/29 22:56:41 by gleal            ###   ########.fr       */
+/*   Updated: 2022/10/30 17:43:17 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,16 +331,39 @@ public:
 		_finish += n;	
 	}
 
-	// HERE: erase()
+	iterator erase( iterator pos )
+	{
+		return (erase(pos, pos+1));
+	}
+
+	iterator erase (iterator first, iterator last)
+	{
+		iterator ret_val = first; 
+		while (last != end())
+		{
+			_alloc.destroy(&*first);
+			_alloc.construct(&*first, *last);
+			++last;
+			++first;
+		}	
+		_finish = &*first;
+		return (ret_val);
+	}
 	
 	// TODO: Checkar melhor / Test
 	// TODO: T must meet the requirements of CopyInsertable in order to use overload (1).
 	// TODO: exception for max_capacity:
 	void push_back( const T& value )
 	{
-		insert(_finish, 1, value);
+		insert(end(), 1, value);
 	}
-	void resize (size_type n, value_type val = value_type())
+
+	void pop_back()
+	{
+		erase(end()-1);
+	}
+
+	void resize(size_type n, value_type val = value_type())
 	{
 		while (n < size())
 		{
@@ -349,17 +372,22 @@ public:
 		}
 		if (n > capacity())
 			set_capacity(n);
-		set_contents(n, val);
+		set_contents(n-size(), val);
 	}
-	
-
+	void swap( vector& other )
+	{
+		swap(&_start, &other._start);
+		swap(&_finish, &other._finish);
+		swap(&_end_of_storage, &other._end_of_storage);
+	}
 
 private:
-	void	default_increase_capacity( void )
+	void swap( pointer *first, pointer *second )
 	{
-
+		pointer tmp = *first;
+		*first = *second;
+		*second = tmp;
 	}
-
 	void destroy_contents( void )
 	{
 		while (_finish-_start > 0)
