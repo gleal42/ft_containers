@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 23:18:17 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/13 20:12:07 by gleal            ###   ########.fr       */
+/*   Updated: 2022/11/13 20:21:42 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ namespace ft
         public:
         /* ------------------------------ Member Types ------------------------------ */
 			typedef Iter												iterator_type;
-            typedef typename iterator_traits<Iter>::random_access_iterator_tag	iterator_category;
-            typedef typename iterator_traits<Iter>::value_type					value_type;
-			typedef typename iterator_traits<Iter>::difference_type				difference_type;
-			typedef typename iterator_traits<Iter>::pointer						pointer;
-			typedef typename iterator_traits<Iter>::reference					reference;
+            typedef random_access_iterator_tag							iterator_category;
+            typedef typename iterator_traits<Iter>::value_type			value_type;
+			typedef typename iterator_traits<Iter>::difference_type		difference_type;
+			typedef typename iterator_traits<Iter>::pointer				pointer;
+			typedef typename iterator_traits<Iter>::reference			reference;
 
 		/* ---------------------------- Member Functions ---------------------------- */
 		
@@ -44,9 +44,9 @@ namespace ft
 		Reverse_Iterator( const Reverse_Iterator<U>& other ) : base_iterator(other.base()) {}
 		template< class U >
 		Reverse_Iterator& operator=( const Reverse_Iterator<U>& other ) { base_iterator = other.base();}
-		iterator_type base() const { return base_iterator;}
-	    reference operator*() const{ return *base_iterator;}
-		pointer operator->() const { return base_iterator.operator->(); }	
+		iterator_type base() const { return base_iterator - 1;}
+	    reference operator*() const{ return *base();}
+		pointer operator->() const { return base().operator->(); }	
 		reference operator[] (difference_type n) const { return *(base_iterator - n); }
 		Reverse_Iterator& operator++()
 		{

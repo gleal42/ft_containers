@@ -6,12 +6,16 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/30 18:05:53 by gleal            ###   ########.fr       */
+/*   Updated: 2022/11/13 20:28:47 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.hpp"
 #include <algorithm>
+
+/**
+ * TODO: Random Access Iterator and Reverse Iterator Tests.
+ */
 
 /**
  * TODO: Make tests to check if assign and assignment operator adjust capacity
@@ -24,8 +28,8 @@
 // Can be dereferenced as an lvalue vs rvalue not clear implementation
 // Multi-Pass not clear implementation
 
-void test_vector_iterator()
-{
+// void test_vector_iterator()
+// {
 	// ft::vector<int>::iterator a;
 	// ft::vector<int>::iterator b;
 
@@ -60,37 +64,37 @@ void test_vector_iterator()
 	// a += n
 	// a -= n
 	// a[n]
-}
+// }
 // Where X is an iterator type, a and b are objects of this iterator type, t is an object of the type pointed by the iterator type, and n is an integer value.
 
 void test_vec_42()
 {
-	// ft::vector<Buffer> vector_buffer;
+	ft::vector<Buffer> vector_buffer;
 
-	// for (int i = 0; i < COUNT; i++)
-	// {
-	// 	vector_buffer.push_back(Buffer());
-	// }
-	// for (int i = 0; i < COUNT; i++)
-	// {
-	// 	const int idx = rand() % COUNT;
-	// 	vector_buffer[idx].idx = 5;
-	// }
-	// ft::vector<Buffer>().swap(vector_buffer);
+	for (int i = 0; i < COUNT; i++)
+	{
+		vector_buffer.push_back(Buffer());
+	}
+	for (int i = 0; i < COUNT; i++)
+	{
+		const int idx = rand() % COUNT;
+		vector_buffer[idx].idx = 5;
+	}
+	ft::vector<Buffer>().swap(vector_buffer);
 
-	// try
-	// {
-	// 	for (int i = 0; i < COUNT; i++)
-	// 	{
-	// 		const int idx = rand() % COUNT;
-	// 		vector_buffer.at(idx);
-	// 		std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" <<std::endl;
-	// 	}
-	// }
-	// catch(const std::exception& e)
-	// {
-	// 	//NORMAL ! :P
-	// }
+	try
+	{
+		for (int i = 0; i < COUNT; i++)
+		{
+			const int idx = rand() % COUNT;
+			vector_buffer.at(idx);
+			std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" <<std::endl;
+		}
+	}
+	catch(const std::exception& e)
+	{
+		//NORMAL ! :P
+	}
 }
 
 /**
@@ -259,8 +263,64 @@ void vector_copy_constructor( void )
 
 void	vector_assignment_operator()
 {
-	std::cout << "TESTING VECTOR ASSIGNMENT OPERATOR" << std::endl;
+	std::cout << "TESTING VECTOR ASSIGNMENT OPERATOR SMALL TO BIG" << std::endl;
 	
+	ft::vector<int> vector_big1(1, 1);
+	vector_big1.push_back(2);
+	vector_big1.push_back(3);
+	vector_big1.push_back(4);
+	vector_big1.push_back(5);
+	vector_big1.push_back(6);
+	vector_big1.push_back(7);
+	vector_big1.reserve(20);
+
+	std::cout << "BIG VECTOR" << std::endl;
+	print_container(vector_big1);
+	ft::vector<int> vector_small1(2, 10);
+	vector_small1.push_back(11);
+	vector_small1.push_back(12);
+
+	std::cout << "SMALL VECTOR BEFORE ASSIGNING BIG VECTOR" << std::endl;
+	print_container(vector_small1);
+	std::cout << "SIZE: [" << vector_small1.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << vector_small1.capacity() << "]" << std::endl;
+
+	vector_small1 = vector_big1;
+
+	std::cout << "AFTER ASSIGNING" << std::endl;
+	print_container(vector_small1);
+	std::cout << "SIZE: [" << vector_small1.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << vector_small1.capacity() << "]" << std::endl;
+
+	std::cout << "TESTING VECTOR ASSIGNMENT OPERATOR BIG to SMALL" << std::endl;
+
+	ft::vector<int> vector_small2(2, 10);
+	vector_small2.push_back(11);
+	vector_small2.push_back(12);
+
+	ft::vector<int> vector_big2(1, 1);
+	vector_big2.push_back(2);
+	vector_big2.push_back(3);
+	vector_big2.push_back(4);
+	vector_big2.push_back(5);
+	vector_big2.push_back(6);
+	vector_big2.push_back(7);
+	vector_big2.reserve(20);
+
+	std::cout << "SMALL VECTOR" << std::endl;
+	print_container(vector_small2);
+
+	std::cout << "BIG VECTOR BEFORE ASSIGNING BIG VECTOR" << std::endl;
+	print_container(vector_big2);
+	std::cout << "SIZE: [" << vector_big2.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << vector_big2.capacity() << "]" << std::endl;
+
+	vector_big2 = vector_small2;
+
+	std::cout << "AFTER ASSIGNING" << std::endl;
+	print_container(vector_big2);
+	std::cout << "SIZE: [" << vector_big2.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << vector_big2.capacity() << "]" << std::endl;
 }
 
 void vector_assign()
@@ -276,10 +336,8 @@ void vector_assign()
 	ft::vector<std::string> temp(vector_str);
 	
 	std::cout << "VECTOR BEFORE ASSIGN" << std::endl;
-	std::cout << "print_container" << std::endl;
 	print_container(vector_str);
 	std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
-	std::cout << "print_container_capacity" << std::endl;
 	print_container_capacity(vector_str);
 	vector_str.reserve(vector_str.size() + 3);
 	std::cout << "SIZE: [" << vector_str.size() << "]" << std::endl;
@@ -287,9 +345,7 @@ void vector_assign()
 
 	vector_str.assign(3, "YO");
 	std::cout << "VECTOR SIMPLE ASSIGN with size smaller than capacity" << std::endl;
-	std::cout << "print_container" << std::endl;
 	print_container(vector_str);
-	std::cout << "print_container_capacity" << std::endl;
 	print_container_capacity(vector_str);
 	std::cout << "SIZE: [" << vector_str.size() << "]" << std::endl;
 	std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
@@ -521,6 +577,117 @@ void	vector_swap()
 	print_stats(vec_2);
 }
 
+void vector_external_swap()
+{
+	ft::vector<int> vec_1(1, 1);
+	vec_1.push_back(2);
+	vec_1.push_back(3);
+
+	ft::vector<int> vec_2(1, 4);
+	vec_2.push_back(5);
+	vec_2.push_back(6);
+
+	std::cout << "VECTOR 1 before swap" << std::endl;
+	print_stats(vec_1);
+	std::cout << "VECTOR 2 before swap" << std::endl;
+	print_stats(vec_2);
+
+	ft::swap(vec_1, vec_2);
+
+	std::cout << "VECTOR 1 after swap" << std::endl;
+	print_stats(vec_1);
+	std::cout << "VECTOR 2 after swap" << std::endl;
+	print_stats(vec_2);
+}
+
+void vector_comparisons()
+{
+	std::cout << "Comparing VECTORS" << std::endl;
+
+	ft::vector<int> vec_1(1, 1);
+	vec_1.push_back(2);
+	vec_1.push_back(3);
+
+	ft::vector<int> vec_2(1, 1);
+	vec_2.push_back(2);
+	vec_2.push_back(3);
+	
+	std::cout << std::boolalpha;
+	std::cout << "-------VEC 1-------" << std::endl;
+	print_container(vec_1);
+	std::cout << "-------VEC 2-------" << std::endl;
+	print_container(vec_2);
+	std::cout << "VECTOR 1 == VECTOR 2 returns " << (vec_1 == vec_2) << std::endl;	
+	std::cout << "VECTOR 1 != VECTOR 2 returns " << (vec_1 != vec_2) << std::endl;	
+	std::cout << "VECTOR 1 <  VECTOR 2 returns " << (vec_1 < vec_2) << '\n';
+    std::cout << "VECTOR 1 <= VECTOR 2 returns " << (vec_1 <= vec_2) << '\n';
+    std::cout << "VECTOR 1 >  VECTOR 2 returns " << (vec_1 > vec_2) << '\n';
+    std::cout << "VECTOR 1 >= VECTOR 2 returns " << (vec_1 >= vec_2) << '\n';
+
+	vec_2.pop_back();
+	std::cout << "-------VEC 1-------" << std::endl;
+	print_container(vec_1);
+	std::cout << "-------VEC 2-------" << std::endl;
+	print_container(vec_2);
+	std::cout << "VECTOR 1 == VECTOR 2 returns " << (vec_1 == vec_2) << std::endl;	
+	std::cout << "VECTOR 1 != VECTOR 2 returns " << (vec_1 != vec_2) << std::endl;	
+	std::cout << "VECTOR 1 <  VECTOR 2 returns " << (vec_1 < vec_2) << '\n';
+    std::cout << "VECTOR 1 <= VECTOR 2 returns " << (vec_1 <= vec_2) << '\n';
+    std::cout << "VECTOR 1 >  VECTOR 2 returns " << (vec_1 > vec_2) << '\n';
+    std::cout << "VECTOR 1 >= VECTOR 2 returns " << (vec_1 >= vec_2) << '\n';
+	
+	vec_2.push_back(2);
+	std::cout << "-------VEC 1-------" << std::endl;
+	print_container(vec_1);
+	std::cout << "-------VEC 2-------" << std::endl;
+	print_container(vec_2);
+	std::cout << "VECTOR 1 == VECTOR 2 returns " << (vec_1 == vec_2) << std::endl;	
+	std::cout << "VECTOR 1 != VECTOR 2 returns " << (vec_1 != vec_2) << std::endl;	
+	std::cout << "VECTOR 1 <  VECTOR 2 returns " << (vec_1 < vec_2) << '\n';
+    std::cout << "VECTOR 1 <= VECTOR 2 returns " << (vec_1 <= vec_2) << '\n';
+    std::cout << "VECTOR 1 >  VECTOR 2 returns " << (vec_1 > vec_2) << '\n';
+    std::cout << "VECTOR 1 >= VECTOR 2 returns " << (vec_1 >= vec_2) << '\n';
+
+	vec_1.pop_back();
+	std::cout << "-------VEC 1-------" << std::endl;
+	print_container(vec_1);
+	std::cout << "-------VEC 2-------" << std::endl;
+	print_container(vec_2);
+	std::cout << "VECTOR 1 == VECTOR 2 returns " << (vec_1 == vec_2) << std::endl;	
+	std::cout << "VECTOR 1 != VECTOR 2 returns " << (vec_1 != vec_2) << std::endl;	
+	std::cout << "VECTOR 1 <  VECTOR 2 returns " << (vec_1 < vec_2) << '\n';
+    std::cout << "VECTOR 1 <= VECTOR 2 returns " << (vec_1 <= vec_2) << '\n';
+    std::cout << "VECTOR 1 >  VECTOR 2 returns " << (vec_1 > vec_2) << '\n';
+    std::cout << "VECTOR 1 >= VECTOR 2 returns " << (vec_1 >= vec_2) << '\n';
+}
+
+void	vector_reverse_iterator()
+{
+	ft::vector<int> vec_1(1, 1);
+	vec_1.push_back(2);
+	vec_1.push_back(3);
+	vec_1.push_back(4);
+	vec_1.push_back(5);
+    std::cout << "RBEGIN TO REND" << std::endl;
+	for (ft::vector<int>::reverse_iterator rev_it = vec_1.rbegin();
+		rev_it != vec_1.rend();
+		rev_it++)
+	{
+		std::cout << *rev_it << std::endl;
+	}
+    std::cout << "REND - 1 TO RBEGIN - 1" << std::endl;
+	for (ft::vector<int>::reverse_iterator rev_it = vec_1.rend() - 1;
+		rev_it != vec_1.rbegin() - 1;
+		rev_it--)
+	{
+		std::cout << *rev_it << std::endl;
+	}
+}
+
+/**
+ * TODO: Test Destructor somehow. Maybe call manually?
+ */
+
 void vector_custom_tests()
 {
 	vector_default_constructor();
@@ -537,31 +704,28 @@ void vector_custom_tests()
 	vector_pop_back();
 	vector_resize();
 	vector_swap();
-
 	
 	// (destructor)
 	// ~vector();
 
+	vector_external_swap();
+	vector_comparisons();
 
-	// empty = non-empty
-
-	// non-empty = empty
+	vector_reverse_iterator();
 
 	// Iterators
 	// iterator begin();
 
 	// const_iterator begin() const;
-	// Add error to check that std ft is being called
-
-	// Capacity
 }
 
 int test_vector()
 {
 	// test_vec_42();
 	std::cout << "\nRunning custom tests\n" << std::endl;
-	vector_custom_tests();
+	// vector_custom_tests();
 	// main from 42
+	test_vec_42();
 	// test_vector_iterator();
 	return (0);
 }

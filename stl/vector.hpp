@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:34:59 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/30 17:43:17 by gleal            ###   ########.fr       */
+/*   Updated: 2022/11/13 20:20:44 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,13 @@ public:
 		LOG("Assignment operator called" << std::endl);
 		LOG( (is_const<T>::value ? "It IS constant " : "It is NOT constant"));
 		destroy_contents();
-		dealloc();
-		alloc_empty(x.capacity());
+		if (x.size() > capacity())
+		{
+			dealloc();
+			alloc_empty(x.size());
+		}
 		copy_contents_range_to_end(x.begin(), x.end());
+		return *this;
 	}
 
 	void assign( size_type count, const T& value )
@@ -256,7 +260,7 @@ public:
 	{
 		return (_finish - _start);
 	}
-	// TODO: double check
+	// TODO: double check/ test
 	size_type max_size() const
 	{
 		return(_alloc.max_size());
@@ -491,6 +495,72 @@ private:
 	friend void	vector_custom_tests();
 	
 }; // class vector
+
+// TODO: Test
+template< class T, class Alloc >
+void swap( vector<T,Alloc>& lhs, vector<T,Alloc>& rhs )
+{
+	lhs.swap(rhs);
+}
+
+template< class T, class Alloc >
+bool operator==( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+{
+	if (lhs.size() != rhs.size())
+		return false ;
+	for (typename vector<T,Alloc>::const_iterator it_lhs = lhs.begin(), it_rhs = rhs.begin();
+		it_lhs != lhs.end();
+		it_lhs++, it_rhs++)
+	{
+		if (*it_lhs != *it_rhs)
+			return false ;
+	}
+	return true ;
+}
+
+template< class T, class Alloc >
+bool operator!=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+{
+	return !(lhs == rhs);
+}
+
+template< class T, class Alloc >
+bool operator<( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+{
+	typename vector<T,Alloc>::const_iterator it_lhs = lhs.begin(), it_rhs = rhs.begin();
+	for (;it_lhs != lhs.end() && it_rhs != rhs.end() && *it_lhs == *it_rhs;
+		it_lhs++, it_rhs++)
+	{
+	}
+	if (it_rhs == rhs.end())
+	{
+		return false ;
+	}
+	if (it_lhs == lhs.end())
+	{
+		return true ;
+	}
+	return *it_lhs < *it_rhs;
+}
+
+template< class T, class Alloc >
+bool operator<=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+{
+	return lhs < rhs || lhs == rhs;
+}
+
+template< class T, class Alloc >
+bool operator>( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+{
+	return !(lhs <= rhs);
+}
+
+template< class T, class Alloc >
+bool operator>=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+{
+	return lhs > rhs || lhs == rhs;
+}
+
 }; // namespace ft
 
 #endif
