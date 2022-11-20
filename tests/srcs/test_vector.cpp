@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
-/*   Updated: 2022/11/13 20:28:47 by gleal            ###   ########.fr       */
+/*   Updated: 2022/11/20 20:10:46 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,13 @@
 void test_vec_42()
 {
 	ft::vector<Buffer> vector_buffer;
-
+	std::cout << "SIZE: [" << vector_buffer.size() << "]" << std::endl;
+	std::cout << "CAPACITY: [" << vector_buffer.capacity() << "]" << std::endl;
 	for (int i = 0; i < COUNT; i++)
 	{
 		vector_buffer.push_back(Buffer());
+		std::cout << "SIZE: [" << vector_buffer.size() << "]" << std::endl;
+		std::cout << "CAPACITY: [" << vector_buffer.capacity() << "]" << std::endl;
 	}
 	for (int i = 0; i < COUNT; i++)
 	{
@@ -116,11 +119,6 @@ void vector_default_constructor(void)
 	std::cout << "and corresponding value type is [" << typeid(ft::vector<int>::value_type).name() << "]" << std::endl;
 
 	std::cout << "_______________________________________\n" << std::endl;
-	ft::vector<char> vector3;
-	std::cout << "Data of vector char is [" << typeid(vector3.data()).name() << "]" << std::endl;
-	std::cout << "and corresponding value type is [" << typeid(ft::vector<char>::value_type).name() << "]" << std::endl;
-
-	std::cout << "_______________________________________\n" << std::endl;
 	ft::vector<char *> vector4;
 	std::cout << "Data of vector char pointer is [" << typeid(vector4.data()).name() << "]" << std::endl;
 	std::cout << "and corresponding value type is [" << typeid(ft::vector<char *>::value_type).name() << "]" << std::endl;
@@ -155,8 +153,7 @@ void vector_fill_constructor( void )
 	std::cout << "vector<std::string>.front() [" << vector_str.front() << "]" << std::endl;
 	std::cout << "vector<std::string>.back() [" << vector_str.back() << "]" << std::endl;
 	std::cout << "vector<std::string>.data() [" << *vector_str.data() << "]" << std::endl;
-
-
+	print_stats(vector_str);
 }
 
 /**
@@ -169,35 +166,44 @@ void vector_fill_constructor( void )
  * Create vector with 5 size and 10 capacity and use this from begin() to
  * end() + 2 for example
  */
+
 void vector_range_constructor( void )
 {
 	// Replace these with different push_back, insert created, etc
 	std::cout << "[VECTOR RANGE CONSTRUCTOR]" << std::endl;
 
-	ft::vector<std::string> vector_str(1, "Hello");
-	vector_str.push_back("my");
-	vector_str.push_back("name");
-	vector_str.push_back("is");
-	vector_str.push_back("Gonçalo");
-	print_container(vector_str);
+	ft::vector<std::string> vector_str_base(1, "Hello");
+	vector_str_base.push_back("my");
+	vector_str_base.push_back("name");
+	vector_str_base.push_back("is");
+	vector_str_base.push_back("Gonçalo");
+	print_stats(vector_str_base);
+	ft::vector<std::string> vector_str_range(vector_str_base.begin(), vector_str_base.end());
+	print_stats(vector_str_range);
 
-	ft::vector<int> vector7(10, 5);
-	ft::vector<char> vector8(3, 'k');
+	ft::vector<int> vector_int_base(10, 5);
+	print_stats(vector_int_base);
+	ft::vector<int> vector_int_range(vector_int_base.begin(), vector_int_base.end());
+	print_stats(vector_int_range);
+
+	ft::vector<char> vector_char_base(3, 'k');
+	print_stats(vector_char_base);
+	ft::vector<char> vector_char_range(vector_char_base.begin(), vector_char_base.end());
+	print_stats(vector_char_range);
+
 	char a[] = "Okay";
-	ft::vector<char *> vector9(4, a);
-	// ft::vector<const int> vector10(2, 4); // const elements not allowed
+	ft::vector<char *> vector_charptr_base(4, a);
+	print_stats(vector_charptr_base);
+	ft::vector<char *> vector_charptr_range(vector_charptr_base.begin(), vector_charptr_base.end());
+	print_stats(vector_charptr_range);
 
-	ft::vector<std::string> vector_str_range(vector_str.begin(), vector_str.end());
-
-	ft::vector<int> vector12(vector7.begin(), vector7.end());
 	int myints[] = {16, 2, 77, 29};
-	ft::vector<int> vector13(myints, myints + sizeof(myints) / sizeof(int));
-	ft::vector<char> vector14(vector8.begin(), vector8.end());
-	ft::vector<char *> vector15(vector9.begin(), vector9.end());
+	ft::vector<int> vector_int_direct(myints, myints + sizeof(myints) / sizeof(int));
+	print_stats(vector_int_direct);
+
 	// ft::vector<const int> vector16(vector10.begin(), vector10.end());	
 
-	// TODO: Test assign with more capacity than size and then assign and check new size.
-
+	// ft::vector<const int> vector10(2, 4); // const elements not allowed
 }
 
 /**
@@ -206,6 +212,7 @@ void vector_range_constructor( void )
  * 
  * TODO: Add test with increased capacity and create copy
  * (what happens is the capacity is not taken into consideration)
+ * TODO: Test assign with more capacity than size and then assign and check new size.
  */
 
 void vector_copy_constructor( void )
@@ -214,49 +221,25 @@ void vector_copy_constructor( void )
 	ft::vector<std::string> vec_str(5, "Hello");
 	vec_str.reserve(10);
 
-	std::cout << "print_container" << std::endl;	
-	print_container(vec_str);
-	std::cout << "print_container_capacity" << std::endl;
-	print_container_capacity(vec_str);
-	std::cout << "SIZE: [" << vec_str.size() << "]" << std::endl;
-	std::cout << "CAPACITY: [" << vec_str.capacity() << "]" << std::endl;
+	print_stats(vec_str);
 	ft::vector<std::string> vector_cpy_str(vec_str);
-	std::cout << "SIZE: [" << vector_cpy_str.size() << "]" << std::endl;
-	std::cout << "CAPACITY: [" << vector_cpy_str.capacity() << "]" << std::endl;
+	print_stats(vector_cpy_str);
 
 	ft::vector<int> vec_int(10, 5);
-	std::cout << "print_container" << std::endl;
-	print_container(vec_int);
-	std::cout << "print_container_capacity" << std::endl;
-	print_container_capacity(vec_int);
-	std::cout << "SIZE: [" << vec_int.size() << "]" << std::endl;
-	std::cout << "CAPACITY: [" << vec_int.capacity() << "]" << std::endl;
-
-	ft::vector<int> vector18(vec_int);
+	print_stats(vec_int);
+	ft::vector<int> vector_cpy_int(vec_int);
+	print_stats(vector_cpy_int);
 
 	ft::vector<char> vec_char(3, 'k');
-
-	std::cout << "print_container" << std::endl;
-	print_container(vec_char);
-	std::cout << "print_container_capacity" << std::endl;
-	print_container_capacity(vec_char);
-	std::cout << "SIZE: [" << vec_char.size() << "]" << std::endl;
-	std::cout << "CAPACITY: [" << vec_char.capacity() << "]" << std::endl;
-
-	ft::vector<char> vector20(vec_char);
+	print_stats(vec_char);
+	ft::vector<char> vec_cpy_char(vec_char);
+	print_stats(vec_cpy_char);
 
 	char a[] = "Okay";
 	ft::vector<char *> vec_char_ptr(4, a);
-
-	std::cout << "print_container" << std::endl;
-	print_container(vec_char_ptr);
-	std::cout << "print_container_capacity" << std::endl;
-	print_container_capacity(vec_char_ptr);
-	std::cout << "SIZE: [" << vec_char_ptr.size() << "]" << std::endl;
-	std::cout << "CAPACITY: [" << vec_char_ptr.capacity() << "]" << std::endl;
-
-	ft::vector<char *> vector21(vec_char_ptr);
-
+	print_stats(vec_char_ptr);
+	ft::vector<char *> vec_cpy_char_ptr(vec_char_ptr);
+	print_stats(vec_cpy_char_ptr);
 	// ft::vector<const int> vector10(2, 4);	
 	// ft::vector<const int> vector22(vector10);
 }
@@ -334,21 +317,19 @@ void vector_assign()
 	vector_str.push_back("Gonçalo");
 	
 	ft::vector<std::string> temp(vector_str);
-	
-	std::cout << "VECTOR BEFORE ASSIGN" << std::endl;
-	print_container(vector_str);
-	std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
-	print_container_capacity(vector_str);
+	print_stats(vector_str);
+
 	vector_str.reserve(vector_str.size() + 3);
 	std::cout << "SIZE: [" << vector_str.size() << "]" << std::endl;
 	std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
 
 	vector_str.assign(3, "YO");
 	std::cout << "VECTOR SIMPLE ASSIGN with size smaller than capacity" << std::endl;
-	print_container(vector_str);
-	print_container_capacity(vector_str);
-	std::cout << "SIZE: [" << vector_str.size() << "]" << std::endl;
-	std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
+	print_stats(vector_str);
+	// print_container(vector_str);
+	// print_container_capacity(vector_str);
+	// std::cout << "SIZE: [" << vector_str.size() << "]" << std::endl;
+	// std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
 
 	std::cout << "VECTOR RANGE ASSIGN" << std::endl;
 	temp.push_back("these");
@@ -374,7 +355,7 @@ void vector_assign()
 	std::cout << "CAPACITY: [" << vector_str.capacity() << "]" << std::endl;
 }
 
-// TODO: Make more tests for each
+// // TODO: Make more tests for each
 
 void	vector_insert()
 {
@@ -431,6 +412,82 @@ void	vector_insert()
 	quick_test.reserve(quick_test.size() + 1);
 	quick_test.insert(quick_test.begin(), 100);
 	print_stats(quick_test);
+
+	ft::vector<int> big_vector;
+	big_vector.push_back(1);
+	big_vector.push_back(2);
+	big_vector.push_back(3);
+	big_vector.push_back(4);
+	big_vector.push_back(5);
+	big_vector.push_back(6);
+	big_vector.push_back(7);
+	big_vector.push_back(8);
+	big_vector.push_back(10);
+	print_stats(big_vector);
+
+	std::cout << "VECTOR with insert range more than double empty" << std::endl;
+	ft::vector<int> small_vector_empty;
+	small_vector_empty.insert(small_vector_empty.begin(), big_vector.begin(), big_vector.end());
+	print_stats(small_vector_empty);
+
+	std::cout << "VECTOR with insert range more than double not empty" << std::endl;
+	ft::vector<int> small_vector_not_empty(1, 0);
+	small_vector_not_empty.insert(small_vector_not_empty.begin(), big_vector.begin(), big_vector.end());
+	print_stats(small_vector_not_empty);
+
+	std::cout << "VECTOR with single insert versus push_back" << std::endl;
+	ft::vector<int> pb_vector;
+	std::cout << "push_back 1" << std::endl;
+	pb_vector.push_back(1);
+	print_stats(pb_vector);
+	std::cout << "push_back 2" << std::endl;
+	pb_vector.push_back(2);
+	print_stats(pb_vector);
+	std::cout << "push_back 3" << std::endl;
+	pb_vector.push_back(3);
+	print_stats(pb_vector);
+
+	ft::vector<int> single_ins_vector;
+	std::cout << "insert 1 2 3 1st time" << std::endl;
+	single_ins_vector.insert(single_ins_vector.end(), 1);
+	print_stats(single_ins_vector);
+	std::cout << "insert 1 2 3 2ND TIME" << std::endl;
+	single_ins_vector.insert(single_ins_vector.end(), 2);
+	print_stats(single_ins_vector);
+	std::cout << "insert 1 2 3" << std::endl;
+	single_ins_vector.insert(single_ins_vector.end(), 3);
+	print_stats(single_ins_vector);
+
+	std::cout << "VECTOR with range insert versus push_back" << std::endl;
+	ft::vector<int> pb_vector2;
+	std::cout << "push_back 1" << std::endl;
+	pb_vector2.push_back(1);
+	print_stats(pb_vector2);
+	std::cout << "push_back 2" << std::endl;
+	pb_vector2.push_back(2);
+	print_stats(pb_vector2);
+	std::cout << "push_back 3" << std::endl;
+	pb_vector2.push_back(3);
+	print_stats(pb_vector2);
+
+	ft::vector<int> ins_vector;
+	std::cout << "insert 1 2 3 1st time" << std::endl;
+	ins_vector.insert(ins_vector.end(), pb_vector.begin(), (pb_vector.begin()+3));
+	print_stats(ins_vector);
+	std::cout << "insert 1 2 3 2ND TIME" << std::endl;
+	ins_vector.insert(ins_vector.end(), pb_vector.begin(), (pb_vector.begin()+3));
+	print_stats(ins_vector);
+	std::cout << "insert 1 2 3" << std::endl;
+	ins_vector.insert(ins_vector.end(), pb_vector.begin(), (pb_vector.begin()+3));
+	print_stats(ins_vector);
+
+	std::cout << "VECTOR huge range insert" << std::endl;
+
+	std::cout << "VECTOR empty insert" << std::endl;
+	ft::vector<int> no_change_vec(1, 2);
+	print_stats(no_change_vec);
+	no_change_vec.insert(no_change_vec.end(), no_change_vec.begin(), no_change_vec.begin());
+	print_stats(no_change_vec);
 }
 
 void	vector_clear()
@@ -710,7 +767,6 @@ void vector_custom_tests()
 
 	vector_external_swap();
 	vector_comparisons();
-
 	vector_reverse_iterator();
 
 	// Iterators
@@ -721,11 +777,10 @@ void vector_custom_tests()
 
 int test_vector()
 {
-	// test_vec_42();
 	std::cout << "\nRunning custom tests\n" << std::endl;
-	// vector_custom_tests();
+	vector_custom_tests();
 	// main from 42
-	test_vec_42();
+	// test_vec_42();
 	// test_vector_iterator();
 	return (0);
 }

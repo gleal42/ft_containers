@@ -37,7 +37,7 @@ template<typename T>
 void	print_stats(const T & container)
 {
 	print_container(container);
-	print_container_capacity(container);
+	// print_container_capacity(container);
 	std::cout << "SIZE: [" << container.size() << "]" << std::endl;
 	std::cout << "CAPACITY: [" << container.capacity() << "]" << std::endl;	
 }

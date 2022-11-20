@@ -6,13 +6,13 @@
 #    By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/16 17:10:14 by gleal             #+#    #+#              #
-#    Updated: 2022/10/05 16:22:52 by gleal            ###   ########.fr        #
+#    Updated: 2022/11/20 19:46:24 by gleal            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX := c++
-CXXFLAGS := -Wall -Wextra -Werror -g -std=c++98
-CPPFLAGS := -Istl -Itests/inc -Istl/extra
+CXXFLAGS := -Wall -Wextra -Werror -g -std=c++98 -fsanitize=address
+CPPFLAGS := -Istl -Itests/inc -Istl/extra -fsanitize=address
 FT := -DFT=1
 STD := -DFT=0
 

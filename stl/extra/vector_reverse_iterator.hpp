@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 23:18:17 by gleal             #+#    #+#             */
-/*   Updated: 2022/11/13 20:21:42 by gleal            ###   ########.fr       */
+/*   Updated: 2022/11/20 18:26:34 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 // Reverse Iterator Iter is the ReverseAccessIterator
 
 #include <iostream>
+
+// TODO: Create generic ft::reverse_iterator which simply inverts base iterator (requirement for project)
 
 namespace ft
 {

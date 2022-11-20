@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:34:59 by gleal             #+#    #+#             */
-/*   Updated: 2022/11/13 20:20:44 by gleal            ###   ########.fr       */
+/*   Updated: 2022/11/20 20:14:07 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,33 +298,31 @@ public:
 	// size_t new_cap = _end_of_storage - _start + n;
 	void insert (iterator position, size_type n, const value_type& val)
 	{
-		if (_finish + n > _end_of_storage)
-		{
-			size_t pos_dist = position - begin();
-			set_capacity((_end_of_storage - _start) * 2);
-			position = _start + pos_dist;
-		}
-		// print_container_capacity(*this);
+		insert_realloc(position, n);
 		move_contents_forward_from(position, n);
 		set_contents(n, val, &(*position));
 		_finish += n;
 	}
 
 	// Not clear in cppreference but clear in cplusplus
+	// TODO: exception for max_capacity:
+	// NOTE: cap > 0 might be redundant
 	template< class InputIterator >
 	void	insert( iterator position, InputIterator first, InputIterator last ,
 	typename enable_if<!is_integral<InputIterator>::value >::type* = 0)
 	{
 		size_type n = last - first;
-		if (_finish + n >= _end_of_storage)
-		{
-			size_t pos_dist = position - begin();
-			size_t new_cap = (_end_of_storage - _start) * 2;
-			// size_t new_cap = _end_of_storage - _start + n;
-			set_capacity(new_cap);
-			position = _start + pos_dist;
-		}
-		// print_container_capacity(*this);
+		insert_realloc(position, n);
+		// if (_finish + n > _end_of_storage)
+		// {
+		// 	size_t cap = capacity();
+		// 	size_t req_cap = cap + _finish + n - _end_of_storage;
+		// 	size_t pos_dist = position - begin();
+		// 	if (cap < req_cap)
+		// 		cap = (cap > 0 && (cap * 2) > req_cap )? cap * 2 : req_cap;
+		// 	set_capacity(cap);
+		// 	position = _start + pos_dist;
+		// }
 		move_contents_forward_from(position, n);
 		while (first < last)
 		{
@@ -354,9 +352,7 @@ public:
 		return (ret_val);
 	}
 	
-	// TODO: Checkar melhor / Test
 	// TODO: T must meet the requirements of CopyInsertable in order to use overload (1).
-	// TODO: exception for max_capacity:
 	void push_back( const T& value )
 	{
 		insert(end(), 1, value);
@@ -404,6 +400,19 @@ private:
 	{
 		_alloc.deallocate(_start, capacity());
 		_end_of_storage = _start;
+	}
+	void insert_realloc(iterator &position, size_t n)
+	{
+		if (_finish + n > _end_of_storage)
+		{
+			size_t cap = capacity();
+			size_t req_cap = cap + _finish + n - _end_of_storage;
+			size_t pos_dist = position - begin();
+			if (cap < req_cap)
+				cap = (cap > 0 && (cap * 2) > req_cap )? cap * 2 : req_cap;
+			set_capacity(cap);
+			position = _start + pos_dist;
+		}
 	}
 	void alloc_empty(size_t n)
 	{
@@ -464,17 +473,23 @@ private:
 		
 	void	move_contents_forward_from(iterator start, size_type n)
 	{
+		// if (n == 0)
+		// 	return ;
 		iterator move_from = _finish - 1;
 		iterator move_to = move_from + n;
-		LOG("Move FROM is " << *move_from << std::endl);
-		LOG("Move TO is " << *move_to << std::endl);
+		// LOG("Move FROM is " << *move_from << std::endl);
+		// LOG("Move TO is " << *move_to << std::endl);
+		LOG("Current Size " << size() << std::endl);
+		std::cout << "Current CAPACITY " << capacity() << std::endl;
+		std::cout << "From " << *(_finish - 1) << std::endl;
+		std::cout << "To " << size() - 1 + n << std::endl;
 		while (move_to != start)
 		{
 			_alloc.construct(&*move_to, *move_from);
 			_alloc.destroy(&*move_from);
 			// print_container_capacity(*this);
-			LOG("Move FROM is" << *move_from << std::endl);
-			LOG("Move TO is" << *move_to << std::endl);
+			// LOG("Move FROM is" << *move_from << std::endl);
+			// LOG("Move TO is" << *move_to << std::endl);
 			--move_from;
 			--move_to;
 		}
@@ -492,8 +507,6 @@ private:
 	pointer		_finish;
 	pointer		_end_of_storage;
 	allocator_type	_alloc;
-	friend void	vector_custom_tests();
-	
 }; // class vector
 
 // TODO: Test
