@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
-/*   Updated: 2022/11/20 20:10:46 by gleal            ###   ########.fr       */
+/*   Updated: 2022/11/26 16:30:35 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -400,9 +400,9 @@ void	vector_insert()
 	std::cout << "VECTOR before range insert" << std::endl;
 	std::cout << "--------------------------" << std::endl;
 
-
 	print_stats(range_insert_vec);
 
+	std::cout << "Inserting range [" << *(vector_int.begin() + 1) << " to "  <<*(vector_int.end()-2) << "]" <<std::endl;
 	range_insert_vec.insert(range_insert_vec.begin() + 2, vector_int.begin() + 1, vector_int.end()-1);
 
 	std::cout << "VECTOR after range insert" << std::endl;

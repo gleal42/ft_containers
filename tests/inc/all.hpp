@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:35:51 by gleal             #+#    #+#             */
-/*   Updated: 2022/10/23 17:01:22 by gleal            ###   ########.fr       */
+/*   Updated: 2022/11/26 15:32:54 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ struct Buffer
 	int idx;
 	char buff[BUFFER_SIZE];
 };
+
+std::ostream & operator << (std::ostream &os, const Buffer &buf);
 
 #define COUNT (MAX_RAM / (int)sizeof(Buffer))
 

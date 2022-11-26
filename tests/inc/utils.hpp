@@ -42,5 +42,4 @@ void	print_stats(const T & container)
 	std::cout << "CAPACITY: [" << container.capacity() << "]" << std::endl;	
 }
 
-
 #endif // __UTILS_H__
