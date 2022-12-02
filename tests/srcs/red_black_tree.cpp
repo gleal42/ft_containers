@@ -1,36 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   red_black_tree.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/16 17:12:09 by gleal             #+#    #+#             */
-/*   Updated: 2022/12/02 22:48:38 by gleal            ###   ########.fr       */
+/*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
+/*   Updated: 2022/12/02 23:04:45 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "all.hpp"
 #include "RedBlackTree.hpp"
 
-#include <iostream>
-#include <stdio.h>
-
-int main(int argc, char** argv) {
-	(void)argc;
-	(void)argv;
-	if (argc != 2)
-	{
-		std::cerr << "Usage: ./test seed" << std::endl;
-		std::cerr << "Provide a seed please" << std::endl;
-		std::cerr << "Count value:" << COUNT << std::endl;
-		return 1;
-	}
-	const int seed = atoi(argv[1]);
-	srand(seed);
-	// test_stack();
-	// test_vector();
-	test_red_black_tree();
-	
-	return (0);
+void test_red_black_tree()
+{
+	RedBlackTree tree;
+	tree.add_node(4);
+	tree.add_node(3);
+	tree.add_node(2);
+	tree.add_node(7);
+	tree.add_node(6);
+	tree.add_node(10);
+	tree.print();
+	return ;
 }

@@ -1,0 +1,17 @@
+---
+
+BasedOnStyle: LLVM
+
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterEnum: true
+  AfterStruct: true
+  AfterClass: true
+  AfterFunction: true
+  SplitEmptyFunction: false
+  AfterControlStatement: Always
+UseTab: Always
+IndentWidth: 8
+AlignAfterOpenBracket: Align
+AlignOperands: false
+ContinuationIndentWidth: 12
