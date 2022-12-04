@@ -6,7 +6,7 @@
 /*   By: gleal <gleal@student.42lisboa.com>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 21:42:39 by gleal             #+#    #+#             */
-/*   Updated: 2022/12/02 23:04:45 by gleal            ###   ########.fr       */
+/*   Updated: 2022/12/04 00:40:38 by gleal            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ void test_red_black_tree()
 	tree.add_node(7);
 	tree.add_node(6);
 	tree.add_node(10);
-	tree.print();
+	tree.print(tree.root, "ROOT", "");
 	return ;
 }
