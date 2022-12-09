@@ -28,7 +28,7 @@ struct Node
 		RED
 	};
 
-    Color clr;
+	Color clr;
 	Node(int nbr, Node *parent);
 };
 
@@ -38,10 +38,17 @@ struct RedBlackTree
 	~RedBlackTree();
 	Node *root;
 	void add_node(int nbr);
+	Node *find_node(int nbr);
 	void print(Node *ptr, const std::string &side,
 		   const std::string &depth);
-    void left_rotate(Node *old);
-    void right_rotate(Node *old);
+	void left_rotate(Node *old);
+	void right_rotate(Node *old);
+	void fix_insert(Node *inserted);
+	void fix_insert(Node **ptr, Node *uncle, bool is_opposite_parent,
+			      void (RedBlackTree::*grandparent_rot)(Node *),
+			      void (RedBlackTree::*parent_rot)(Node *));
+	Node::Color getColour(Node *node);
+	void setColour(Node *node, Node::Color clr);
 };
 
 void test_red_black_tree();

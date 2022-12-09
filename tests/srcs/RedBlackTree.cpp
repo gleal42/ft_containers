@@ -13,7 +13,7 @@
 #include "RedBlackTree.hpp"
 
 Node::Node(int nbr, Node *parent)
-    : data(nbr), parent(parent), left(NULL), right(NULL), clr(BLACK)
+    : data(nbr), parent(parent), left(NULL), right(NULL), clr(RED)
 {}
 
 RedBlackTree::RedBlackTree() : root(NULL) {}
@@ -81,34 +81,38 @@ void RedBlackTree::print(Node *ptr, const std::string &side,
 {
 	if (ptr != NULL)
 	{
-		print(ptr->left, "LEFT", (depth + "    "));
-		std::cout << depth << side << " " << ptr->data << " "
-			  << (ptr->clr ? "red" : "blk") << " p: " << (ptr!=root?ptr->parent->data:0) << std::endl;
-		print(ptr->right, "RIGHT", (depth + "    "));
+		print(ptr->right, "RIGHT", (depth + "         "));
+		std::cout << depth
+			  << (ptr != root ? ptr->parent->data : 0)
+			  << "->" 
+			  << side << " [" << ptr->data << "] "
+			  << (ptr->clr ? "red" : "blk")
+			  << std::endl;
+		print(ptr->left, "LEFT", (depth + "         "));
 	}
 }
 
-void RedBlackTree::left_rotate(Node *old)
+void RedBlackTree::left_rotate(Node *x)
 {
-	Node *new_base = old->right;
-	old->right = new_base->left;
-	if (new_base->left != NULL)
+	Node *y = x->right;
+	x->right = y->left;
+	if (y->left != NULL)
 	{
-		new_base->left->parent = old;
+		y->left->parent = x;
 	}
-	new_base->parent = old->parent;
-	if (old->parent == NULL)
+	y->parent = x->parent;
+	if (x->parent == NULL)
 	{
-		root = new_base;
-	} else if (old == old->parent->left)
+		root = y;
+	} else if (x == x->parent->left)
 	{
-		old->parent->left = new_base;
+		x->parent->left = y;
 	} else
 	{
-		old->parent->right = new_base;
+		x->parent->right = y;
 	}
-	new_base->left = old;
-	old->parent = new_base;
+	y->left = x;
+	x->parent = y;
 }
 
 void RedBlackTree::right_rotate(Node *old)
@@ -132,4 +136,113 @@ void RedBlackTree::right_rotate(Node *old)
 	}
 	new_base->right = old;
 	old->parent = new_base;
+}
+
+void RedBlackTree::fix_insert(Node *ptr)
+{
+	while (getColour(ptr->parent) == Node::RED)
+	{
+		Node *parent = ptr->parent;
+		Node *grand_parent = parent->parent;
+		if (ptr->parent == grand_parent->left)
+		{
+			fix_insert(&ptr, grand_parent->right,
+				   (ptr == parent->right),
+				   &RedBlackTree::right_rotate,
+				   &RedBlackTree::left_rotate);
+		} else
+		{
+			fix_insert(&ptr, grand_parent->left,
+				   (ptr == parent->left),
+				   &RedBlackTree::left_rotate,
+				   &RedBlackTree::right_rotate);
+		}
+	}
+	root->clr = Node::BLACK; // Case  ptr =
+}
+
+void RedBlackTree::fix_insert(Node **ptr, Node *uncle, bool is_opposite_parent,
+			      void (RedBlackTree::*grandparent_rot)(Node *),
+			      void (RedBlackTree::*parent_rot)(Node *))
+{
+	Node *parent = (*ptr)->parent;
+	Node *grandparent = parent->parent;
+	if (getColour(uncle) == Node::RED) // Case 1
+	{
+		setColour(parent, Node::BLACK);
+		setColour(uncle, Node::BLACK);
+		setColour(grandparent, Node::RED);
+		(*ptr) = grandparent;
+	} else // Case 2 and 3
+	{
+		if (is_opposite_parent) // Case 2
+		{
+			(this->*parent_rot)(parent);
+			(*ptr) = parent;
+			parent = (*ptr)->parent;
+			grandparent = parent->parent;
+		}
+		// Case 3
+		setColour(parent, Node::BLACK);
+		setColour(grandparent, Node::RED);
+		(this->*grandparent_rot)(grandparent);
+	}
+}
+
+Node *RedBlackTree::find_node(int nbr)
+{
+	Node *it = root;
+	while (it != NULL)
+	{
+		if (nbr < it->data)
+		{
+			it = it->left;
+		} else if (nbr > it->data)
+		{
+			it = it->right;
+		} else
+			return it;
+	}
+	return it;
+}
+
+// void RedBlackTree::fix_insert_right_parent(Node *ptr)
+// {
+// 	Node *parent = ptr->parent;
+// 	Node *grandparent = parent->parent;
+// 	Node *uncle = grandparent->left;
+// 	if (getColour(uncle) == Node::RED) // Case 1
+// 	{
+// 		setColour(parent, Node::BLACK);
+// 		setColour(uncle, Node::BLACK);
+// 		setColour(grandparent, Node::RED);
+// 		left_rotate(grandparent);
+// 		ptr = grandparent;
+// 	} else // Case 2 and 3
+// 	{
+// 		if (ptr == parent->right) // Case 2
+// 		{
+// 			right_rotate(parent);
+// 			ptr = parent;
+// 			parent = ptr->parent;
+// 			grandparent = parent->parent;
+// 		}
+// 		// Case 3
+// 		SetColour(parent, Node::BLACK);
+// 		SetColour(grandparent, Node::RED);
+// 		left_rotate(grandparent);
+// 	}
+// }
+
+Node::Color RedBlackTree::getColour(Node *node)
+{
+	if (node)
+		return node->clr;
+	return Node::BLACK;
+}
+
+void RedBlackTree::setColour(Node *node, Node::Color clr)
+{
+	if (node)
+		node->clr = clr;
 }
