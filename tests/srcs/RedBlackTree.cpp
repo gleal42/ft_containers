@@ -76,18 +76,71 @@ void RedBlackTree::add_node(int nbr)
 	}
 }
 
+void RedBlackTree::delete_node(int nbr)
+{
+	Node *to_delete = find_node(nbr);
+	if (to_delete == NULL)
+		return;
+	Node *y = to_delete;
+	Node *x;
+	Node::Color y_color = y->clr;
+	if (to_delete->left == NULL)
+	{ // case 1
+		x = to_delete->right;
+		transplant(to_delete, to_delete->right);
+	} else if (to_delete->right == NULL)
+	{ // case 2
+		x = to_delete->left;
+		transplant(to_delete, to_delete->left);
+	} else // case 3
+	{
+		y = minimum(to_delete->right);
+		y_color = y->clr;
+		x = y->right;
+		if (y->parent == to_delete)
+		{
+			x->parent = y;
+		} else
+		{
+			transplant(y, y->right);
+			y->right = to_delete->right;
+			y->right->parent = y;
+		}
+		transplant(to_delete, y);
+		y->left = to_delete->left;
+		y->left->parent = y;
+		y->clr = to_delete->clr;
+	}
+	delete to_delete;
+	if (y_color == Node::BLACK)
+	{
+		fix_delete(x);
+	}
+}
+
+void RedBlackTree::transplant(Node *spot, Node *sub_tree)
+{
+	if (spot->parent == NULL)
+		root = sub_tree;
+	else if (spot == spot->parent->left)
+	{
+		spot->parent->left = sub_tree;
+	} else
+	{
+		spot->parent->right = sub_tree;
+	}
+	sub_tree->parent = spot->parent;
+}
+
 void RedBlackTree::print(Node *ptr, const std::string &side,
 			 const std::string &depth)
 {
 	if (ptr != NULL)
 	{
 		print(ptr->right, "RIGHT", (depth + "         "));
-		std::cout << depth
-			  << (ptr != root ? ptr->parent->data : 0)
-			  << "->" 
-			  << side << " [" << ptr->data << "] "
-			  << (ptr->clr ? "red" : "blk")
-			  << std::endl;
+		std::cout << depth << (ptr != root ? ptr->parent->data : 0)
+			  << "->" << side << " [" << ptr->data << "] "
+			  << (ptr->clr ? "red" : "blk") << std::endl;
 		print(ptr->left, "LEFT", (depth + "         "));
 	}
 }
@@ -206,34 +259,6 @@ Node *RedBlackTree::find_node(int nbr)
 	return it;
 }
 
-// void RedBlackTree::fix_insert_right_parent(Node *ptr)
-// {
-// 	Node *parent = ptr->parent;
-// 	Node *grandparent = parent->parent;
-// 	Node *uncle = grandparent->left;
-// 	if (getColour(uncle) == Node::RED) // Case 1
-// 	{
-// 		setColour(parent, Node::BLACK);
-// 		setColour(uncle, Node::BLACK);
-// 		setColour(grandparent, Node::RED);
-// 		left_rotate(grandparent);
-// 		ptr = grandparent;
-// 	} else // Case 2 and 3
-// 	{
-// 		if (ptr == parent->right) // Case 2
-// 		{
-// 			right_rotate(parent);
-// 			ptr = parent;
-// 			parent = ptr->parent;
-// 			grandparent = parent->parent;
-// 		}
-// 		// Case 3
-// 		SetColour(parent, Node::BLACK);
-// 		SetColour(grandparent, Node::RED);
-// 		left_rotate(grandparent);
-// 	}
-// }
-
 Node::Color RedBlackTree::getColour(Node *node)
 {
 	if (node)
@@ -245,4 +270,59 @@ void RedBlackTree::setColour(Node *node, Node::Color clr)
 {
 	if (node)
 		node->clr = clr;
+}
+
+Node *RedBlackTree::minimum(Node *ptr)
+{
+	while (ptr != NULL)
+	{
+		ptr = ptr->left;
+	}
+	return ptr;
+}
+
+void RedBlackTree::fix_delete(Node *to_fix)
+{
+	Node *sibling;
+	while (to_fix != root && to_fix->clr == Node::BLACK)
+	{
+		if (to_fix == to_fix->parent->left)
+		{
+			Node *sibling = to_fix->parent->right;
+			// case 1
+			if (sibling->clr == Node::RED)
+			{
+				sibling->clr == Node::BLACK;
+				to_fix->parent->clr = Node::RED;
+				left_rotate(to_fix->parent);
+				sibling = to_fix->parent->right;
+			}
+			// case 2
+			if (sibling->left->clr == Node::BLACK &&
+			    sibling->right->clr == Node::BLACK)
+			{
+				sibling->clr = Node::RED;
+				to_fix = to_fix->parent;
+			} else
+			{
+				// case 3
+				if (sibling->right->clr == Node::BLACK)
+				{
+					sibling->left->clr = Node::BLACK;
+					sibling->clr = Node::RED;
+					right_rotate(sibling);
+					sibling = to_fix->parent->right;
+				}
+				// case 4
+				sibling->clr = to_fix->parent->clr;
+				to_fix->parent->clr = Node::BLACK;
+				sibling->right->clr = Node::BLACK;
+				left_rotate(to_fix->parent);
+				to_fix = root;
+			}
+		}else {
+			// ...
+		}
+	}
+	to_fix->clr = Node::BLACK;
 }
