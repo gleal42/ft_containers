@@ -11,8 +11,18 @@
 /* ************************************************************************** */
 
 #ifndef MAP_HPP
-# define MAP_HPP
+#define MAP_HPP
 
-namespace ft {};
+#include <memory>
+
+namespace ft {
+
+template <class T, class Allocator = std::allocator<T>> class map
+{
+      public:
+
+}; // class map
+
+}; // namespace ft
 
 #endif

@@ -16,21 +16,7 @@
 #include <cstddef>
 #include <iostream>
 
-struct Node
-{
-	int data;
-	Node *parent;
-	Node *left;
-	Node *right;
-	enum Color
-	{
-		BLACK,
-		RED
-	};
-
-	Color clr;
-	Node(int nbr, Node *parent);
-};
+#include "Node.hpp"
 
 struct RedBlackTree
 {
@@ -40,6 +26,9 @@ struct RedBlackTree
 
 	Node *find_node(int nbr);
 	Node *minimum(Node *ptr);
+	Node *maximum(Node *ptr); // TODO
+	Node *previous(Node *ptr); // TODO
+	Node *next(Node *ptr); // TODO
 	Node::Color getColour(Node *node);
 	void setColour(Node *node, Node::Color clr);
 

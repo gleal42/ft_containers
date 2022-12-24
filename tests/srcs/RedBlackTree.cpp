@@ -135,7 +135,10 @@ void RedBlackTree::transplant(Node *spot, Node *sub_tree)
 	{
 		spot->parent->right = sub_tree;
 	}
-	sub_tree->parent = spot->parent;
+	if (sub_tree != NULL)
+	{
+		sub_tree->parent = spot->parent;
+	}
 }
 
 void RedBlackTree::print(Node *ptr, const std::string &side,
@@ -325,7 +328,8 @@ void RedBlackTree::fix_delete(Node *to_fix)
 				left_rotate(to_fix->parent);
 				to_fix = root;
 			}
-		}else {
+		} else
+		{
 			Node *sibling = to_fix->parent->left;
 			// case 1
 			if (sibling->clr == Node::RED)

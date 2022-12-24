@@ -11,8 +11,8 @@
 # **************************************************************************** #
 
 CXX := c++
-CXXFLAGS := -Wall -Wextra -Werror -std=c++98 -g #-fsanitize=address
-CPPFLAGS := -Istl -Itests/inc -Istl/extra -g # -fsanitize=address
+CXXFLAGS := -Wall -Wextra -Werror -std=c++98 -g  -fsanitize=address
+CPPFLAGS := -Istl -Itests/inc -Istl/extra -g  -fsanitize=address
 FT := -DFT=1
 STD := -DFT=0
 
