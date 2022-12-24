@@ -50,6 +50,7 @@ void RedBlackTree::add_node(int nbr)
 	if (root == NULL)
 	{
 		root = new Node(nbr, NULL);
+		fix_insert(root);
 		return;
 	}
 	Node *it = root;
@@ -60,6 +61,7 @@ void RedBlackTree::add_node(int nbr)
 			if (!it->left)
 			{
 				it->left = new Node(nbr, it);
+				fix_insert(it->left);
 				return;
 			}
 			it = it->left;
@@ -68,6 +70,7 @@ void RedBlackTree::add_node(int nbr)
 			if (!it->right)
 			{
 				it->right = new Node(nbr, it);
+				fix_insert(it->right);
 				return;
 			}
 			it = it->right;
@@ -99,7 +102,10 @@ void RedBlackTree::delete_node(int nbr)
 		x = y->right;
 		if (y->parent == to_delete)
 		{
-			x->parent = y;
+			if (x != NULL)
+			{
+				x->parent = y;
+			}
 		} else
 		{
 			transplant(y, y->right);
@@ -112,7 +118,7 @@ void RedBlackTree::delete_node(int nbr)
 		y->clr = to_delete->clr;
 	}
 	delete to_delete;
-	if (y_color == Node::BLACK)
+	if (y_color == Node::BLACK && x != NULL)
 	{
 		fix_delete(x);
 	}
@@ -274,7 +280,7 @@ void RedBlackTree::setColour(Node *node, Node::Color clr)
 
 Node *RedBlackTree::minimum(Node *ptr)
 {
-	while (ptr != NULL)
+	while (ptr->left != NULL)
 	{
 		ptr = ptr->left;
 	}
@@ -283,7 +289,6 @@ Node *RedBlackTree::minimum(Node *ptr)
 
 void RedBlackTree::fix_delete(Node *to_fix)
 {
-	Node *sibling;
 	while (to_fix != root && to_fix->clr == Node::BLACK)
 	{
 		if (to_fix == to_fix->parent->left)
@@ -292,7 +297,7 @@ void RedBlackTree::fix_delete(Node *to_fix)
 			// case 1
 			if (sibling->clr == Node::RED)
 			{
-				sibling->clr == Node::BLACK;
+				sibling->clr = Node::BLACK;
 				to_fix->parent->clr = Node::RED;
 				left_rotate(to_fix->parent);
 				sibling = to_fix->parent->right;
@@ -321,7 +326,38 @@ void RedBlackTree::fix_delete(Node *to_fix)
 				to_fix = root;
 			}
 		}else {
-			// ...
+			Node *sibling = to_fix->parent->left;
+			// case 1
+			if (sibling->clr == Node::RED)
+			{
+				sibling->clr = Node::BLACK;
+				to_fix->parent->clr = Node::RED;
+				right_rotate(to_fix->parent);
+				sibling = to_fix->parent->left;
+			}
+			// case 2
+			if (sibling->right->clr == Node::BLACK &&
+			    sibling->left->clr == Node::BLACK)
+			{
+				sibling->clr = Node::RED;
+				to_fix = to_fix->parent;
+			} else
+			{
+				// case 3
+				if (sibling->left->clr == Node::BLACK)
+				{
+					sibling->right->clr = Node::BLACK;
+					sibling->clr = Node::RED;
+					right_rotate(sibling);
+					sibling = to_fix->parent->left;
+				}
+				// case 4
+				sibling->clr = to_fix->parent->clr;
+				to_fix->parent->clr = Node::BLACK;
+				sibling->left->clr = Node::BLACK;
+				right_rotate(to_fix->parent);
+				to_fix = root;
+			}
 		}
 	}
 	to_fix->clr = Node::BLACK;
