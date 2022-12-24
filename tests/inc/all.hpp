@@ -39,6 +39,7 @@ std::ostream & operator << (std::ostream &os, const Buffer &buf);
 
 void    test_stack();
 int    	test_vector();
+void	test_pair();
 
 #ifdef DEBUG
 #define LOG( x ) std::cout << x

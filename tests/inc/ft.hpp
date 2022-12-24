@@ -18,13 +18,15 @@
 #endif
 
 #if FT
-	#include <map.hpp>
-	#include <stack.hpp>
-	#include <vector.hpp>
+	#include "map.hpp"
+	#include "stack.hpp"
+	#include "vector.hpp"
+	#include "pair.hpp"
 #else
 	#include <map>
 	#include <stack>
 	#include <vector>
+	#include <utility>
 	namespace ft = std;
 #endif
 
