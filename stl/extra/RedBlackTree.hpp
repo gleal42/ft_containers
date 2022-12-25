@@ -26,9 +26,9 @@ struct RedBlackTree
 
 	Node *find_node(int nbr);
 	Node *minimum(Node *ptr);
-	Node *maximum(Node *ptr); // TODO
-	Node *previous(Node *ptr); // TODO
-	Node *next(Node *ptr); // TODO
+	Node *maximum(Node *ptr);
+	Node *prev(Node *ptr);
+	Node *next(Node *ptr);
 	Node::Color getColour(Node *node);
 	void setColour(Node *node, Node::Color clr);
 

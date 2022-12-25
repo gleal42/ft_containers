@@ -281,14 +281,7 @@ void RedBlackTree::setColour(Node *node, Node::Color clr)
 		node->clr = clr;
 }
 
-Node *RedBlackTree::minimum(Node *ptr)
-{
-	while (ptr->left != NULL)
-	{
-		ptr = ptr->left;
-	}
-	return ptr;
-}
+
 
 void RedBlackTree::fix_delete(Node *to_fix)
 {
@@ -365,4 +358,56 @@ void RedBlackTree::fix_delete(Node *to_fix)
 		}
 	}
 	to_fix->clr = Node::BLACK;
+}
+
+Node *RedBlackTree::minimum(Node *ptr)
+{
+	if (ptr == NULL)
+		return NULL;
+	while (ptr->left != NULL)
+	{
+		ptr = ptr->left;
+	}
+	return ptr;
+}
+
+Node *RedBlackTree::maximum(Node *ptr)
+{
+	if (ptr == NULL)
+		return NULL;
+	while (ptr->right != NULL)
+	{
+		ptr = ptr->right;
+	}
+	return ptr;
+}
+
+Node *RedBlackTree::next(Node *ptr)
+{
+	if (ptr == NULL)
+		return NULL;
+	if (ptr->right != NULL)
+		return minimum(ptr->right);
+	Node *parent = ptr->parent;
+	while (parent != NULL && ptr == parent->right)
+	{
+		ptr = parent;
+		parent = ptr->parent;
+	}
+	return parent;
+}
+
+Node *RedBlackTree::prev(Node *ptr)
+{
+	if (ptr == NULL)
+		return NULL;
+	if (ptr->left != NULL)
+		return maximum(ptr->left);
+	Node *parent = ptr->parent;
+	while (parent != NULL && ptr == parent->left)
+	{
+		ptr = parent;
+		parent = ptr->parent;
+	}
+	return parent;
 }

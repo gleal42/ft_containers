@@ -56,4 +56,29 @@ void    test_pair()
     std::cout << "A is " << (a>=g ?  "greater equal": "not greater equal") << " than G" << std::endl;
     std::cout << "A is " << (a>=h ?  "greater equal": "not greater equal") << " than H" << std::endl;
     std::cout << "A is " << (a>=i ?  "greater equal": "not greater equal") << " than I" << std::endl;
+
+    std::cout << "\n------TESTING EQUAL------\n\n";
+    std::cout << "A is " << (a==a ? "equal": "not equal") << " than A" << std::endl;
+    std::cout << "A is " << (a==b ? "equal": "not equal") << " than b" << std::endl;
+    std::cout << "A is " << (a==c ? "equal": "not equal") << " than c" << std::endl;
+    std::cout << "B is " << (b==c ?  "equal": "not equal") << " than c" << std::endl;
+    std::cout << "A is " << (a==d ?  "equal": "not equal") << " than D" << std::endl;
+    std::cout << "A is " << (a==e ?  "equal": "not equal") << " than E" << std::endl;
+    std::cout << "A is " << (a==f ?  "equal": "not equal") << " than F" << std::endl;
+    std::cout << "A is " << (a==g ?  "equal": "not equal") << " than G" << std::endl;
+    std::cout << "A is " << (a==h ?  "equal": "not equal") << " than H" << std::endl;
+    std::cout << "A is " << (a==i ?  "equal": "not equal") << " than I" << std::endl;
+
+    std::cout << "\n------TESTING DIFFERENT------\n\n";
+    std::cout << "A is " << (a!=a ? "different": "not different") << " than A" << std::endl;
+    std::cout << "A is " << (a!=b ? "different": "not different") << " than b" << std::endl;
+    std::cout << "A is " << (a!=c ? "different": "not different") << " than c" << std::endl;
+    std::cout << "B is " << (b!=c ?  "different": "not different") << " than c" << std::endl;
+    std::cout << "A is " << (a!=d ?  "different": "not different") << " than D" << std::endl;
+    std::cout << "A is " << (a!=e ?  "different": "not different") << " than E" << std::endl;
+    std::cout << "A is " << (a!=f ?  "different": "not different") << " than F" << std::endl;
+    std::cout << "A is " << (a!=g ?  "different": "not different") << " than G" << std::endl;
+    std::cout << "A is " << (a!=h ?  "different": "not different") << " than H" << std::endl;
+    std::cout << "A is " << (a!=i ?  "different": "not different") << " than I" << std::endl;
+
 }

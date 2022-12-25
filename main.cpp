@@ -30,8 +30,8 @@ int main(int argc, char** argv) {
 	srand(seed);
 	// test_stack();
 	// test_vector();
-	// test_red_black_tree();
-	test_pair();
+	test_red_black_tree();
+	// test_pair();
 	
 	return (0);
 }
