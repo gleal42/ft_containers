@@ -14,7 +14,7 @@
 
 void test_red_black_tree()
 {
-	RedBlackTree tree;
+	RedBlackTree<int> tree;
 	tree.add_node(5);
 
 	tree.print(tree.root, "ROOT", "");

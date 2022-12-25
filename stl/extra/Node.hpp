@@ -3,9 +3,10 @@
 
 // int data will be replaced by ft_pair
 
+template<typename T>
 struct Node
 {
-	int data;
+	T data;
 	Node *parent;
 	Node *left;
 	Node *right;
@@ -16,7 +17,10 @@ struct Node
 	};
 
 	Color clr;
-	Node(int nbr, Node *parent);
+	Node(int nbr, Node *parent)
+    : data(nbr), parent(parent), left(NULL), right(NULL), clr(RED)
+	{
+	}
 };
 
 #endif // __NODE_H__
