@@ -32,8 +32,8 @@ int main(int argc, char** argv) {
 	// test_vector();
 	// test_red_black_tree();
 	// test_pair();
-	// test_map();
-	test_rebind();
+	test_map();
+	// test_rebind();
 	
 	return (0);
 }

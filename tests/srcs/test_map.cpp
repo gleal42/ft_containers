@@ -15,7 +15,9 @@
 void    test_map()
 {
 	ft::map<int, int> map;
-
+	
+	ft::pair<const int, int> a(2, 3);
+	map.insert(a);
 	
 	// 42 test
 	// ft::map<int, int> map_int;

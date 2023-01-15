@@ -44,6 +44,11 @@ class map
     : tree()
     {
     }
+    void insert(const value_type& value)
+    {
+        tree.add_node(value);
+    }
+
 private:
 	RedBlackTree<ft::pair<Key, T>, Allocator> tree;
 }; // class map

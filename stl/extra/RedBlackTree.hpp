@@ -24,15 +24,9 @@ struct RedBlackTree
 {
 
 	typedef Allocator allocator_type;
-
-	// template<typename B>
-	// struct rebind
-	// {
-	// 	typedef 
-	// };
-
 	typedef typename rebind<Allocator>::to<Node<T> >::other node_allocator;
 	typedef typename node_allocator::pointer node_pointer;
+
 
 	// Member types
 	node_allocator _alloc;
