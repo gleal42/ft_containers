@@ -40,6 +40,8 @@ std::ostream & operator << (std::ostream &os, const Buffer &buf);
 void    test_stack();
 int    	test_vector();
 void	test_pair();
+void	test_map();
+void	test_rebind();
 
 #ifdef DEBUG
 #define LOG( x ) std::cout << x

@@ -17,10 +17,26 @@
 #include <iostream>
 
 #include "Node.hpp"
+#include "rebind.hpp"
 
-template <typename T> struct RedBlackTree
+template <typename T, typename Allocator = std::allocator<T> >
+struct RedBlackTree
 {
-	Node<T> *root;
+
+	typedef Allocator allocator_type;
+
+	// template<typename B>
+	// struct rebind
+	// {
+	// 	typedef 
+	// };
+
+	typedef typename rebind<Allocator>::to<Node<T> >::other node_allocator;
+	typedef typename node_allocator::pointer node_pointer;
+
+	// Member types
+	node_allocator _alloc;
+	node_pointer root;
 
 	RedBlackTree() : root(NULL) {}
 	~RedBlackTree()
@@ -43,10 +59,12 @@ template <typename T> struct RedBlackTree
 					it = &(*it)->right;
 				}
 			}
-			delete *it;
+			_alloc.destroy(*it);
+			_alloc.deallocate(*it, 1);
 			*it = NULL;
 		}
-		delete root;
+		_alloc.destroy(root);
+		_alloc.deallocate(root, 1);
 		root = NULL;
 	}
 
@@ -361,7 +379,8 @@ template <typename T> struct RedBlackTree
 				} else
 				{
 					// case 3
-					if (sibling->right->clr == Node<T>::BLACK)
+					if (sibling->right->clr ==
+					    Node<T>::BLACK)
 					{
 						sibling->left->clr =
 							    Node<T>::BLACK;
@@ -396,7 +415,8 @@ template <typename T> struct RedBlackTree
 				} else
 				{
 					// case 3
-					if (sibling->left->clr == Node<T>::BLACK)
+					if (sibling->left->clr ==
+					    Node<T>::BLACK)
 					{
 						sibling->right->clr =
 							    Node<T>::BLACK;

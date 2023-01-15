@@ -14,20 +14,24 @@
 
 void    test_map()
 {
-	ft::map<int, int> map_int;
-	for (int i = 0; i < COUNT; ++i)
-	{
-		map_int.insert(ft::make_pair(rand(), rand()));
-	}
+	ft::map<int, int> map;
 
-	int sum = 0;
-	for (int i = 0; i < 10000; i++)
-	{
-		int access = rand();
-		sum += map_int[access];
-	}
-	std::cout << "should be constant with the same seed: " << sum << std::endl;
-	{
-		ft::map<int, int> copy = map_int;
-	}
+	
+	// 42 test
+	// ft::map<int, int> map_int;
+	// for (int i = 0; i < COUNT; ++i)
+	// {
+	// 	map_int.insert(ft::make_pair(rand(), rand()));
+	// }
+
+	// int sum = 0;
+	// for (int i = 0; i < 10000; i++)
+	// {
+	// 	int access = rand();
+	// 	sum += map_int[access];
+	// }
+	// std::cout << "should be constant with the same seed: " << sum << std::endl;
+	// {
+	// 	ft::map<int, int> copy = map_int;
+	// }
 }

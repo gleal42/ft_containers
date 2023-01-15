@@ -37,3 +37,5 @@ https://en.cppreference.com/w/cpp/types/enable_if
 
 is_integral
 https://stackoverflow.com/questions/43571962/how-is-stdis-integral-implemented/43571992#43571992
+
+https://stackoverflow.com/questions/36547958/can-i-use-allocator-specified-for-some-type-to-allocate-objects-of-another-type

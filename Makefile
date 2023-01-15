@@ -26,10 +26,14 @@ SRCS := main.cpp \
 		test_stack.cpp \
 		test_vector.cpp \
 		test_pair.cpp \
+		test_map.cpp \
+		test_rebind.cpp \
 		red_black_tree.cpp \
 		RedBlackTree.cpp \
 		all.cpp \
 		test_reverse_vector_iterator.cpp
+
+
 OBJS := $(SRCS:.cpp=.o)
 
 FT_OBJS := $(addprefix ft_, $(OBJS))

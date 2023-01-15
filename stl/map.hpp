@@ -15,6 +15,7 @@
 
 #include <memory>
 #include "pair.hpp"
+#include "RedBlackTree.hpp"
 
 namespace ft {
 
@@ -39,9 +40,17 @@ class map
     // typedef Reverse_Iterator<iterator> 						reverse_iterator;
     // typedef Reverse_Iterator<const_iterator> 				const_reverse_iterator;
 
-	
+    map()
+    : tree()
+    {
+    }
+private:
+	RedBlackTree<ft::pair<Key, T>, Allocator> tree;
 }; // class map
 
-}; // namespace ft
+
+
+
+} // namespace ft
 
 #endif
