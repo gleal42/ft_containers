@@ -23,7 +23,6 @@ template <typename T, typename Allocator = std::allocator<T> >
 struct RedBlackTree
 {
 
-	typedef Allocator allocator_type;
 	typedef typename rebind<Allocator>::to<Node<T> >::other node_allocator;
 	typedef typename node_allocator::pointer node_pointer;
 
@@ -62,7 +61,7 @@ struct RedBlackTree
 		root = NULL;
 	}
 
-	Node<T> *find_node(int nbr)
+	Node<T> *find_node(T nbr)
 	{
 		Node<T> *it = root;
 		while (it != NULL)
@@ -143,11 +142,12 @@ struct RedBlackTree
 			node->clr = clr;
 	}
 
-	void add_node(int nbr)
+	void add_node(T nbr)
 	{
 		if (root == NULL)
 		{
-			root = new Node<T>(nbr, NULL);
+			root = _alloc.allocate(1);
+			_alloc.construct(root, Node<T>(nbr, NULL));
 			fix_insert(root);
 			return;
 		}
@@ -158,7 +158,8 @@ struct RedBlackTree
 			{
 				if (!it->left)
 				{
-					it->left = new Node<T>(nbr, it);
+					it->left = _alloc.allocate(1);
+					_alloc.construct(it->left, Node<T>(nbr, it));
 					fix_insert(it->left);
 					return;
 				}
@@ -167,7 +168,8 @@ struct RedBlackTree
 			{
 				if (!it->right)
 				{
-					it->right = new Node<T>(nbr, it);
+					it->right = _alloc.allocate(1); 
+					_alloc.construct(it->right, Node<T>(nbr, it));
 					fix_insert(it->right);
 					return;
 				}
@@ -177,7 +179,7 @@ struct RedBlackTree
 		}
 	}
 
-	void delete_node(int nbr)
+	void delete_node(T nbr)
 	{
 		Node<T> *to_delete = find_node(nbr);
 		if (to_delete == NULL)
@@ -215,7 +217,8 @@ struct RedBlackTree
 			y->left->parent = y;
 			y->clr = to_delete->clr;
 		}
-		delete to_delete;
+		_alloc.destroy(to_delete);
+		_alloc.deallocate(to_delete, 1);
 		if (y_color == Node<T>::BLACK && x != NULL)
 		{
 			fix_delete(x);

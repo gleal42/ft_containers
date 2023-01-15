@@ -17,7 +17,7 @@ struct Node
 	};
 
 	Color clr;
-	Node(int nbr, Node *parent)
+	Node(T nbr, Node *parent)
     : data(nbr), parent(parent), left(NULL), right(NULL), clr(RED)
 	{
 	}

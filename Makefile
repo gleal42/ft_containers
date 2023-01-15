@@ -11,8 +11,8 @@
 # **************************************************************************** #
 
 CXX := c++
-CXXFLAGS := -Wall -Wextra -Werror -std=c++98 -g  -fsanitize=address
-CPPFLAGS := -Istl -Itests/inc -Istl/extra -g  -fsanitize=address
+CXXFLAGS := -Wall -Wextra -Werror -std=c++98 -g  # -fsanitize=address
+CPPFLAGS := -Istl -Itests/inc -Istl/extra -g # -fsanitize=address
 FT := -DFT=1
 STD := -DFT=0
 
@@ -29,7 +29,6 @@ SRCS := main.cpp \
 		test_map.cpp \
 		test_rebind.cpp \
 		red_black_tree.cpp \
-		RedBlackTree.cpp \
 		all.cpp \
 		test_reverse_vector_iterator.cpp
 

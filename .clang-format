@@ -10,8 +10,10 @@ BraceWrapping:
   AfterStruct: true
   AfterClass: true
   AfterFunction: true
-  SplitEmptyFunction: false
+  SplitEmptyFunction: true
   AfterControlStatement: Always
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
 UseTab: Always
 IndentWidth: 8
 AlignAfterOpenBracket: Align

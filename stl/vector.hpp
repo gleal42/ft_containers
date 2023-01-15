@@ -18,7 +18,7 @@
 #include "macros.hpp"
 #include "utils.hpp"
 #include "vector_iterator.hpp"
-#include "vector_reverse_iterator.hpp"
+#include "reverse_iterator.hpp"
 #include <memory>
 #include <sstream>
 #include <typeinfo>
