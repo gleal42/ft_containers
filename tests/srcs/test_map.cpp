@@ -12,13 +12,20 @@
 
 #include "all.hpp"
 
-void    test_map()
+void    test_map_iterator()
 {
-	ft::map<int, int> map;
+	ft::map<int, int> map1;
 	
 	ft::pair<const int, int> a(2, 3);
-	map.insert(a);
-	
+	map1.insert(a);
+
+	std::cout << map1.begin()->first << std::endl;
+}
+
+void    test_map()
+{
+
+	test_map_iterator();
 	// 42 test
 	// ft::map<int, int> map_int;
 	// for (int i = 0; i < COUNT; ++i)

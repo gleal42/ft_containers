@@ -1,272 +1,100 @@
-#if !defined(__MAP_ITERATOR_H__)
+#ifndef __MAP_ITERATOR_H__
 #define __MAP_ITERATOR_H__
 
-#include "iterator_traits.hpp"
-
-// HERE
+#include "Node.hpp"
 
 namespace ft {
-template <class T> struct Map_Bidirectional_Iterator
+template <class T> struct map_bidirectional_iterator
 {
-      public:
-	/* ------------------------------ Member Types
+	public:
+	/* ------------------------------ Member Types *
 	 * ------------------------------ */
-	typedef bidirectional_iterator_tag iterator_category;
-	typedef typename iterator_traits<T>::value_type value_type;
-	typedef typename iterator_traits<T>::difference_type difference_type;
-	typedef typename iterator_traits<T>::pointer pointer;
-	typedef typename iterator_traits<T>::reference reference;
+	typedef std::bidirectional_iterator_tag iterator_category;
+	typedef T value_type;
+	typedef T* pointer;
+	typedef T& reference;
 
-	/* ---------------------------- General Iterator
-	 * ---------------------------- */
-	Map_Bidirectional_Iterator(const pointer point) : ptr(point) {}
+	typedef Node<T> node;
+	typedef node *node_pointer;
 
-	Map_Bidirectional_Iterator(const Map_Bidirectional_Iterator &ra_iter)
-	    : ptr(ra_iter.ptr)
+	map_bidirectional_iterator() : node_ptr(node_pointer()) {}
+	map_bidirectional_iterator(const node_pointer& node) : node_ptr(node) {}
+	map_bidirectional_iterator(const map_bidirectional_iterator &old_it)
+	    : node_ptr(old_it.node_ptr)
 	{
 	}
-
-	Map_Bidirectional_Iterator &
-	operator=(const Map_Bidirectional_Iterator &ra_iter)
+	map_bidirectional_iterator &
+	operator=(const map_bidirectional_iterator &ra_iter)
 	{
-		this->ptr = ra_iter.ptr;
+		this->node_ptr = ra_iter.node_ptr;
 		return *this;
 	}
 
-	~Map_Bidirectional_Iterator() {}
-	Map_Bidirectional_Iterator &operator++();
-	Map_Bidirectional_Iterator operator++(int);
-	/* ----------------------------- Input Iterator
-	 * ----------------------------- */
+	~map_bidirectional_iterator() {}
 
 	template <class T1>
-	friend bool operator==(const Map_Bidirectional_Iterator<T1> &a,
-			       const Map_Bidirectional_Iterator<T1> &b);
-	template <class T1>
-	friend bool operator!=(const Map_Bidirectional_Iterator<T1> &a,
-			       const Map_Bidirectional_Iterator<T1> &b);
-
-	reference operator*() const;
-	pointer operator->() const;
-
-	/* ---------------------------- Forward Iterator
-	 * ---------------------------- */
-
-	Map_Bidirectional_Iterator();
-
-	/* ------------------------- Bidirectional Iterator
-	 * ------------------------- */
-
-	Map_Bidirectional_Iterator &operator--();
-	Map_Bidirectional_Iterator operator--(int);
-
-	/* ------------------------- Random Access Iterator
-	 * ------------------------- */
-
-	Map_Bidirectional_Iterator operator+(difference_type n) const;
-	Map_Bidirectional_Iterator operator-(difference_type n) const;
-	// Map_Bidirectional_Iterator operator-(const Map_Bidirectional_Iterator
-	// &it) const;
+	friend bool operator==(const map_bidirectional_iterator<T1> &a,
+			       const map_bidirectional_iterator<T1> &b);
 
 	template <class T1>
-	friend Map_Bidirectional_Iterator<T1>
-	operator+(typename Map_Bidirectional_Iterator<T1>::difference_type n,
-		  const Map_Bidirectional_Iterator<T1> &it);
-	template <class T1>
-	friend typename Map_Bidirectional_Iterator<T1>::difference_type
-	operator-(const Map_Bidirectional_Iterator<T1> &a,
-		  const Map_Bidirectional_Iterator<T1> &b);
-	template <class T1>
-	friend bool operator<(const Map_Bidirectional_Iterator<T1> &a,
-			      const Map_Bidirectional_Iterator<T1> &b);
-	template <class T1>
-	friend bool operator>(const Map_Bidirectional_Iterator<T1> &a,
-			      const Map_Bidirectional_Iterator<T1> &b);
-	template <class T1>
-	friend bool operator<=(const Map_Bidirectional_Iterator<T1> &a,
-			       const Map_Bidirectional_Iterator<T1> &b);
-	template <class T1>
-	friend bool operator>=(const Map_Bidirectional_Iterator<T1> &a,
-			       const Map_Bidirectional_Iterator<T1> &b);
+	friend bool operator!=(const map_bidirectional_iterator<T1> &a,
+			       const map_bidirectional_iterator<T1> &b);
 
-	Map_Bidirectional_Iterator &operator+=(difference_type n);
-	Map_Bidirectional_Iterator &operator-=(difference_type n);
+	reference operator*() const
+	{
+		return (node_ptr->data);
+	}
 
-	reference operator[](difference_type n) const;
+	pointer operator->() const
+	{
+		return (&node_ptr->data);
+	}
 
-      private:
-	pointer ptr;
+	map_bidirectional_iterator &operator++()
+	{
+		node_ptr = node_ptr->next();
+		return *this;
+	}
+
+	map_bidirectional_iterator operator++(int)
+	{
+		map_bidirectional_iterator<T> temp(*this);
+		++(*this);
+		return temp;
+	}
+
+	map_bidirectional_iterator &operator--()
+	{
+		node_ptr = node_ptr->prev();
+		return *this;
+	}
+
+	map_bidirectional_iterator operator--(int)
+	{
+		map_bidirectional_iterator<T> temp(*this);
+		--(*this);
+		return temp;
+	}
+
+	// DATA
+    private:
+	node_pointer node_ptr;
 };
 
-/* ---------------------------- General Iterator ---------------------------- */
-
-template <class T> Map_Bidirectional_Iterator<T>::~Map_Bidirectional_Iterator()
+template <class T>
+bool operator==(const map_bidirectional_iterator<T> &a,
+		const map_bidirectional_iterator<T> &b)
 {
+	return (a.node_ptr == b.node_ptr);
 }
 
 template <class T>
-Map_Bidirectional_Iterator<T> &Map_Bidirectional_Iterator<T>::operator++()
+bool operator!=(const map_bidirectional_iterator<T> &a,
+		const map_bidirectional_iterator<T> &b)
 {
-	++(this->ptr);
-	return *this;
+	return (a.node_ptr != b.node_ptr);
 }
 
-template <class T>
-Map_Bidirectional_Iterator<T> Map_Bidirectional_Iterator<T>::operator++(int)
-{
-	Map_Bidirectional_Iterator<T> temp(*this);
-	++(*this);
-	return temp;
-}
-
-/* ----------------------------- Input Iterator ----------------------------- */
-
-template <class T>
-bool operator==(const Map_Bidirectional_Iterator<T> &a,
-		const Map_Bidirectional_Iterator<T> &b)
-{
-	return (a.ptr == b.ptr);
-}
-
-template <class T>
-bool operator!=(const Map_Bidirectional_Iterator<T> &a,
-		const Map_Bidirectional_Iterator<T> &b)
-{
-	return (a.ptr != b.ptr);
-}
-
-template <class T>
-typename Map_Bidirectional_Iterator<T>::reference
-Map_Bidirectional_Iterator<T>::operator*() const
-{
-	return (*ptr);
-}
-
-template <class T>
-typename Map_Bidirectional_Iterator<T>::pointer
-Map_Bidirectional_Iterator<T>::operator->() const
-{
-	return (ptr);
-}
-
-/* ---------------------------- Forward Iterator ---------------------------- */
-
-template <class T>
-Map_Bidirectional_Iterator<T>::Map_Bidirectional_Iterator() : ptr(pointer())
-{
-}
-
-/* ------------------------- Bidirectional Iterator ------------------------- */
-template <class T>
-Map_Bidirectional_Iterator<T> &Map_Bidirectional_Iterator<T>::operator--()
-{
-	--(this->ptr);
-	return *this;
-}
-
-template <class T>
-Map_Bidirectional_Iterator<T> Map_Bidirectional_Iterator<T>::operator--(int)
-{
-	Map_Bidirectional_Iterator<T> temp(*this);
-	--(*this);
-	return temp;
-}
-
-// /* ------------------------- Random Access Iterator -------------------------
-// */
-template <class T>
-Map_Bidirectional_Iterator<T>
-Map_Bidirectional_Iterator<T>::operator+(difference_type n) const
-{
-	return (Map_Bidirectional_Iterator<T>(this->ptr + n));
-}
-
-template <class T>
-Map_Bidirectional_Iterator<T>
-operator+(typename Map_Bidirectional_Iterator<T>::difference_type n,
-	  const Map_Bidirectional_Iterator<T> &it)
-{
-	Map_Bidirectional_Iterator<T> temp(it);
-
-	temp += n;
-	return (temp);
-}
-
-template <class T>
-Map_Bidirectional_Iterator<T>
-Map_Bidirectional_Iterator<T>::operator-(difference_type n) const
-{
-	return (Map_Bidirectional_Iterator<T>(this->ptr - n));
-}
-
-// Still deciding if I use this one:
-/*
-	template< class T >
-	typename Map_Bidirectional_Iterator<T>::difference_type
-   Map_Bidirectional_Iterator<T>::operator-(const Map_Bidirectional_Iterator<T>
-   &it) const
-	{
-		return (this->ptr - it.ptr);
-	}
-*/
-template <class T>
-typename Map_Bidirectional_Iterator<T>::difference_type
-operator-(const Map_Bidirectional_Iterator<T> &a,
-	  const Map_Bidirectional_Iterator<T> &b)
-{
-	return (a.ptr - b.ptr);
-}
-
-template <class T>
-bool operator<(const Map_Bidirectional_Iterator<T> &a,
-	       const Map_Bidirectional_Iterator<T> &b)
-{
-	return (a.ptr < b.ptr);
-}
-
-template <class T>
-bool operator>(const Map_Bidirectional_Iterator<T> &a,
-	       const Map_Bidirectional_Iterator<T> &b)
-{
-	return (a.ptr > b.ptr);
-}
-
-template <class T>
-bool operator<=(const Map_Bidirectional_Iterator<T> &a,
-		const Map_Bidirectional_Iterator<T> &b)
-{
-	return (a.ptr <= b.ptr);
-}
-
-template <class T>
-bool operator>=(const Map_Bidirectional_Iterator<T> &a,
-		const Map_Bidirectional_Iterator<T> &b)
-{
-	return (a.ptr >= b.ptr);
-}
-template <class T>
-Map_Bidirectional_Iterator<T> &Map_Bidirectional_Iterator<T>::operator+=(
-	    Map_Bidirectional_Iterator<T>::difference_type n)
-{
-	this->ptr += n;
-	return (*this);
-}
-
-template <class T>
-Map_Bidirectional_Iterator<T> &Map_Bidirectional_Iterator<T>::operator-=(
-	    Map_Bidirectional_Iterator<T>::difference_type n)
-{
-	this->ptr -= n;
-	return (*this);
-}
-
-template <class T>
-typename Map_Bidirectional_Iterator<T>::reference
-Map_Bidirectional_Iterator<T>::operator[](
-	    Map_Bidirectional_Iterator<T>::difference_type n) const
-{
-	return (this->ptr[n]);
-}
 }; // namespace ft
 
 #endif // __MAP_ITERATOR_H__

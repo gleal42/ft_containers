@@ -35,8 +35,8 @@ class map
     typedef typename allocator_type::const_reference 		const_reference;
     typedef typename allocator_type::pointer 				pointer;
     typedef typename allocator_type::const_pointer 			const_pointer;
-    // typedef Map_Bidirectional_Iterator<pointer> 			iterator;
-    // typedef Map_Bidirectional_Iterator<const_pointer>		const_iterator;
+    typedef typename RedBlackTree<value_type>::iterator 	iterator;
+    // typedef map_bidirectional_iterator<const_pointer>		const_iterator;
     // typedef Reverse_Iterator<iterator> 						reverse_iterator;
     // typedef Reverse_Iterator<const_iterator> 				const_reverse_iterator;
 
@@ -48,9 +48,13 @@ class map
     {
         tree.add_node(value);
     }
-
+    iterator begin()
+    {
+        return tree.begin();
+    }
+    // const_iterator begin() const;
 private:
-	RedBlackTree<ft::pair<Key, T>, Allocator> tree;
+	RedBlackTree<value_type, Allocator> tree;
 }; // class map
 
 

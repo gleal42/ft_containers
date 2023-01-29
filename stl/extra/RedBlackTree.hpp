@@ -18,15 +18,15 @@
 
 #include "Node.hpp"
 #include "rebind.hpp"
+#include "map_iterator.hpp"
 
 template <typename T, typename Allocator = std::allocator<T> >
 struct RedBlackTree
 {
-
 	typedef typename rebind<Allocator>::to<Node<T> >::other node_allocator;
 	typedef typename node_allocator::pointer node_pointer;
-
-
+	typedef ft::map_bidirectional_iterator<T> iterator;
+	
 	// Member types
 	node_allocator _alloc;
 	node_pointer root;
@@ -77,6 +77,7 @@ struct RedBlackTree
 		}
 		return it;
 	}
+
 	Node<T> *minimum(Node<T> *ptr)
 	{
 		if (ptr == NULL)
@@ -90,8 +91,6 @@ struct RedBlackTree
 
 	Node<T> *maximum(Node<T> *ptr)
 	{
-		if (ptr == NULL)
-			return NULL;
 		while (ptr->right != NULL)
 		{
 			ptr = ptr->right;
@@ -103,30 +102,14 @@ struct RedBlackTree
 	{
 		if (ptr == NULL)
 			return NULL;
-		if (ptr->left != NULL)
-			return maximum(ptr->left);
-		Node<T> *parent = ptr->parent;
-		while (parent != NULL && ptr == parent->left)
-		{
-			ptr = parent;
-			parent = ptr->parent;
-		}
-		return parent;
+		return ptr->prev();
 	}
 
 	Node<T> *next(Node<T> *ptr)
 	{
 		if (ptr == NULL)
 			return NULL;
-		if (ptr->right != NULL)
-			return minimum(ptr->right);
-		Node<T> *parent = ptr->parent;
-		while (parent != NULL && ptr == parent->right)
-		{
-			ptr = parent;
-			parent = ptr->parent;
-		}
-		return parent;
+		return ptr->next();
 	}
 
 	typename Node<T>::Color getColour(Node<T> *node)
@@ -432,6 +415,12 @@ struct RedBlackTree
 		}
 		to_fix->clr = Node<T>::BLACK;
 	}
+
+	iterator begin()
+	{
+		return ft::map_bidirectional_iterator<T>(root->minimum_subtree());
+	}
+
 };
 
 void test_red_black_tree();
