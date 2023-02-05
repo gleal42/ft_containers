@@ -11,55 +11,57 @@
 /* ************************************************************************** */
 
 #include "RedBlackTree.hpp"
+#include <utility>
 
 void test_red_black_tree()
 {
-	RedBlackTree<int, std::allocator<int> > tree;
-	tree.add_node(5);
+	std::less<int> cmp;
+	RedBlackTree<std::pair<int, int>, std::less<int>, std::allocator<int> > tree(cmp);
+	tree.add_node(std::pair<int, int>(5, 5));
 
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
-	tree.add_node(2);
+	tree.add_node(std::pair<int, int>(2, 2));
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
-	tree.add_node(10);
+	tree.add_node(std::pair<int, int>(10, 10));
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
-	tree.add_node(8);
+	tree.add_node(std::pair<int, int>(8, 8));
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
-	tree.add_node(12);
+	tree.add_node(std::pair<int, int>(12, 12));
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
-	tree.add_node(6);
+	tree.add_node(std::pair<int, int>(6, 6));
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
-	tree.add_node(9);
+	tree.add_node(std::pair<int, int>(9, 9));
 	tree.print(tree.root, "ROOT", "");
 
-	std::cout << "After 2 comes [" << tree.next(tree.find_node(2))->data
+	std::cout << "After 2 comes [" << tree.next(tree.find_node(2))->data.first
 		  << "]\n";
-	std::cout << "Before 5 comes [" << tree.prev(tree.find_node(5))->data
+	std::cout << "Before 5 comes [" << tree.prev(tree.find_node(5))->data.first
 		  << "]\n";
-	std::cout << "After 5 comes [" << tree.next(tree.find_node(5))->data
+	std::cout << "After 5 comes [" << tree.next(tree.find_node(5))->data.first
 		  << "]\n";
-	std::cout << "Before 6 comes [" << tree.prev(tree.find_node(6))->data
+	std::cout << "Before 6 comes [" << tree.prev(tree.find_node(6))->data.first
 		  << "]\n";
-	std::cout << "After 6 comes [" << tree.next(tree.find_node(6))->data
+	std::cout << "After 6 comes [" << tree.next(tree.find_node(6))->data.first
 		  << "]\n";
-	std::cout << "Before 8 comes [" << tree.prev(tree.find_node(8))->data
+	std::cout << "Before 8 comes [" << tree.prev(tree.find_node(8))->data.first
 		  << "]\n";
-	std::cout << "After 8 comes [" << tree.next(tree.find_node(8))->data
+	std::cout << "After 8 comes [" << tree.next(tree.find_node(8))->data.first
 		  << "]\n";
-	std::cout << "Before 9 comes [" << tree.prev(tree.find_node(9))->data
+	std::cout << "Before 9 comes [" << tree.prev(tree.find_node(9))->data.first
 		  << "]\n";
-	std::cout << "After 9 comes [" << tree.next(tree.find_node(9))->data
+	std::cout << "After 9 comes [" << tree.next(tree.find_node(9))->data.first
 		  << "]\n";
-	std::cout << "Before 10 comes [" << tree.prev(tree.find_node(10))->data
+	std::cout << "Before 10 comes [" << tree.prev(tree.find_node(10))->data.first
 		  << "]\n";
-	std::cout << "After 10 comes [" << tree.next(tree.find_node(10))->data
+	std::cout << "After 10 comes [" << tree.next(tree.find_node(10))->data.first
 		  << "]\n";
-	std::cout << "Before 12 comes [" << tree.prev(tree.find_node(12))->data
+	std::cout << "Before 12 comes [" << tree.prev(tree.find_node(12))->data.first
 		  << "]\n";
 
 	std::cout << "\n\nABOUT TO DELETE\n\n";

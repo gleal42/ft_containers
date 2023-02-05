@@ -20,18 +20,23 @@
 #include "rebind.hpp"
 #include "map_iterator.hpp"
 
-template <typename T, typename Allocator = std::allocator<T> >
+
+template <typename T, class Compare = std::less<typename T::first_type>, typename Allocator = std::allocator<T> >
 struct RedBlackTree
 {
-	typedef typename rebind<Allocator>::to<Node<T> >::other node_allocator;
+	typedef typename rebind<Allocator>::template to<Node<T> >::other node_allocator;
 	typedef typename node_allocator::pointer node_pointer;
 	typedef ft::map_bidirectional_iterator<T> iterator;
+	typedef ft::map_bidirectional_iterator<const T> const_iterator; // TODO: test
 	
 	// Member types
 	node_allocator _alloc;
 	node_pointer root;
+	Compare _cmp;
 
-	RedBlackTree() : root(NULL) {}
+	RedBlackTree() : root(NULL), _cmp(){}
+	RedBlackTree(const Compare& cmp) : root(NULL), _cmp(cmp){}
+
 	~RedBlackTree()
 	{
 		Node<T> **it = &root;
@@ -61,15 +66,15 @@ struct RedBlackTree
 		root = NULL;
 	}
 
-	Node<T> *find_node(T nbr)
+	Node<T> *find_node(typename T::first_type nbr)
 	{
 		Node<T> *it = root;
 		while (it != NULL)
 		{
-			if (nbr < it->data)
+			if (_cmp(nbr, it->data.first))
 			{
 				it = it->left;
-			} else if (nbr > it->data)
+			} else if (_cmp(it->data.first, nbr))
 			{
 				it = it->right;
 			} else
@@ -137,7 +142,7 @@ struct RedBlackTree
 		Node<T> *it = root;
 		while (it != NULL)
 		{
-			if (nbr < it->data)
+			if (_cmp(nbr.first, it->data.first))
 			{
 				if (!it->left)
 				{
@@ -147,7 +152,7 @@ struct RedBlackTree
 					return;
 				}
 				it = it->left;
-			} else if (nbr > it->data)
+			} else if (_cmp(it->data.first, nbr.first))
 			{
 				if (!it->right)
 				{
@@ -162,7 +167,7 @@ struct RedBlackTree
 		}
 	}
 
-	void delete_node(T nbr)
+	void delete_node(typename T::first_type nbr)
 	{
 		Node<T> *to_delete = find_node(nbr);
 		if (to_delete == NULL)
@@ -232,8 +237,8 @@ struct RedBlackTree
 		{
 			print(ptr->right, "RIGHT", (depth + "         "));
 			std::cout << depth
-				  << (ptr != root ? ptr->parent->data : 0)
-				  << "->" << side << " [" << ptr->data << "] "
+				  << (ptr != root ? ptr->parent->data.first : 0)
+				  << "->" << side << " [" << ptr->data.first << "] "
 				  << (ptr->clr ? "red" : "blk") << std::endl;
 			print(ptr->left, "LEFT", (depth + "         "));
 		}
@@ -422,7 +427,5 @@ struct RedBlackTree
 	}
 
 };
-
-void test_red_black_tree();
 
 #endif // __REDBLACKTREE_H__

@@ -42,6 +42,7 @@ int    	test_vector();
 void	test_pair();
 void	test_map();
 void	test_rebind();
+void 	test_red_black_tree();
 
 #ifdef DEBUG
 #define LOG( x ) std::cout << x
