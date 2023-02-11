@@ -25,23 +25,23 @@ void    test_map_iterator()
 
 void    test_map_constructors()
 {
-	// ft::map<std::string, int> map1;
+	ft::map<std::string, int> map1;
 
-	// ft::pair<std::string, int> a("anything", 2);
-	// ft::pair<std::string, int> b("is possible", 3);
-	// map1.insert(a);
-	// map1.insert(b);
-	// map1.insert(a);
+	ft::pair<std::string, int> a("anything", 2);
+	ft::pair<std::string, int> b("is possible", 3);
+	map1.insert(a);
+	map1.insert(b);
+	map1.insert(a);
 
-	// std::less<int> less;
+	std::less<int> less;
 
-	// ft::map<int, int, std::less<int> > map2(less);
+	ft::map<int, int, std::less<int> > map2(less);
 
-	// ft::map<std::string, int> iter(map1.begin(), map1.end());
-	// std::cout << iter.begin()->first << std::endl;
-	// std::cout << iter.begin()->second << std::endl;
+	ft::map<std::string, int> iter(map1.begin(), map1.end());
+	std::cout << iter.begin()->first << std::endl;
+	std::cout << iter.begin()->second << std::endl;
 
-	// ft::map<std::string, int>ite2(iter);
+	ft::map<std::string, int>ite2(iter);
 }
 
 // void    map_test_42()

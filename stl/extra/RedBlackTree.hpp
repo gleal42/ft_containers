@@ -26,22 +26,37 @@ struct RedBlackTree
 {
 	typedef typename rebind<Allocator>::template to<Node<T> >::other node_allocator;
 	typedef typename node_allocator::pointer node_pointer;
+
 	typedef ft::map_bidirectional_iterator<T> iterator;
 	typedef ft::map_bidirectional_iterator<const T> const_iterator; // TODO: test
 	
 	// Member types
-	node_allocator _alloc;
+	node_allocator _node_alloc;
 	node_pointer root;
+	node_pointer _end;
 	Compare _cmp;
 
-	RedBlackTree() : root(NULL), _cmp(){}
-	RedBlackTree(const Compare& cmp) : root(NULL), _cmp(cmp){}
+	RedBlackTree() : root(NULL), _cmp()
+	{
+		_end = _node_alloc.allocate(1);
+		_node_alloc.construct(_end, Node<T>(T(), NULL, _end));
+	}
+	RedBlackTree(const Compare& cmp) : root(NULL), _cmp(cmp)
+	{
+		_end = _node_alloc.allocate(1);
+		_node_alloc.construct(_end, Node<T>(T(), NULL, _end));
+	}
 
 	~RedBlackTree()
 	{
 		Node<T> **it = &root;
 		if (root == NULL)
+		{
+			_node_alloc.destroy(_end);
+			_node_alloc.deallocate(_end, 1);
+			_end = NULL;
 			return;
+		}
 
 		while (root->left != NULL || root->right != NULL)
 		{
@@ -57,13 +72,16 @@ struct RedBlackTree
 					it = &(*it)->right;
 				}
 			}
-			_alloc.destroy(*it);
-			_alloc.deallocate(*it, 1);
+			_node_alloc.destroy(*it);
+			_node_alloc.deallocate(*it, 1);
 			*it = NULL;
 		}
-		_alloc.destroy(root);
-		_alloc.deallocate(root, 1);
+		_node_alloc.destroy(root);
+		_node_alloc.deallocate(root, 1);
 		root = NULL;
+		_node_alloc.destroy(_end);
+		_node_alloc.deallocate(_end, 1);
+		_end = NULL;
 	}
 
 	Node<T> *find_node(typename T::first_type nbr)
@@ -107,6 +125,8 @@ struct RedBlackTree
 	{
 		if (ptr == NULL)
 			return NULL;
+		if (ptr == _end)
+			return (maximum(root));
 		return ptr->prev();
 	}
 
@@ -114,7 +134,10 @@ struct RedBlackTree
 	{
 		if (ptr == NULL)
 			return NULL;
-		return ptr->next();
+		Node<T> *res = ptr->next();
+		if (res == NULL)
+			return _end;
+		return res;
 	}
 
 	typename Node<T>::Color getColour(Node<T> *node)
@@ -134,8 +157,8 @@ struct RedBlackTree
 	{
 		if (root == NULL)
 		{
-			root = _alloc.allocate(1);
-			_alloc.construct(root, Node<T>(nbr, NULL));
+			root = _node_alloc.allocate(1);
+			_node_alloc.construct(root, Node<T>(nbr, NULL, _end));
 			fix_insert(root);
 			return;
 		}
@@ -146,8 +169,8 @@ struct RedBlackTree
 			{
 				if (!it->left)
 				{
-					it->left = _alloc.allocate(1);
-					_alloc.construct(it->left, Node<T>(nbr, it));
+					it->left = _node_alloc.allocate(1);
+					_node_alloc.construct(it->left, Node<T>(nbr, it, _end));
 					fix_insert(it->left);
 					return;
 				}
@@ -156,8 +179,8 @@ struct RedBlackTree
 			{
 				if (!it->right)
 				{
-					it->right = _alloc.allocate(1); 
-					_alloc.construct(it->right, Node<T>(nbr, it));
+					it->right = _node_alloc.allocate(1); 
+					_node_alloc.construct(it->right, Node<T>(nbr, it, _end));
 					fix_insert(it->right);
 					return;
 				}
@@ -205,8 +228,8 @@ struct RedBlackTree
 			y->left->parent = y;
 			y->clr = to_delete->clr;
 		}
-		_alloc.destroy(to_delete);
-		_alloc.deallocate(to_delete, 1);
+		_node_alloc.destroy(to_delete);
+		_node_alloc.deallocate(to_delete, 1);
 		if (y_color == Node<T>::BLACK && x != NULL)
 		{
 			fix_delete(x);
@@ -423,9 +446,26 @@ struct RedBlackTree
 
 	iterator begin()
 	{
-		return ft::map_bidirectional_iterator<T>(root->minimum_subtree());
+		if (root == NULL)
+			return iterator(_end);
+		return iterator(root->minimum_subtree());
+	}
+	const_iterator begin() const
+	{
+		if (root == NULL)
+			return const_iterator(_end);
+		return const_iterator(root->minimum_subtree());
 	}
 
+	iterator end()
+	{
+		return iterator(_end);
+	}
+
+	const_iterator end() const
+	{
+		return const_iterator(_end);
+	}
 };
 
 #endif // __REDBLACKTREE_H__

@@ -40,7 +40,7 @@ class map
 	typedef typename RedBlackTree<value_type>::const_iterator
 		    const_iterator;
 	typedef Reverse_Iterator<iterator> reverse_iterator;
-	typedef Reverse_Iterator<const_iterator> const_reverse_iterator;
+	// typedef Reverse_Iterator<const_iterator> const_reverse_iterator;
 
 	map()
 	    : tree(), _map_alloc()
@@ -49,30 +49,44 @@ class map
 
     explicit map( const Compare& comp,
                 const Allocator& alloc = Allocator() )
-    :  tree(comp)
+    :  tree(comp), _map_alloc(alloc)
     {
-
     }
 
     template< class InputIt >
     map( InputIt first, InputIt last,
         const Compare& comp = Compare(),
         const Allocator& alloc = Allocator() )
+    :  tree(comp), _map_alloc(alloc)
     {
-
+        for (InputIt copy_it = first; copy_it != last; copy_it++)
+        {
+            tree.add_node(*copy_it);
+        }
     }
 
     map (const map& x)
+    :  tree(x.tree._cmp), _map_alloc(x._map_alloc)
     {
-
+        for (const_iterator copy_it = x.begin(); copy_it != x.end(); copy_it++)
+        {
+            std::cout << "copy_it\n";
+            std::cout << &(*copy_it) << std::endl;
+            std::cout << "end " << &(*x.end()) << std::endl;
+            tree.add_node(*copy_it);
+        }
     }
 
     void insert(const value_type &value) { tree.add_node(value); }
+
 	iterator begin() { return tree.begin(); }
-	// const_iterator begin() const;
+	const_iterator begin() const{ return tree.begin(); }
+	iterator end(){ return tree.end(); }
+	const_iterator end() const{ return tree.end(); }
 
       private:
 	RedBlackTree<value_type, key_compare, Allocator> tree;
+    
 	Allocator _map_alloc;
 }; // class map
 

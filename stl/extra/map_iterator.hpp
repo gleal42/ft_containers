@@ -18,7 +18,7 @@ template <class T> struct map_bidirectional_iterator
 	typedef node *node_pointer;
 
 	map_bidirectional_iterator() : node_ptr(node_pointer()) {}
-	map_bidirectional_iterator(const node_pointer& node) : node_ptr(node) {}
+	map_bidirectional_iterator(const node_pointer node) : node_ptr(node) {}
 	map_bidirectional_iterator(const map_bidirectional_iterator &old_it)
 	    : node_ptr(old_it.node_ptr)
 	{
@@ -91,6 +91,62 @@ bool operator==(const map_bidirectional_iterator<T> &a,
 template <class T>
 bool operator!=(const map_bidirectional_iterator<T> &a,
 		const map_bidirectional_iterator<T> &b)
+{
+	return (a.node_ptr != b.node_ptr);
+}
+
+template <class T>
+struct map_bidirectional_iterator<const T>
+{
+	typedef const Node<T> node;
+	typedef node *node_pointer;
+	typedef const T& reference;
+
+	map_bidirectional_iterator(const node_pointer node) : node_ptr(node) {}
+	map_bidirectional_iterator(const map_bidirectional_iterator<const T> &old_it)
+	    : node_ptr(old_it.node_ptr)
+	{
+	}
+	map_bidirectional_iterator<const T> &operator++()
+	{
+		node_ptr = node_ptr->const_next();
+		return *this;
+	}
+
+	map_bidirectional_iterator<const T> operator++(int)
+	{
+		map_bidirectional_iterator<const T> temp(*this);
+		++(*this);
+		return temp;
+	}
+	reference operator*() const
+	{
+		return (node_ptr->data);
+	}
+
+	template <class T1>
+	friend bool operator==(const map_bidirectional_iterator<const T1> &a,
+			       const map_bidirectional_iterator<const T1> &b);
+
+	template <class T1>
+	friend bool operator!=(const map_bidirectional_iterator<const T1> &a,
+			       const map_bidirectional_iterator<const T1> &b);
+
+	// DATA
+    private:
+	node_pointer node_ptr;
+};
+
+template <class T>
+bool operator==(const map_bidirectional_iterator<const T> &a,
+		const map_bidirectional_iterator<const T> &b)
+{
+	return (a.node_ptr == b.node_ptr);
+}
+
+template <class T>
+bool operator!=(const map_bidirectional_iterator<const T> &a,
+		const map_bidirectional_iterator<const T> &b)
 {
 	return (a.node_ptr != b.node_ptr);
 }

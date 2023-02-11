@@ -28,9 +28,9 @@ int main(int argc, char** argv) {
 	srand(seed);
 	// test_stack();
 	// test_vector();
-	test_red_black_tree();
+	// test_red_black_tree();
 	// test_pair();
-	// test_map();
+	test_map();
 	// test_rebind();
 	
 	return (0);

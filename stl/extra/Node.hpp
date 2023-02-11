@@ -8,6 +8,7 @@ struct Node
 {
 	T data;
 	Node *parent;
+	Node *last;
 	Node *left;
 	Node *right;
 	enum Color
@@ -15,10 +16,10 @@ struct Node
 		BLACK,
 		RED
 	};
-
 	Color clr;
-	Node(T nbr, Node *parent)
-    : data(nbr), parent(parent), left(NULL), right(NULL), clr(RED)
+
+	Node(T nbr, Node *parent, Node *last)
+    : data(nbr), parent(parent), last(last), left(NULL), right(NULL), clr(RED)
 	{
 	}
 
@@ -67,7 +68,24 @@ struct Node
 			ptr = ptr_parent;
 			ptr_parent = ptr->parent;
 		}
-		return parent;
+		if (ptr_parent == NULL)
+			return ptr->last;
+		return ptr_parent;
+	}
+	const Node<T> *const_next() const
+	{
+		if (this->right != NULL)
+			return this->right->minimum_subtree();
+		const Node<T> *ptr = this;
+		const Node<T> *ptr_parent = ptr->parent;
+		while (ptr_parent != NULL && ptr == ptr_parent->right)
+		{
+			ptr = ptr_parent;
+			ptr_parent = ptr->parent;
+		}
+		if (ptr_parent == NULL)
+			return ptr->last;
+		return ptr_parent;
 	}
 };
 
