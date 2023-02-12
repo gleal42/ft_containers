@@ -46,9 +46,26 @@ namespace ft
 		Reverse_Iterator( const Reverse_Iterator<U>& other ) : base_iterator(other.base()) {}
 		template< class U >
 		Reverse_Iterator& operator=( const Reverse_Iterator<U>& other ) { base_iterator = other.base();}
-		iterator_type base() const { return base_iterator - 1;}
-	    reference operator*() const{ return *base();}
-		pointer operator->() const { return base().operator->(); }	
+		iterator_type base() const
+		{
+			return base_iterator;
+		}
+	    reference operator*() const
+		{
+			iterator_type temp(base_iterator);
+			--temp;
+			return *temp;
+		}
+		pointer operator->() const
+		{
+			iterator_type temp(base_iterator);
+			// std::cout << "HEREE babu\n";
+			// std::cout << "GOInG" << (*base_iterator).first << std::endl;
+			// std::cout << "GOInG" << (*temp).first << std::endl;
+			--temp;
+			// std::cout << "GOInG" << (*temp).first << std::endl;
+			return temp.operator->();
+		}	
 		reference operator[] (difference_type n) const { return *(base_iterator - n); }
 		Reverse_Iterator& operator++()
 		{

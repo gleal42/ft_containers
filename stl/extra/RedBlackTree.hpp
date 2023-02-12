@@ -38,16 +38,25 @@ struct RedBlackTree
 
 	RedBlackTree() : root(NULL), _cmp()
 	{
-		_end = _node_alloc.allocate(1);
-		_node_alloc.construct(_end, Node<T>(T(), NULL, _end));
+		init();
 	}
 	RedBlackTree(const Compare& cmp) : root(NULL), _cmp(cmp)
+	{
+		init();
+	}
+
+	~RedBlackTree()
+	{
+		destroy_all();
+	}
+
+	void init()
 	{
 		_end = _node_alloc.allocate(1);
 		_node_alloc.construct(_end, Node<T>(T(), NULL, _end));
 	}
 
-	~RedBlackTree()
+	void	destroy_all()
 	{
 		Node<T> **it = &root;
 		if (root == NULL)
@@ -121,25 +130,6 @@ struct RedBlackTree
 		return ptr;
 	}
 
-	Node<T> *prev(Node<T> *ptr)
-	{
-		if (ptr == NULL)
-			return NULL;
-		if (ptr == _end)
-			return (maximum(root));
-		return ptr->prev();
-	}
-
-	Node<T> *next(Node<T> *ptr)
-	{
-		if (ptr == NULL)
-			return NULL;
-		Node<T> *res = ptr->next();
-		if (res == NULL)
-			return _end;
-		return res;
-	}
-
 	typename Node<T>::Color getColour(Node<T> *node)
 	{
 		if (node)
@@ -153,7 +143,7 @@ struct RedBlackTree
 			node->clr = clr;
 	}
 
-	void add_node(T nbr)
+	void rbt_add_node(T nbr)
 	{
 		if (root == NULL)
 		{
@@ -190,7 +180,7 @@ struct RedBlackTree
 		}
 	}
 
-	void delete_node(typename T::first_type nbr)
+	void rbt_delete_node(typename T::first_type nbr)
 	{
 		Node<T> *to_delete = find_node(nbr);
 		if (to_delete == NULL)
@@ -234,6 +224,18 @@ struct RedBlackTree
 		{
 			fix_delete(x);
 		}
+	}
+
+	void add_node(T nbr)
+	{
+		rbt_add_node(nbr);
+		update_end();
+	}
+
+	void delete_node(typename T::first_type nbr)
+	{
+		rbt_delete_node(nbr);
+		update_end();
 	}
 
 	void transplant(Node<T> *spot, Node<T> *sub_tree)
@@ -465,6 +467,16 @@ struct RedBlackTree
 	const_iterator end() const
 	{
 		return const_iterator(_end);
+	}
+
+	void update_end()
+	{
+		if (root == NULL)
+			_end->parent = NULL;
+		else if (_end->parent != root->maximum_subtree())
+		{
+			_end->parent = root->maximum_subtree();
+		}
 	}
 };
 

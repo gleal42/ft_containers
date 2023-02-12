@@ -13,6 +13,7 @@ template <class T> struct map_bidirectional_iterator
 	typedef T value_type;
 	typedef T* pointer;
 	typedef T& reference;
+	typedef typename std::ptrdiff_t difference_type;
 
 	typedef Node<T> node;
 	typedef node *node_pointer;
