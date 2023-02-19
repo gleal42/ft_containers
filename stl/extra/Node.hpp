@@ -57,6 +57,20 @@ struct Node
 		return parent;
 	}
 
+	const Node<T> *const_prev() const
+	{
+		if (this->left != NULL)
+			return this->left->maximum_subtree();
+		const Node<T> *ptr = this;
+		const Node<T> *ptr_parent = ptr->parent;
+		while (ptr_parent != NULL && ptr == ptr_parent->left)
+		{
+			ptr = ptr_parent;
+			ptr_parent = ptr->parent;
+		}
+		return parent;
+	}
+
 	Node<T> *next()
 	{
 		if (this->right != NULL)

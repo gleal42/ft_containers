@@ -20,6 +20,7 @@
 #include "rebind.hpp"
 #include "map_iterator.hpp"
 
+// TODO: remove last from node so that max_size() is correct
 
 template <typename T, class Compare = std::less<typename T::first_type>, typename Allocator = std::allocator<T> >
 struct RedBlackTree
@@ -478,6 +479,25 @@ struct RedBlackTree
 			_end->parent = root->maximum_subtree();
 		}
 	}
+    bool empty() const
+    {
+        return (root == NULL);
+    }
+	size_t size() const
+	{
+		return (count(root));
+	}
+	size_t count(node_pointer node) const
+	{
+		if (node == NULL)
+			return 0;
+		return 1 + count(node->left) + count(node->right);
+	}
+	// https://42born2code.slack.com/archives/CMX2R5JSW/p1652788063716189
+    size_t max_size() const
+    {
+        return (_node_alloc.max_size());
+    }
 };
 
 #endif // __REDBLACKTREE_H__

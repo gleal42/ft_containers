@@ -78,7 +78,7 @@ template <class T> struct map_bidirectional_iterator
 	}
 
 	// DATA
-    private:
+    // private:
 	node_pointer node_ptr;
 };
 
@@ -99,11 +99,19 @@ bool operator!=(const map_bidirectional_iterator<T> &a,
 template <class T>
 struct map_bidirectional_iterator<const T>
 {
+	typedef std::bidirectional_iterator_tag iterator_category;
 	typedef const Node<T> node;
 	typedef node *node_pointer;
+	typedef const T value_type;
 	typedef const T& reference;
+	typedef const T* pointer;
+	typedef typename std::ptrdiff_t difference_type;
 
 	map_bidirectional_iterator(const node_pointer node) : node_ptr(node) {}
+	map_bidirectional_iterator(const map_bidirectional_iterator<T> &old_it)
+	    : node_ptr(old_it.node_ptr)
+	{
+	}
 	map_bidirectional_iterator(const map_bidirectional_iterator<const T> &old_it)
 	    : node_ptr(old_it.node_ptr)
 	{
@@ -120,11 +128,25 @@ struct map_bidirectional_iterator<const T>
 		++(*this);
 		return temp;
 	}
+	map_bidirectional_iterator<const T> &operator--()
+	{
+		node_ptr = node_ptr->const_prev();
+		return *this;
+	}
+	map_bidirectional_iterator<const T> operator--(int)
+	{
+		map_bidirectional_iterator<const T> temp(*this);
+		--(*this);
+		return temp;
+	}
 	reference operator*() const
 	{
 		return (node_ptr->data);
 	}
-
+	pointer operator->() const
+	{
+		return (&node_ptr->data);
+	}
 	template <class T1>
 	friend bool operator==(const map_bidirectional_iterator<const T1> &a,
 			       const map_bidirectional_iterator<const T1> &b);
