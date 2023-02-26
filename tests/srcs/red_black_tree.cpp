@@ -18,7 +18,6 @@ void test_red_black_tree()
 	std::less<int> cmp;
 	RedBlackTree<std::pair<int, int>, std::less<int>, std::allocator<int> > tree(cmp);
 	tree.add_node(std::pair<int, int>(5, 5));
-
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
 	tree.add_node(std::pair<int, int>(2, 2));
@@ -64,10 +63,11 @@ void test_red_black_tree()
 	std::cout << "Before 12 comes [" << tree.find_node(12)->prev()->data.first
 		  << "]\n";
 
-	std::cout << "\n\nABOUT TO DELETE\n\n";
+	std::cout << "\n\nABOUT TO DELETE 5\n\n";
 	tree.delete_node(5);
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
+	std::cout << "\n\nABOUT TO DELETE 2\n\n";
 	tree.delete_node(2);
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
@@ -83,8 +83,9 @@ void test_red_black_tree()
 	tree.delete_node(6);
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
+	// std::cout << "TO DELETE IS " << ptr->data.first << std::endl;
 	tree.delete_node(9);
-	tree.print(tree.root, "ROOT", "");
+	// tree.print(tree.root, "ROOT", "");
 
 	return;
 }

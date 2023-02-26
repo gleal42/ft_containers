@@ -3,12 +3,10 @@
 
 // int data will be replaced by ft_pair
 
-template<typename T>
-struct Node
+template <typename T> struct Node
 {
 	T data;
 	Node *parent;
-	Node *last;
 	Node *left;
 	Node *right;
 	enum Color
@@ -18,8 +16,8 @@ struct Node
 	};
 	Color clr;
 
-	Node(T nbr, Node *parent, Node *last)
-    : data(nbr), parent(parent), last(last), left(NULL), right(NULL), clr(RED)
+	Node(T nbr, Node *parent)
+	    : data(nbr), parent(parent), left(NULL), right(NULL), clr(RED)
 	{
 	}
 
@@ -36,11 +34,34 @@ struct Node
 	Node<T> *maximum_subtree()
 	{
 		Node<T> *ptr = this;
-		while (ptr->right != NULL)
+		bool has_end = is_far_right(ptr);
+		if (ptr->right == NULL)
+			return ptr;
+		if (has_end)
 		{
-			ptr = ptr->right;
+			while (ptr->right->right != NULL)
+			{
+				ptr = ptr->right;
+			}
+		} else
+		{
+			while (ptr->right != NULL)
+			{
+				ptr = ptr->right;
+			}
 		}
 		return ptr;
+	}
+	
+	bool is_far_right(Node<T> *ptr)
+	{
+		while (ptr->parent != NULL)
+		{
+			if (ptr == ptr->parent->left)
+				return false;
+			ptr = ptr->parent;
+		}
+		return true;
 	}
 
 	Node<T> *prev()
@@ -49,7 +70,8 @@ struct Node
 			return this->left->maximum_subtree();
 		Node<T> *ptr = this;
 		Node<T> *ptr_parent = ptr->parent;
-		while (ptr_parent != NULL && ptr == ptr_parent->left)
+		while (ptr_parent != NULL &&
+		       ptr == ptr_parent->left)
 		{
 			ptr = ptr_parent;
 			ptr_parent = ptr->parent;
@@ -63,7 +85,8 @@ struct Node
 			return this->left->maximum_subtree();
 		const Node<T> *ptr = this;
 		const Node<T> *ptr_parent = ptr->parent;
-		while (ptr_parent != NULL && ptr == ptr_parent->left)
+		while (ptr_parent != NULL &&
+		       ptr == ptr_parent->left)
 		{
 			ptr = ptr_parent;
 			ptr_parent = ptr->parent;
@@ -82,8 +105,6 @@ struct Node
 			ptr = ptr_parent;
 			ptr_parent = ptr->parent;
 		}
-		if (ptr_parent == NULL)
-			return ptr->last;
 		return ptr_parent;
 	}
 	const Node<T> *const_next() const
@@ -97,8 +118,6 @@ struct Node
 			ptr = ptr_parent;
 			ptr_parent = ptr->parent;
 		}
-		if (ptr_parent == NULL)
-			return ptr->last;
 		return ptr_parent;
 	}
 };

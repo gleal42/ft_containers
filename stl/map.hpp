@@ -90,21 +90,21 @@ class map
 	T &at(const Key &key)
 	{
 		Node<value_type> *found_node = tree.find_node(key);
-		if (found_node == NULL)
+		if (found_node == NULL || found_node == tree._end)
 			throw std::out_of_range("");
 		return found_node->data.second;
 	}
 	const T &at(const Key &key) const
 	{
 		const Node<value_type> *found_node = tree.find_node(key);
-		if (found_node == NULL)
+		if (found_node == NULL || found_node == tree._end)
 			throw std::out_of_range("");
 		return found_node->data.second;
 	}
 	T &operator[](const Key &key)
 	{
 		Node<value_type> *found_node = tree.find_node(key);
-		if (found_node == NULL)
+		if (found_node == NULL || found_node == tree._end)
 		{
 			value_type temp = ft::pair<const Key, T>(key, T());
 			tree.add_node(temp);

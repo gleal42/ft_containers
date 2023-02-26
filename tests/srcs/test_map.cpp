@@ -242,5 +242,5 @@ void    test_map()
 	test_map_assignment();
 	test_map_element_access();
 	test_map_capacity();
-	// map_test_42();
+	map_test_42();
 }

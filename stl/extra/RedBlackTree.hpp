@@ -54,13 +54,14 @@ struct RedBlackTree
 	void init()
 	{
 		_end = _node_alloc.allocate(1);
-		_node_alloc.construct(_end, Node<T>(T(), NULL, _end));
+		_node_alloc.construct(_end, Node<T>(T(), NULL));
+		_end->clr = Node<T>::BLACK;
 	}
 
 	void	destroy_all()
 	{
 		Node<T> **it = &root;
-		if (root == NULL)
+		if (is_null(root))
 		{
 			_node_alloc.destroy(_end);
 			_node_alloc.deallocate(_end, 1);
@@ -68,16 +69,16 @@ struct RedBlackTree
 			return;
 		}
 
-		while (root->left != NULL || root->right != NULL)
+		while (!is_null(root->left) || !is_null(root->right))
 		{
 			it = &root;
-			while ((*it)->left != NULL || (*it)->right != NULL)
+			while (!is_null((*it)->left)|| !is_null((*it)->right))
 			{
-				while ((*it)->left != NULL)
+				while (!is_null((*it)->left))
 				{
 					it = &(*it)->left;
 				}
-				while ((*it)->right != NULL)
+				while (!is_null((*it)->right))
 				{
 					it = &(*it)->right;
 				}
@@ -97,7 +98,7 @@ struct RedBlackTree
 	Node<T> *find_node(typename T::first_type nbr)
 	{
 		Node<T> *it = root;
-		while (it != NULL)
+		while (!is_null(it))
 		{
 			if (_cmp(nbr, it->data.first))
 			{
@@ -115,7 +116,7 @@ struct RedBlackTree
 	{
 		if (ptr == NULL)
 			return NULL;
-		while (ptr->left != NULL)
+		while (!is_null(ptr->left))
 		{
 			ptr = ptr->left;
 		}
@@ -124,7 +125,9 @@ struct RedBlackTree
 
 	Node<T> *maximum(Node<T> *ptr)
 	{
-		while (ptr->right != NULL)
+		if (ptr == NULL)
+			return NULL;
+		while (!is_null(ptr->right))
 		{
 			ptr = ptr->right;
 		}
@@ -133,14 +136,14 @@ struct RedBlackTree
 
 	typename Node<T>::Color getColour(Node<T> *node)
 	{
-		if (node)
+		if (!is_null(node))
 			return node->clr;
 		return Node<T>::BLACK;
 	}
 
 	void setColour(Node<T> *node, typename Node<T>::Color clr)
 	{
-		if (node)
+		if (!is_null(node))
 			node->clr = clr;
 	}
 
@@ -149,30 +152,37 @@ struct RedBlackTree
 		if (root == NULL)
 		{
 			root = _node_alloc.allocate(1);
-			_node_alloc.construct(root, Node<T>(nbr, NULL, _end));
+			_node_alloc.construct(root, Node<T>(nbr, NULL));
 			fix_insert(root);
+			_end->parent = root;
+			root->right = _end;
 			return;
 		}
 		Node<T> *it = root;
-		while (it != NULL)
+		while (!is_null(it))
 		{
 			if (_cmp(nbr.first, it->data.first))
 			{
-				if (!it->left)
+				if (is_null(it->left))
 				{
 					it->left = _node_alloc.allocate(1);
-					_node_alloc.construct(it->left, Node<T>(nbr, it, _end));
+					_node_alloc.construct(it->left, Node<T>(nbr, it));
 					fix_insert(it->left);
 					return;
 				}
 				it = it->left;
 			} else if (_cmp(it->data.first, nbr.first))
 			{
-				if (!it->right)
+				if (is_null(it->right))
 				{
 					it->right = _node_alloc.allocate(1); 
-					_node_alloc.construct(it->right, Node<T>(nbr, it, _end));
+					_node_alloc.construct(it->right, Node<T>(nbr, it));
 					fix_insert(it->right);
+					if (_cmp(_end->parent->data.first, nbr.first))
+					{
+						it->right->right = _end;
+						_end->parent = it->right;
+					}
 					return;
 				}
 				it = it->right;
@@ -184,16 +194,16 @@ struct RedBlackTree
 	void rbt_delete_node(typename T::first_type nbr)
 	{
 		Node<T> *to_delete = find_node(nbr);
-		if (to_delete == NULL)
+		if (is_null(to_delete))
 			return;
 		Node<T> *y = to_delete;
 		Node<T> *x;
 		typename Node<T>::Color y_color = y->clr;
-		if (to_delete->left == NULL)
+		if (is_null(to_delete->left))
 		{ // case 1
 			x = to_delete->right;
 			transplant(to_delete, to_delete->right);
-		} else if (to_delete->right == NULL)
+		} else if (is_null(to_delete->right))
 		{ // case 2
 			x = to_delete->left;
 			transplant(to_delete, to_delete->left);
@@ -204,7 +214,7 @@ struct RedBlackTree
 			x = y->right;
 			if (y->parent == to_delete)
 			{
-				if (x != NULL)
+				if (!is_null(x))
 				{
 					x->parent = y;
 				}
@@ -219,9 +229,15 @@ struct RedBlackTree
 			y->left->parent = y;
 			y->clr = to_delete->clr;
 		}
+		if (is_last(to_delete))
+		{
+			Node<T> *new_last = to_delete->prev();
+			_end->parent = new_last;
+			new_last->right = _end;
+		}
 		_node_alloc.destroy(to_delete);
 		_node_alloc.deallocate(to_delete, 1);
-		if (y_color == Node<T>::BLACK && x != NULL)
+		if (y_color == Node<T>::BLACK && !is_null(x))
 		{
 			fix_delete(x);
 		}
@@ -230,18 +246,16 @@ struct RedBlackTree
 	void add_node(T nbr)
 	{
 		rbt_add_node(nbr);
-		update_end();
 	}
 
 	void delete_node(typename T::first_type nbr)
 	{
 		rbt_delete_node(nbr);
-		update_end();
 	}
 
 	void transplant(Node<T> *spot, Node<T> *sub_tree)
 	{
-		if (spot->parent == NULL)
+		if (is_null(spot->parent))
 			root = sub_tree;
 		else if (spot == spot->parent->left)
 		{
@@ -250,7 +264,7 @@ struct RedBlackTree
 		{
 			spot->parent->right = sub_tree;
 		}
-		if (sub_tree != NULL)
+		if (!is_null(sub_tree))
 		{
 			sub_tree->parent = spot->parent;
 		}
@@ -259,7 +273,7 @@ struct RedBlackTree
 	void print(Node<T> *ptr, const std::string &side,
 		   const std::string &depth)
 	{
-		if (ptr != NULL)
+		if (!is_null(ptr))
 		{
 			print(ptr->right, "RIGHT", (depth + "         "));
 			std::cout << depth
@@ -274,12 +288,12 @@ struct RedBlackTree
 	{
 		Node<T> *y = x->right;
 		x->right = y->left;
-		if (y->left != NULL)
+		if (!is_null(y->left))
 		{
 			y->left->parent = x;
 		}
 		y->parent = x->parent;
-		if (x->parent == NULL)
+		if (is_null(x->parent))
 		{
 			root = y;
 		} else if (x == x->parent->left)
@@ -297,12 +311,12 @@ struct RedBlackTree
 	{
 		Node<T> *new_base = old->left;
 		old->left = new_base->right;
-		if (new_base->right != NULL)
+		if (!is_null(new_base->right))
 		{
 			new_base->right->parent = old;
 		}
 		new_base->parent = old->parent;
-		if (old->parent == NULL)
+		if (is_null(old->parent))
 		{
 			root = new_base;
 		} else if (old == old->parent->right)
@@ -447,6 +461,11 @@ struct RedBlackTree
 		to_fix->clr = Node<T>::BLACK;
 	}
 
+	bool is_null(const Node<T> *ptr)
+	{
+		return (ptr == NULL || ptr == _end);
+	}
+
 	iterator begin()
 	{
 		if (root == NULL)
@@ -469,15 +488,9 @@ struct RedBlackTree
 	{
 		return const_iterator(_end);
 	}
-
-	void update_end()
+	bool is_last(node_pointer ptr)
 	{
-		if (root == NULL)
-			_end->parent = NULL;
-		else if (_end->parent != root->maximum_subtree())
-		{
-			_end->parent = root->maximum_subtree();
-		}
+		return (!is_null(root) && ptr == root->maximum_subtree());
 	}
     bool empty() const
     {
@@ -489,7 +502,7 @@ struct RedBlackTree
 	}
 	size_t count(node_pointer node) const
 	{
-		if (node == NULL)
+		if (node == NULL || node == _end)
 			return 0;
 		return 1 + count(node->left) + count(node->right);
 	}
