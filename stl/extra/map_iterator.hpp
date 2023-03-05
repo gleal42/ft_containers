@@ -3,6 +3,8 @@
 
 #include "Node.hpp"
 
+template <class T>
+struct map_const_bidirectional_iterator;
 namespace ft {
 template <class T> struct map_bidirectional_iterator
 {
@@ -24,6 +26,11 @@ template <class T> struct map_bidirectional_iterator
 	    : node_ptr(old_it.node_ptr)
 	{
 	}
+	map_bidirectional_iterator(const map_const_bidirectional_iterator<T> &old_it)
+	    : node_ptr(old_it.node_ptr)
+	{
+	}
+
 	map_bidirectional_iterator &
 	operator=(const map_bidirectional_iterator &ra_iter)
 	{
@@ -32,14 +39,6 @@ template <class T> struct map_bidirectional_iterator
 	}
 
 	~map_bidirectional_iterator() {}
-
-	template <class T1>
-	friend bool operator==(const map_bidirectional_iterator<T1> &a,
-			       const map_bidirectional_iterator<T1> &b);
-
-	template <class T1>
-	friend bool operator!=(const map_bidirectional_iterator<T1> &a,
-			       const map_bidirectional_iterator<T1> &b);
 
 	reference operator*() const
 	{
@@ -77,44 +76,36 @@ template <class T> struct map_bidirectional_iterator
 		return temp;
 	}
 
+	// template <class T1>
+	// friend bool operator==(const map_bidirectional_iterator<T1> &a,
+	// 		       const map_bidirectional_iterator<T1> &b);
+
+	// template <class T1>
+	// friend bool operator!=(const map_bidirectional_iterator<T1> &a,
+	// 		       const map_bidirectional_iterator<T1> &b);
+
+	// // reg const
+	// template <class T1>
+	// friend bool operator==(const map_bidirectional_iterator<T1> &a,
+	// 		const map_const_bidirectional_iterator<T1> &b);
+	// template <class T1>
+	// friend bool operator!=(const map_bidirectional_iterator<T1> &a,
+	// 		const map_const_bidirectional_iterator<T1> &b);
+
+	// // const reg
+	// template <class T1>
+	// friend bool operator==(const map_const_bidirectional_iterator<T1> &a,
+	// 		const map_bidirectional_iterator<T1> &b);
+
+	// template <class T1>
+	// friend bool operator!=(const map_const_bidirectional_iterator<T1> &a,
+	// 		const map_bidirectional_iterator<T1> &b);
 	// DATA
-    private:
 	node_pointer node_ptr;
-	friend map_bidirectional_iterator<const T>::map_bidirectional_iterator(const map_bidirectional_iterator<T> &old_it);
-	// reg const
-	template <class T1>
-	friend bool operator==(const map_bidirectional_iterator<T1> &a,
-			const map_bidirectional_iterator<const T1> &b);
-	template <class T1>
-	friend bool operator!=(const map_bidirectional_iterator<T1> &a,
-			const map_bidirectional_iterator<const T1> &b);
-
-	// const reg
-	template <class T1>
-	friend bool operator==(const map_bidirectional_iterator<const T1> &a,
-			const map_bidirectional_iterator<T1> &b);
-
-	template <class T1>
-	friend bool operator!=(const map_bidirectional_iterator<const T1> &a,
-			const map_bidirectional_iterator<T1> &b);
 };
 
 template <class T>
-bool operator==(const map_bidirectional_iterator<T> &a,
-		const map_bidirectional_iterator<T> &b)
-{
-	return (a.node_ptr == b.node_ptr);
-}
-
-template <class T>
-bool operator!=(const map_bidirectional_iterator<T> &a,
-		const map_bidirectional_iterator<T> &b)
-{
-	return (a.node_ptr != b.node_ptr);
-}
-
-template <class T>
-struct map_bidirectional_iterator<const T>
+struct map_const_bidirectional_iterator
 {
 	typedef std::bidirectional_iterator_tag iterator_category;
 	typedef const Node<T> node;
@@ -124,35 +115,36 @@ struct map_bidirectional_iterator<const T>
 	typedef const T* pointer;
 	typedef typename std::ptrdiff_t difference_type;
 
-	map_bidirectional_iterator(const node_pointer node) : node_ptr(node) {}
-	map_bidirectional_iterator(const map_bidirectional_iterator<T> &old_it)
+	map_const_bidirectional_iterator(const node_pointer node) : node_ptr(node) {}
+	map_const_bidirectional_iterator(const map_const_bidirectional_iterator<T> &old_it)
 	    : node_ptr(old_it.node_ptr)
 	{
 	}
-	map_bidirectional_iterator(const map_bidirectional_iterator<const T> &old_it)
+
+	map_const_bidirectional_iterator(const map_bidirectional_iterator<T> &old_it)
 	    : node_ptr(old_it.node_ptr)
 	{
 	}
-	map_bidirectional_iterator<const T> &operator++()
+	map_const_bidirectional_iterator<T> &operator++()
 	{
 		node_ptr = node_ptr->const_next();
 		return *this;
 	}
 
-	map_bidirectional_iterator<const T> operator++(int)
+	map_const_bidirectional_iterator<T> operator++(int)
 	{
-		map_bidirectional_iterator<const T> temp(*this);
+		map_const_bidirectional_iterator<T> temp(*this);
 		++(*this);
 		return temp;
 	}
-	map_bidirectional_iterator<const T> &operator--()
+	map_const_bidirectional_iterator<T> &operator--()
 	{
 		node_ptr = node_ptr->const_prev();
 		return *this;
 	}
-	map_bidirectional_iterator<const T> operator--(int)
+	map_const_bidirectional_iterator<T> operator--(int)
 	{
-		map_bidirectional_iterator<const T> temp(*this);
+		map_const_bidirectional_iterator<T> temp(*this);
 		--(*this);
 		return temp;
 	}
@@ -165,74 +157,88 @@ struct map_bidirectional_iterator<const T>
 		return (&node_ptr->data);
 	}
 
+    // private:
+	// // const const
+	// template <class T1>
+	// friend bool operator==(const map_const_bidirectional_iterator<T1> &a,
+	// 		       const map_const_bidirectional_iterator<T1> &b);
+	// template <class T1>
+	// friend bool operator!=(const map_const_bidirectional_iterator<T1> &a,
+	// 		       const map_const_bidirectional_iterator<T1> &b);
+
+	// // reg const
+	// template <class T1>
+	// friend bool operator==(const map_bidirectional_iterator<T1> &a,
+	// 		const map_const_bidirectional_iterator<T1> &b);
+	// template <class T1>
+	// friend bool operator!=(const map_bidirectional_iterator<T1> &a,
+	// 		const map_const_bidirectional_iterator<T1> &b);
+
+	// // const reg
+	// template <class T1>
+	// friend bool operator==(const map_const_bidirectional_iterator<T1> &a,
+	// 		const map_const_bidirectional_iterator<T1> &b);
+
+	// template <class T1>
+	// friend bool operator!=(const map_const_bidirectional_iterator<T1> &a,
+	// 		const map_const_bidirectional_iterator<T1> &b);
+
 	// DATA
-    private:
-	// const const
-	template <class T1>
-	friend bool operator==(const map_bidirectional_iterator<const T1> &a,
-			       const map_bidirectional_iterator<const T1> &b);
-	template <class T1>
-	friend bool operator!=(const map_bidirectional_iterator<const T1> &a,
-			       const map_bidirectional_iterator<const T1> &b);
-
-	// reg const
-	template <class T1>
-	friend bool operator==(const map_bidirectional_iterator<T1> &a,
-			const map_bidirectional_iterator<const T1> &b);
-	template <class T1>
-	friend bool operator!=(const map_bidirectional_iterator<T1> &a,
-			const map_bidirectional_iterator<const T1> &b);
-
-	// const reg
-	template <class T1>
-	friend bool operator==(const map_bidirectional_iterator<const T1> &a,
-			const map_bidirectional_iterator<T1> &b);
-
-	template <class T1>
-	friend bool operator!=(const map_bidirectional_iterator<const T1> &a,
-			const map_bidirectional_iterator<T1> &b);
-
 	node_pointer node_ptr;
 };
 
 template <class T>
 bool operator==(const map_bidirectional_iterator<T> &a,
-		const map_bidirectional_iterator<const T> &b)
-{
-	return (a.node_ptr == b.node_ptr);
-}
-
-template <class T>
-bool operator==(const map_bidirectional_iterator<const T> &a,
 		const map_bidirectional_iterator<T> &b)
-{
-	return (a.node_ptr == b.node_ptr);
-}
-
-template <class T>
-bool operator==(const map_bidirectional_iterator<const T> &a,
-		const map_bidirectional_iterator<const T> &b)
 {
 	return (a.node_ptr == b.node_ptr);
 }
 
 template <class T>
 bool operator!=(const map_bidirectional_iterator<T> &a,
-		const map_bidirectional_iterator<const T> &b)
-{
-	return (a.node_ptr != b.node_ptr);
-}
-
-template <class T>
-bool operator!=(const map_bidirectional_iterator<const T> &a,
 		const map_bidirectional_iterator<T> &b)
 {
 	return (a.node_ptr != b.node_ptr);
 }
 
 template <class T>
-bool operator!=(const map_bidirectional_iterator<const T> &a,
-		const map_bidirectional_iterator<const T> &b)
+bool operator==(const map_bidirectional_iterator<T> &a,
+		const map_const_bidirectional_iterator<T> &b)
+{
+	return (a.node_ptr == b.node_ptr);
+}
+
+template <class T>
+bool operator==(const map_const_bidirectional_iterator<T> &a,
+		const map_bidirectional_iterator<T> &b)
+{
+	return (a.node_ptr == b.node_ptr);
+}
+
+template <class T>
+bool operator==(const map_const_bidirectional_iterator<T> &a,
+		const map_const_bidirectional_iterator<T> &b)
+{
+	return (a.node_ptr == b.node_ptr);
+}
+
+template <class T>
+bool operator!=(const map_bidirectional_iterator<T> &a,
+		const map_const_bidirectional_iterator<T> &b)
+{
+	return (a.node_ptr != b.node_ptr);
+}
+
+template <class T>
+bool operator!=(const map_const_bidirectional_iterator<T> &a,
+		const map_bidirectional_iterator<T> &b)
+{
+	return (a.node_ptr != b.node_ptr);
+}
+
+template <class T>
+bool operator!=(const map_const_bidirectional_iterator<T> &a,
+		const map_const_bidirectional_iterator<T> &b)
 {
 	return (a.node_ptr != b.node_ptr);
 }

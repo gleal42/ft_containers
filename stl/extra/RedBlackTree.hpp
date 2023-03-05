@@ -31,8 +31,7 @@ struct RedBlackTree
 	typedef typename node_allocator::pointer node_pointer;
 
 	typedef ft::map_bidirectional_iterator<T> iterator;
-	typedef ft::map_bidirectional_iterator<const T>
-		    const_iterator; // TODO: test
+	typedef ft::map_const_bidirectional_iterator<T> const_iterator;
 
 	// Member types
 	node_allocator _node_alloc;
