@@ -74,8 +74,7 @@ class map
 
 	map &operator=(const map &other)
 	{
-		tree.destroy_all();
-		tree.init();
+		tree.destroy_nodes();
 		for (const_iterator copy_it = other.begin();
 		     copy_it != other.end(); copy_it++)
 		{
@@ -140,6 +139,12 @@ class map
     {
         return (tree.max_size());
     }
+
+	// Modifiers
+	void clear()
+	{
+		tree.destroy_nodes();
+	}
 	void insert(const value_type &value) { tree.add_node(value); }
 
       private:

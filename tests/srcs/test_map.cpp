@@ -123,6 +123,7 @@ void    test_map_assignment()
 	ref_map.insert(a);
 	ref_map.insert(d);
 
+	std::cout << "FIRST MAP" << std::endl;
 	for (ft::map<int, int>::iterator it = ref_map.begin(); it != ref_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
@@ -134,12 +135,14 @@ void    test_map_assignment()
 	map2.insert(e);
 	map2.insert(a);
 
+	std::cout << "Second MAP" << std::endl;
 	for (ft::map<int, int>::iterator it = map2.begin(); it != map2.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
 
+	std::cout << "Third MAP" << std::endl;
 	map2 = 	ref_map;
 	for (ft::map<int, int>::iterator it = map2.begin(); it != map2.end(); it++)
 	{
@@ -214,6 +217,44 @@ void    test_map_capacity()
 	std::cout << map_int.max_size() << std::endl;
 }
 
+void    test_modifiers()
+{
+	std::cout << "---Testing Modifiers---" << std::endl;
+	std::cout << "---void clear();---" << std::endl;
+	ft::map<char, int> ref_map;
+	ft::pair<char, int> a('a', 1);
+	ft::pair<char, int> b('b', 2);
+	ft::pair<char, int> c('c', 3);
+	ft::pair<char, int> d('d', 4);
+	ft::pair<char, int> e('e', 5);
+
+	ref_map.insert(d);
+	ref_map.insert(a);
+	ref_map.insert(e);
+	ref_map.insert(c);
+	ref_map.insert(b);
+	for (ft::map<char, int>::const_iterator it = ref_map.begin(); it != ref_map.end(); it++)
+	{
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+	ref_map.clear();
+	for (ft::map<char, int>::const_iterator it = ref_map.begin(); it != ref_map.end(); it++)
+	{
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+	ref_map.insert(d);
+	ref_map.insert(a);
+	for (ft::map<char, int>::iterator it = ref_map.begin(); it != ref_map.end(); it++)
+	{
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+	std::cout << "---iterator insert( iterator pos, const value_type& value );---" << std::endl;
+
+}
+
 void    map_test_42()
 {
 	// 42 test
@@ -242,5 +283,6 @@ void    test_map()
 	test_map_assignment();
 	test_map_element_access();
 	test_map_capacity();
+	test_modifiers();
 	map_test_42();
 }

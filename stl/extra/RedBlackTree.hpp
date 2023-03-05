@@ -17,38 +17,36 @@
 #include <iostream>
 
 #include "Node.hpp"
-#include "rebind.hpp"
 #include "map_iterator.hpp"
+#include "rebind.hpp"
 
 // TODO: remove last from node so that max_size() is correct
 
-template <typename T, class Compare = std::less<typename T::first_type>, typename Allocator = std::allocator<T> >
+template <typename T, class Compare = std::less<typename T::first_type>,
+	  typename Allocator = std::allocator<T> >
 struct RedBlackTree
 {
-	typedef typename rebind<Allocator>::template to<Node<T> >::other node_allocator;
+	typedef typename rebind<Allocator>::template to<Node<T> >::other
+		    node_allocator;
 	typedef typename node_allocator::pointer node_pointer;
 
 	typedef ft::map_bidirectional_iterator<T> iterator;
-	typedef ft::map_bidirectional_iterator<const T> const_iterator; // TODO: test
-	
+	typedef ft::map_bidirectional_iterator<const T>
+		    const_iterator; // TODO: test
+
 	// Member types
 	node_allocator _node_alloc;
 	node_pointer root;
 	node_pointer _end;
 	Compare _cmp;
 
-	RedBlackTree() : root(NULL), _cmp()
-	{
-		init();
-	}
-	RedBlackTree(const Compare& cmp) : root(NULL), _cmp(cmp)
-	{
-		init();
-	}
+	RedBlackTree() : root(NULL), _cmp() { init(); }
+	RedBlackTree(const Compare &cmp) : root(NULL), _cmp(cmp) { init(); }
 
 	~RedBlackTree()
 	{
-		destroy_all();
+		destroy_nodes();
+		destroy_last();
 	}
 
 	void init()
@@ -58,7 +56,7 @@ struct RedBlackTree
 		_end->clr = Node<T>::BLACK;
 	}
 
-	void	destroy_all()
+	void destroy_nodes()
 	{
 		Node<T> **it = &root;
 		if (is_null(root))
@@ -72,7 +70,7 @@ struct RedBlackTree
 		while (!is_null(root->left) || !is_null(root->right))
 		{
 			it = &root;
-			while (!is_null((*it)->left)|| !is_null((*it)->right))
+			while (!is_null((*it)->left) || !is_null((*it)->right))
 			{
 				while (!is_null((*it)->left))
 				{
@@ -90,27 +88,14 @@ struct RedBlackTree
 		_node_alloc.destroy(root);
 		_node_alloc.deallocate(root, 1);
 		root = NULL;
+	}
+	void destroy_last()
+	{
 		_node_alloc.destroy(_end);
 		_node_alloc.deallocate(_end, 1);
 		_end = NULL;
 	}
 
-	Node<T> *find_node(typename T::first_type nbr)
-	{
-		Node<T> *it = root;
-		while (!is_null(it))
-		{
-			if (_cmp(nbr, it->data.first))
-			{
-				it = it->left;
-			} else if (_cmp(it->data.first, nbr))
-			{
-				it = it->right;
-			} else
-				return it;
-		}
-		return it;
-	}
 
 	Node<T> *minimum(Node<T> *ptr)
 	{
@@ -147,51 +132,89 @@ struct RedBlackTree
 			node->clr = clr;
 	}
 
-	void rbt_add_node(T nbr)
+	Node<T> *find_node(typename T::first_type nbr)
 	{
-		if (root == NULL)
-		{
-			root = _node_alloc.allocate(1);
-			_node_alloc.construct(root, Node<T>(nbr, NULL));
-			fix_insert(root);
-			_end->parent = root;
-			root->right = _end;
-			return;
-		}
 		Node<T> *it = root;
 		while (!is_null(it))
 		{
-			if (_cmp(nbr.first, it->data.first))
+			if (_cmp(nbr, it->data.first))
 			{
-				if (is_null(it->left))
-				{
-					it->left = _node_alloc.allocate(1);
-					_node_alloc.construct(it->left, Node<T>(nbr, it));
-					fix_insert(it->left);
-					return;
-				}
 				it = it->left;
-			} else if (_cmp(it->data.first, nbr.first))
+			} else if (_cmp(it->data.first, nbr))
 			{
-				if (is_null(it->right))
-				{
-					it->right = _node_alloc.allocate(1); 
-					_node_alloc.construct(it->right, Node<T>(nbr, it));
-					fix_insert(it->right);
-					if (_cmp(_end->parent->data.first, nbr.first))
-					{
-						it->right->right = _end;
-						_end->parent = it->right;
-					}
-					return;
-				}
 				it = it->right;
 			} else
-				return;
+				return it;
+		}
+		return it;
+	}
+
+	Node<T> *find_location_node(typename T::first_type nbr)
+	{
+		Node<T> *it = root;
+		while (!is_null(it))
+		{
+			if (_cmp(nbr, it->data.first))
+			{
+				if (is_null(it->left))
+					return it;
+				it = it->left;
+			} else if (_cmp(it->data.first, nbr))
+			{
+				if (is_null(it->right))
+					return it;
+				it = it->right;
+			} else
+				return it;
+		}
+		return it;
+	}
+
+	void add_node(T nbr)
+	{
+		Node<T> *location = find_location_node(nbr.first);
+		if (location != NULL && location->data == nbr)
+			return ;
+		add_node(nbr, location);
+	}
+
+	void add_node(T nbr, Node<T> *location)
+	{
+		if (is_null(location))
+		{
+			root = _node_alloc.allocate(1);
+			construct_node(root, nbr, NULL);
+			update_end(root);
+			return ;
+		}
+		if (_cmp(nbr.first, location->data.first))
+		{
+			location->left = _node_alloc.allocate(1);
+			construct_node(location->left, nbr, location);
+		} else if (_cmp(location->data.first, nbr.first))
+		{
+			location->right = _node_alloc.allocate(1);
+			construct_node(location->right, nbr, location);
+			if (_cmp(_end->parent->data.first, nbr.first))
+			{
+				update_end(location->right);
+			}
 		}
 	}
 
-	void rbt_delete_node(typename T::first_type nbr)
+	void update_end(Node<T> *last)
+	{
+		last->right = _end;
+		_end->parent = last;
+	}
+
+	void	construct_node(Node<T> *location, T nbr, Node<T> *parent)
+	{
+		_node_alloc.construct(location, Node<T>(nbr, parent));
+		fix_insert(location);
+	}
+
+	void delete_node(typename T::first_type nbr)
 	{
 		Node<T> *to_delete = find_node(nbr);
 		if (is_null(to_delete))
@@ -243,16 +266,6 @@ struct RedBlackTree
 		}
 	}
 
-	void add_node(T nbr)
-	{
-		rbt_add_node(nbr);
-	}
-
-	void delete_node(typename T::first_type nbr)
-	{
-		rbt_delete_node(nbr);
-	}
-
 	void transplant(Node<T> *spot, Node<T> *sub_tree)
 	{
 		if (is_null(spot->parent))
@@ -278,8 +291,9 @@ struct RedBlackTree
 			print(ptr->right, "RIGHT", (depth + "         "));
 			std::cout << depth
 				  << (ptr != root ? ptr->parent->data.first : 0)
-				  << "->" << side << " [" << ptr->data.first << "] "
-				  << (ptr->clr ? "red" : "blk") << std::endl;
+				  << "->" << side << " [" << ptr->data.first
+				  << "] " << (ptr->clr ? "red" : "blk")
+				  << std::endl;
 			print(ptr->left, "LEFT", (depth + "         "));
 		}
 	}
@@ -479,27 +493,15 @@ struct RedBlackTree
 		return const_iterator(root->minimum_subtree());
 	}
 
-	iterator end()
-	{
-		return iterator(_end);
-	}
+	iterator end() { return iterator(_end); }
 
-	const_iterator end() const
-	{
-		return const_iterator(_end);
-	}
+	const_iterator end() const { return const_iterator(_end); }
 	bool is_last(node_pointer ptr)
 	{
 		return (!is_null(root) && ptr == root->maximum_subtree());
 	}
-    bool empty() const
-    {
-        return (root == NULL);
-    }
-	size_t size() const
-	{
-		return (count(root));
-	}
+	bool empty() const { return (root == NULL); }
+	size_t size() const { return (count(root)); }
 	size_t count(node_pointer node) const
 	{
 		if (node == NULL || node == _end)
@@ -507,10 +509,7 @@ struct RedBlackTree
 		return 1 + count(node->left) + count(node->right);
 	}
 	// https://42born2code.slack.com/archives/CMX2R5JSW/p1652788063716189
-    size_t max_size() const
-    {
-        return (_node_alloc.max_size());
-    }
+	size_t max_size() const { return (_node_alloc.max_size()); }
 };
 
 #endif // __REDBLACKTREE_H__
