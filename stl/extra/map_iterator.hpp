@@ -12,7 +12,7 @@ template <class T> struct map_bidirectional_iterator
 	/* ------------------------------ Member Types *
 	 * ------------------------------ */
 	template<typename> friend class CompareHelper;
-	template<typename> friend class map_const_bidirectional_iterator;
+	template<typename> friend struct map_const_bidirectional_iterator;
 
 	typedef std::bidirectional_iterator_tag iterator_category;
 	typedef T value_type;
@@ -88,7 +88,7 @@ template <class T>
 struct map_const_bidirectional_iterator
 {
 	template<typename> friend class CompareHelper;
-	template<typename> friend class map_bidirectional_iterator;
+	template<typename> friend struct map_bidirectional_iterator;
 
 	typedef std::bidirectional_iterator_tag iterator_category;
 	typedef const Node<T> node;
