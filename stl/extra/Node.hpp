@@ -2,7 +2,6 @@
 #define __NODE_H__
 
 // int data will be replaced by ft_pair
-
 template <typename T> struct Node
 {
 	T data;

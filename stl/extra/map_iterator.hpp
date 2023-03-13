@@ -12,6 +12,7 @@ template <class T> struct map_bidirectional_iterator
 	/* ------------------------------ Member Types *
 	 * ------------------------------ */
 	template<typename> friend class CompareHelper;
+	template<typename> friend class FindHelper;
 	template<typename> friend struct map_const_bidirectional_iterator;
 
 	typedef std::bidirectional_iterator_tag iterator_category;
@@ -80,7 +81,6 @@ template <class T> struct map_bidirectional_iterator
 	}
 
 	// DATA
-	private:
 	node_pointer node_ptr;
 };
 
@@ -88,6 +88,7 @@ template <class T>
 struct map_const_bidirectional_iterator
 {
 	template<typename> friend class CompareHelper;
+	template<typename> friend class FindHelper;
 	template<typename> friend struct map_bidirectional_iterator;
 
 	typedef std::bidirectional_iterator_tag iterator_category;
@@ -140,14 +141,19 @@ struct map_const_bidirectional_iterator
 		return (&node_ptr->data);
 	}
 
-    private:
 	// DATA
 	node_pointer node_ptr;
 };
 
-// Friend compare helper class to be able to access private node_ptr indirectly
-// if user tries to create Compare Helper it will not be possible to redifine
-// This way we prevent having many operator overloader methods
+/* 
+Friend compare helper class to be able to access private node_ptr indirectly
+if user tries to create Compare Helper it will not be possible to redifine
+This way we prevent having many operator overloader methods
+HOWEVER: The following would be impossible:
+insert with hint they give us the iterator and we need to check if Node is correct
+erase with iterators (we can't just have access to data pointer,
+we need to access node in order to use de deallocate)
+and we would need the Node<ptr> which would be private
 
 template<typename T>
 class CompareHelper
@@ -188,71 +194,64 @@ class CompareHelper
 	{
 		return !equal();
 	}
-};
+}; */
 
 template <class T>
 bool operator==(const map_bidirectional_iterator<T> &a,
 		const map_bidirectional_iterator<T> &b)
 {
-	CompareHelper<T> temp_compare(a, b);
-	return (temp_compare.equal());
+	return (a.node_ptr == b.node_ptr);
 }
 
 template <class T>
 bool operator!=(const map_bidirectional_iterator<T> &a,
 		const map_bidirectional_iterator<T> &b)
 {
-	CompareHelper<T> temp_compare(a, b);
-	return (temp_compare.different());
+	return (a.node_ptr != b.node_ptr);
 }
 
 template <class T>
 bool operator==(const map_bidirectional_iterator<T> &a,
 		const map_const_bidirectional_iterator<T> &b)
 {
-	CompareHelper<T> temp_compare(a, b);
-	return (temp_compare.equal());
+	return (a.node_ptr == b.node_ptr);
 }
 
 template <class T>
 bool operator==(const map_const_bidirectional_iterator<T> &a,
 		const map_bidirectional_iterator<T> &b)
 {
-	CompareHelper<T> temp_compare(a, b);
-	return (temp_compare.equal());
+	return (a.node_ptr == b.node_ptr);
 }
 
 template <class T>
 bool operator==(const map_const_bidirectional_iterator<T> &a,
 		const map_const_bidirectional_iterator<T> &b)
 {
-	CompareHelper<T> temp_compare(a, b);
-	return (temp_compare.equal());
+	return (a.node_ptr == b.node_ptr);
 }
 
 template <class T>
 bool operator!=(const map_bidirectional_iterator<T> &a,
 		const map_const_bidirectional_iterator<T> &b)
 {
-	CompareHelper<T> temp_compare(a, b);
-	return (temp_compare.different());
+	return (a.node_ptr != b.node_ptr);
 }
 
 template <class T>
 bool operator!=(const map_const_bidirectional_iterator<T> &a,
 		const map_bidirectional_iterator<T> &b)
 {
-	CompareHelper<T> temp_compare(a, b);
-	return (temp_compare.different());
+	return (a.node_ptr != b.node_ptr);
 }
 
 template <class T>
 bool operator!=(const map_const_bidirectional_iterator<T> &a,
 		const map_const_bidirectional_iterator<T> &b)
 {
-	CompareHelper<T> temp_compare(a, b);
-	return (temp_compare.different());
+	return (a.node_ptr != b.node_ptr);
 }
+
 
 }; // namespace ft
 

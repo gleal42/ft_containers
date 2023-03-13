@@ -95,7 +95,6 @@ struct RedBlackTree
 		_end = NULL;
 	}
 
-
 	Node<T> *minimum(Node<T> *ptr)
 	{
 		if (ptr == NULL)
@@ -148,9 +147,8 @@ struct RedBlackTree
 		return it;
 	}
 
-	Node<T> *find_location_node(typename T::first_type nbr)
+	Node<T> *find_location_node(Node<T> *it, typename T::first_type nbr)
 	{
-		Node<T> *it = root;
 		while (!is_null(it))
 		{
 			if (_cmp(nbr, it->data.first))
@@ -169,27 +167,33 @@ struct RedBlackTree
 		return it;
 	}
 
-	void add_node(T nbr)
+	Node<T> *find_location_node(typename T::first_type nbr)
+	{
+		return find_location_node(root, nbr);
+	}
+
+	Node<T> *add_node(T nbr)
 	{
 		Node<T> *location = find_location_node(nbr.first);
 		if (location != NULL && location->data == nbr)
-			return ;
-		add_node(nbr, location);
+			return location;
+		return (add_node(nbr, location));
 	}
 
-	void add_node(T nbr, Node<T> *location)
+	Node<T> * add_node(T nbr, Node<T> *location)
 	{
 		if (is_null(location))
 		{
 			root = _node_alloc.allocate(1);
 			construct_node(root, nbr, NULL);
 			update_end(root);
-			return ;
+			return root;
 		}
 		if (_cmp(nbr.first, location->data.first))
 		{
 			location->left = _node_alloc.allocate(1);
 			construct_node(location->left, nbr, location);
+			return location->left;
 		} else if (_cmp(location->data.first, nbr.first))
 		{
 			location->right = _node_alloc.allocate(1);
@@ -198,7 +202,19 @@ struct RedBlackTree
 			{
 				update_end(location->right);
 			}
+			return location->right;
 		}
+		return location;
+	}
+
+	Node<T> * add_node(iterator hint, const T& value)
+	{
+		Node<T> *location = find_location_node(hint.node_ptr, value.first);
+		if (is_null(location))
+		{
+			return(add_node(value));
+		}
+		return(add_node(value, location));
 	}
 
 	void update_end(Node<T> *last)
@@ -218,6 +234,20 @@ struct RedBlackTree
 		Node<T> *to_delete = find_node(nbr);
 		if (is_null(to_delete))
 			return;
+		delete_node(to_delete);
+	}
+
+	void delete_node(iterator to_delete)
+	{
+		delete_node(to_delete.node_ptr);
+	}
+	void delete_node(const_iterator to_delete)
+	{
+		delete_node(to_delete.node_ptr);
+	}
+
+	void delete_node(Node<T> * to_delete)
+	{
 		Node<T> *y = to_delete;
 		Node<T> *x;
 		typename Node<T>::Color y_color = y->clr;
@@ -495,6 +525,25 @@ struct RedBlackTree
 	iterator end() { return iterator(_end); }
 
 	const_iterator end() const { return const_iterator(_end); }
+
+	void swap (RedBlackTree& x)
+	{
+		node_allocator temp_node_alloc = this->_node_alloc;
+		node_pointer temp_root = this->root;
+		node_pointer temp_end = this->_end;
+		Compare temp_cmp = this->_cmp;
+
+		this->_node_alloc = x._node_alloc;
+		this->root = x.root;
+		this->_end = x._end;
+		this->_cmp = x._cmp;
+
+		x._node_alloc = temp_node_alloc;
+		x.root = temp_root;
+		x._end = temp_end;
+		x._cmp = temp_cmp;
+	}
+
 	bool is_last(node_pointer ptr)
 	{
 		return (!is_null(root) && ptr == root->maximum_subtree());

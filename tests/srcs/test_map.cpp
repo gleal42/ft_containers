@@ -251,8 +251,139 @@ void    test_modifiers()
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
-	std::cout << "---iterator insert( iterator pos, const value_type& value );---" << std::endl;
+	std::cout << "\n---iterator insert( iterator pos, const value_type& value );---" << std::endl;
 
+	ft::map<char, int> hint_map;
+	{
+		ft::map<char, int>::iterator hint1 = hint_map.begin();
+		ft::map<char, int>::iterator it = hint_map.insert(hint1, a);
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+	{
+		ft::map<char, int>::iterator hint1 = hint_map.begin();
+		ft::map<char, int>::iterator it = hint_map.insert(hint1, a);
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+	{
+		ft::map<char, int>::iterator hint2 = hint_map.begin();
+		ft::map<char, int>::iterator it = hint_map.insert(hint2, b);
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+	{
+		ft::map<char, int>::iterator hint3 = hint_map.find(b.first);
+		ft::map<char, int>::iterator it = hint_map.insert(hint3, b);
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+	ref_map.insert(d);
+	ref_map.insert(a);
+	ref_map.insert(e);
+	ref_map.insert(c);
+	ref_map.insert(b);
+	std::cout << "\n---void insert( InputIt first, InputIt last );---" << std::endl;
+	ft::map<char, int> range_insert_map;
+	range_insert_map.insert(ref_map.begin(), ref_map.end());
+	for (ft::map<char, int>::const_iterator it = range_insert_map.begin(); it != range_insert_map.end(); it++)
+	{
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+
+	std::cout << "\n---void erase (iterator position);---" << std::endl;
+	ft::map<char, int> erase_map(ref_map);
+	ft::map<char, int>::iterator erase_it = erase_map.find('c');
+	erase_map.erase(erase_it);
+	for (ft::map<char, int>::const_iterator it = erase_map.begin(); it != erase_map.end(); it++)
+	{
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+
+	std::cout << "\n---size_type erase (const key_type& k);---" << std::endl;
+	ft::map<char, int>::size_type ret = erase_map.erase('a');
+	std::cout << "deleting a was a success so we got " << ret << std::endl;
+	for (ft::map<char, int>::const_iterator it = erase_map.begin(); it != erase_map.end(); it++)
+	{
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+	ret = erase_map.erase('a');
+	std::cout << "if we try again it won't work so ret is " << ret << std::endl;
+	for (ft::map<char, int>::const_iterator it = erase_map.begin(); it != erase_map.end(); it++)
+	{
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+	std::cout << "\n---void erase (iterator first, iterator last);---" << std::endl;
+	erase_it = erase_map.end();
+	erase_it--;
+	erase_map.erase(erase_map.begin(), erase_it);
+	for (ft::map<char, int>::const_iterator it = erase_map.begin(); it != erase_map.end(); it++)
+	{
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+	std::cout << "\n---	void swap (map& x);---" << std::endl;
+	ft::map<char, int> swap_map(ref_map);
+	ft::pair<char, int> f('f', 6);
+	swap_map.erase('a');
+	ref_map.insert(f);
+
+	std::cout << "\n---	swap_map before ---" << std::endl;
+	for (ft::map<char, int>::const_iterator it = swap_map.begin(); it != swap_map.end(); it++)
+	{
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+	std::cout << "\n---	ref_map before ---" << std::endl;
+	for (ft::map<char, int>::const_iterator it = ref_map.begin(); it != ref_map.end(); it++)
+	{
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+
+	swap_map.swap(ref_map);
+
+	std::cout << "\n---	swap_map after ---" << std::endl;
+	for (ft::map<char, int>::const_iterator it = swap_map.begin(); it != swap_map.end(); it++)
+	{
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+	std::cout << "\n---	ref_map after ---" << std::endl;
+	for (ft::map<char, int>::const_iterator it = ref_map.begin(); it != ref_map.end(); it++)
+	{
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
+}
+
+
+void    test_lookup()
+{
+	std::cout << "\n|---Testing Lookup---|\n" << std::endl;
+	ft::pair<std::string, int> a("Hello", 10);
+	ft::pair<std::string, int> b("my", 1);
+	ft::pair<std::string, int> c("name", 2);
+	ft::pair<std::string, int> d("name", 10000);
+	ft::pair<std::string, int> e("is", 1123);
+	ft::pair<std::string, int> f("Goncalo", 112421);
+
+	ft::map<std::string, int> look_up_map;
+	look_up_map.insert(a);
+	look_up_map.insert(b);
+	look_up_map.insert(c);
+	look_up_map.insert(d);
+	look_up_map.insert(e);
+	look_up_map.insert(f);
+	for (ft::map<std::string, int>::const_iterator it = look_up_map.begin(); it != look_up_map.end(); it++)
+	{
+		std::cout << "it->first " << it->first << std::endl;
+		std::cout << "it->second " << it->second << std::endl;
+	}
 }
 
 void    map_test_42()
@@ -284,5 +415,6 @@ void    test_map()
 	test_map_element_access();
 	test_map_capacity();
 	test_modifiers();
-	map_test_42();
+	test_lookup();
+	// map_test_42();
 }

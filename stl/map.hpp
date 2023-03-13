@@ -145,8 +145,61 @@ class map
 	{
 		tree.destroy_nodes();
 	}
-	void insert(const value_type &value) { tree.add_node(value); }
 
+	void insert(const value_type &value) { tree.add_node(value); }
+	iterator insert( iterator pos, const value_type& value )
+	{
+		return (tree.add_node(pos, value));
+	}
+	template< class InputIt >
+	void insert( InputIt first, InputIt last )
+	{
+		while (first != last)
+		{
+			tree.add_node(*first);
+			first++;
+		}
+	}
+	void erase (iterator position)
+	{
+		tree.delete_node(position);
+	}
+	size_type erase (const key_type& k)
+	{
+		Node<value_type> *found_node = tree.find_node(k);
+		if (found_node == NULL || found_node == tree._end)
+			return 0;
+		tree.delete_node(k);
+		return 1;
+	}
+	void erase (iterator first, iterator last)
+	{
+		while (first != last && first != tree.end())
+		{
+			tree.delete_node(first++);
+		}
+	}
+	void swap (map& x)
+	{
+		tree.swap(x.tree);
+		Allocator temp_alloc = _map_alloc;
+		_map_alloc = x._map_alloc;
+		x._map_alloc = temp_alloc;
+	}
+	iterator find( const Key& key )
+	{
+		Node<value_type> *found_node = tree.find_node(key);
+		if (found_node == NULL || found_node == tree._end)
+			return tree.end();
+		return iterator(found_node);
+	}
+	const_iterator find( const Key& key ) const
+	{
+		const Node<value_type> *found_node = tree.find_node(key);
+		if (found_node == NULL || found_node == tree._end)
+			return tree.end();
+		return const_iterator(found_node);
+	}
       private:
 	RedBlackTree<value_type, key_compare, Allocator> tree;
 	Allocator _map_alloc;
