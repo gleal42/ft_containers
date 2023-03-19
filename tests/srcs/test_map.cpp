@@ -12,11 +12,11 @@
 
 #include "all.hpp"
 
-void    test_map_iterators()
+void test_map_iterators()
 {
 	std::cout << "Map iterators" << std::endl;
 	ft::map<int, int> map1;
-	
+
 	ft::pair<int, int> a(1, 2);
 	ft::pair<int, int> b(2, 3);
 	ft::pair<int, int> c(3, 5);
@@ -50,7 +50,7 @@ void    test_map_iterators()
 	std::cout << crlast->second << std::endl;
 }
 
-void    test_map_constructors_rev_iterator()
+void test_map_constructors_rev_iterator()
 {
 	std::cout << "Default MAP Constructor" << std::endl;
 	ft::map<std::string, int> map1;
@@ -101,12 +101,12 @@ void    test_map_constructors_rev_iterator()
 	std::cout << "-----" << std::endl;
 	std::cout << rev_it->first << std::endl;
 
-	ft::map<std::string, int>ite2(iter);
+	ft::map<std::string, int> ite2(iter);
 	std::cout << ite2.begin()->first << std::endl;
 	std::cout << ite2.begin()->second << std::endl;
 }
 
-void    test_map_assignment()
+void test_map_assignment()
 {
 	std::cout << "MAP Assignment" << std::endl;
 	ft::map<int, int> ref_map;
@@ -124,27 +124,30 @@ void    test_map_assignment()
 	ref_map.insert(d);
 
 	std::cout << "FIRST MAP" << std::endl;
-	for (ft::map<int, int>::iterator it = ref_map.begin(); it != ref_map.end(); it++)
+	for (ft::map<int, int>::iterator it = ref_map.begin();
+	     it != ref_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
-	
+
 	ft::map<int, int> map2;
 	ft::pair<int, int> e(5, 50);
 	map2.insert(e);
 	map2.insert(a);
 
 	std::cout << "Second MAP" << std::endl;
-	for (ft::map<int, int>::iterator it = map2.begin(); it != map2.end(); it++)
+	for (ft::map<int, int>::iterator it = map2.begin(); it != map2.end();
+	     it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
 
 	std::cout << "Third MAP" << std::endl;
-	map2 = 	ref_map;
-	for (ft::map<int, int>::iterator it = map2.begin(); it != map2.end(); it++)
+	map2 = ref_map;
+	for (ft::map<int, int>::iterator it = map2.begin(); it != map2.end();
+	     it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
@@ -176,18 +179,16 @@ void test_map_element_access()
 	{
 		int res_3 = ref_map.at("Sixth");
 		std::cout << res_3 << std::endl;
-	}
-	catch(const std::out_of_range & e)
+	} catch (const std::out_of_range &e)
 	{
 		std::cerr << e.what() << '\n';
 	}
-	
+
 	try
 	{
 		const int res_4 = ref_map.at("Sixth");
 		std::cout << res_4 << std::endl;
-	}
-	catch(const std::out_of_range& e)
+	} catch (const std::out_of_range &e)
 	{
 		std::cerr << e.what() << '\n';
 	}
@@ -198,7 +199,7 @@ void test_map_element_access()
 	std::cout << res_6 << std::endl;
 }
 
-void    test_map_capacity()
+void test_map_capacity()
 {
 	std::cout << "MAP capacity" << std::endl;
 	ft::map<int, int> map_int;
@@ -217,7 +218,7 @@ void    test_map_capacity()
 	std::cout << map_int.max_size() << std::endl;
 }
 
-void    test_modifiers()
+void test_modifiers()
 {
 	std::cout << "---Testing Modifiers---" << std::endl;
 	std::cout << "---void clear();---" << std::endl;
@@ -233,25 +234,30 @@ void    test_modifiers()
 	ref_map.insert(e);
 	ref_map.insert(c);
 	ref_map.insert(b);
-	for (ft::map<char, int>::const_iterator it = ref_map.begin(); it != ref_map.end(); it++)
+	for (ft::map<char, int>::const_iterator it = ref_map.begin();
+	     it != ref_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
 	ref_map.clear();
-	for (ft::map<char, int>::const_iterator it = ref_map.begin(); it != ref_map.end(); it++)
+	for (ft::map<char, int>::const_iterator it = ref_map.begin();
+	     it != ref_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
 	ref_map.insert(d);
 	ref_map.insert(a);
-	for (ft::map<char, int>::iterator it = ref_map.begin(); it != ref_map.end(); it++)
+	for (ft::map<char, int>::iterator it = ref_map.begin();
+	     it != ref_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
-	std::cout << "\n---iterator insert( iterator pos, const value_type& value );---" << std::endl;
+	std::cout << "\n---iterator insert( iterator pos, const value_type& "
+		     "value );---"
+		  << std::endl;
 
 	ft::map<char, int> hint_map;
 	{
@@ -283,10 +289,12 @@ void    test_modifiers()
 	ref_map.insert(e);
 	ref_map.insert(c);
 	ref_map.insert(b);
-	std::cout << "\n---void insert( InputIt first, InputIt last );---" << std::endl;
+	std::cout << "\n---void insert( InputIt first, InputIt last );---"
+		  << std::endl;
 	ft::map<char, int> range_insert_map;
 	range_insert_map.insert(ref_map.begin(), ref_map.end());
-	for (ft::map<char, int>::const_iterator it = range_insert_map.begin(); it != range_insert_map.end(); it++)
+	for (ft::map<char, int>::const_iterator it = range_insert_map.begin();
+	     it != range_insert_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
@@ -296,32 +304,39 @@ void    test_modifiers()
 	ft::map<char, int> erase_map(ref_map);
 	ft::map<char, int>::iterator erase_it = erase_map.find('c');
 	erase_map.erase(erase_it);
-	for (ft::map<char, int>::const_iterator it = erase_map.begin(); it != erase_map.end(); it++)
+	for (ft::map<char, int>::const_iterator it = erase_map.begin();
+	     it != erase_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
 
-	std::cout << "\n---size_type erase (const key_type& k);---" << std::endl;
+	std::cout << "\n---size_type erase (const key_type& k);---"
+		  << std::endl;
 	ft::map<char, int>::size_type ret = erase_map.erase('a');
 	std::cout << "deleting a was a success so we got " << ret << std::endl;
-	for (ft::map<char, int>::const_iterator it = erase_map.begin(); it != erase_map.end(); it++)
+	for (ft::map<char, int>::const_iterator it = erase_map.begin();
+	     it != erase_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
 	ret = erase_map.erase('a');
-	std::cout << "if we try again it won't work so ret is " << ret << std::endl;
-	for (ft::map<char, int>::const_iterator it = erase_map.begin(); it != erase_map.end(); it++)
+	std::cout << "if we try again it won't work so ret is " << ret
+		  << std::endl;
+	for (ft::map<char, int>::const_iterator it = erase_map.begin();
+	     it != erase_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
-	std::cout << "\n---void erase (iterator first, iterator last);---" << std::endl;
+	std::cout << "\n---void erase (iterator first, iterator last);---"
+		  << std::endl;
 	erase_it = erase_map.end();
 	erase_it--;
 	erase_map.erase(erase_map.begin(), erase_it);
-	for (ft::map<char, int>::const_iterator it = erase_map.begin(); it != erase_map.end(); it++)
+	for (ft::map<char, int>::const_iterator it = erase_map.begin();
+	     it != erase_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
@@ -333,13 +348,15 @@ void    test_modifiers()
 	ref_map.insert(f);
 
 	std::cout << "\n---	swap_map before ---" << std::endl;
-	for (ft::map<char, int>::const_iterator it = swap_map.begin(); it != swap_map.end(); it++)
+	for (ft::map<char, int>::const_iterator it = swap_map.begin();
+	     it != swap_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
 	std::cout << "\n---	ref_map before ---" << std::endl;
-	for (ft::map<char, int>::const_iterator it = ref_map.begin(); it != ref_map.end(); it++)
+	for (ft::map<char, int>::const_iterator it = ref_map.begin();
+	     it != ref_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
@@ -348,21 +365,22 @@ void    test_modifiers()
 	swap_map.swap(ref_map);
 
 	std::cout << "\n---	swap_map after ---" << std::endl;
-	for (ft::map<char, int>::const_iterator it = swap_map.begin(); it != swap_map.end(); it++)
+	for (ft::map<char, int>::const_iterator it = swap_map.begin();
+	     it != swap_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
 	std::cout << "\n---	ref_map after ---" << std::endl;
-	for (ft::map<char, int>::const_iterator it = ref_map.begin(); it != ref_map.end(); it++)
+	for (ft::map<char, int>::const_iterator it = ref_map.begin();
+	     it != ref_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
 }
 
-
-void    test_lookup()
+void test_lookup()
 {
 	std::cout << "\n|---Testing Lookup---|\n" << std::endl;
 	ft::pair<std::string, int> a("Hello", 10);
@@ -379,14 +397,168 @@ void    test_lookup()
 	look_up_map.insert(d);
 	look_up_map.insert(e);
 	look_up_map.insert(f);
-	for (ft::map<std::string, int>::const_iterator it = look_up_map.begin(); it != look_up_map.end(); it++)
+	for (ft::map<std::string, int>::const_iterator it = look_up_map.begin();
+	     it != look_up_map.end(); it++)
 	{
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
+
+	std::cout << "\n---	size_type count( const Key& key ) const; ---"
+		  << std::endl;
+	std::cout << "If I find occurrence I will get "
+		  << look_up_map.count("Hello") << std::endl;
+	std::cout << "If I do not find occurrence I will get "
+		  << look_up_map.count("Helos") << std::endl;
+
+	std::cout << "\n---	iterator find( const Key& key ); ---"
+		  << std::endl;
+	ft::map<std::string, int>::iterator iter = look_up_map.begin();
+	std::cout << "begin() is " << iter->first << std::endl;
+	ft::map<std::string, int>::const_iterator citer = look_up_map.begin();
+	std::cout << "const begin() string size is " << citer->first.size()
+		  << std::endl;
 }
 
-void    map_test_42()
+void test_bounds()
+{
+	std::cout << "\n|---Testing bounds---|\n" << std::endl;
+
+	ft::pair<int, int> a(1, 10);
+	ft::pair<int, int> b(4, 40);
+	ft::pair<int, int> c(7, 70);
+	ft::pair<int, int> d(30, 300);
+	ft::pair<int, int> e(20, 200);
+	ft::pair<int, int> f(17, 170);
+
+	ft::map<int, int> bound_map;
+	bound_map.insert(a);
+	bound_map.insert(b);
+	bound_map.insert(c);
+	bound_map.insert(d);
+	bound_map.insert(e);
+	bound_map.insert(f);
+
+	std::cout << "\n---	iterator lower_bound( const Key& key ); ---" << std::endl;
+	ft::map<int, int>::iterator lower1 = bound_map.lower_bound(-1);
+	std::cout << "lower_bound 1 is " << lower1->first << std::endl;
+
+	ft::map<int, int>::iterator lower2 = bound_map.lower_bound(17);
+	std::cout << "lower_bound 2 is " << lower2->first << std::endl;
+
+	ft::map<int, int>::iterator lower3 = bound_map.lower_bound(30);
+	std::cout << "lower_bound 3 is " << lower3->first << std::endl;
+
+	ft::map<int, int>::iterator lower4 = bound_map.lower_bound(320);
+	std::cout << "lower_bound 4 same as end? " << (lower4 == bound_map.end()) << std::endl;
+
+	std::cout << "\n---	const_iterator lower_bound( const Key& key ) const; ---" << std::endl;
+	ft::map<int, int>::const_iterator clower1 = bound_map.lower_bound(-1);
+	std::cout << "const_lower_bound 1 is " << clower1->first << std::endl;
+
+	ft::map<int, int>::const_iterator clower2 = bound_map.lower_bound(17);
+	std::cout << "const_lower_bound 2 is " << clower2->first << std::endl;
+
+	ft::map<int, int>::const_iterator clower3 = bound_map.lower_bound(30);
+	std::cout << "const_lower_bound 3 is " << clower3->first << std::endl;
+
+	ft::map<int, int>::const_iterator clower4 = bound_map.lower_bound(320);
+	std::cout << "lower_bound 4 same as end? " << (clower4 == bound_map.end()) << std::endl;
+
+	std::cout << "\n---	iterator upper_bound( const Key& key ); ---" << std::endl;
+	ft::map<int, int>::iterator upper1 = bound_map.upper_bound(-1);
+	std::cout << "upper_bound 1 is " << upper1->first << std::endl;
+
+	ft::map<int, int>::iterator upper2 = bound_map.upper_bound(17);
+	std::cout << "upper_bound 2 is " << upper2->first << std::endl;
+
+	ft::map<int, int>::iterator upper3 = bound_map.upper_bound(30);
+	std::cout << "upper_bound 3 same as end? " << (upper3 == bound_map.end()) << std::endl;
+
+	ft::map<int, int>::iterator upper4 = bound_map.upper_bound(320);
+	std::cout << "upper_bound 4 same as end? " << (upper4 == bound_map.end()) << std::endl;
+
+	std::cout << "\n---	const_iterator upper_bound( const Key& key ) const; ---" << std::endl;
+	ft::map<int, int>::const_iterator cupper1 = bound_map.upper_bound(-1);
+	std::cout << "const_upper_bound 1 is " << cupper1->first << std::endl;
+
+	ft::map<int, int>::const_iterator cupper2 = bound_map.upper_bound(17);
+	std::cout << "const_upper_bound 2 is " << cupper2->first << std::endl;
+
+	ft::map<int, int>::const_iterator cupper3 = bound_map.upper_bound(30);
+	std::cout << "const_upper_bound 3 same as end? " << (cupper3 == bound_map.end()) << std::endl;
+
+	ft::map<int, int>::const_iterator cupper4 = bound_map.upper_bound(320);
+	std::cout << "const_upper_bound 4 same as end? " << (cupper4 == bound_map.end()) << std::endl;
+
+
+	std::cout << "\n---	ft::pair<iterator,iterator> equal_range( const Key& key ); ---" << std::endl;
+	ft::pair<ft::map<int, int>::iterator, ft::map<int, int>::iterator> equal_range1 = bound_map.equal_range(-1);
+	std::cout << "equal_range.lower_bound1 is " << equal_range1.first->first << std::endl;
+	std::cout << "equal_range.upper_bound1 is " << equal_range1.second->first << std::endl;
+
+	ft::pair<ft::map<int, int>::iterator, ft::map<int, int>::iterator> equal_range2 = bound_map.equal_range(17);
+	std::cout << "equal_range.lower_bound2 is " << equal_range2.first->first << std::endl;
+	std::cout << "equal_range.upper_bound2 is " << equal_range2.second->first << std::endl;
+
+	ft::pair<ft::map<int, int>::iterator, ft::map<int, int>::iterator> equal_range3 = bound_map.equal_range(30);
+	std::cout << "equal_range.lower_bound3 is " << equal_range3.first->first << std::endl;
+	std::cout << "equal_range.upper_bound3 same as end? " << (equal_range3.first == bound_map.end()) << std::endl;
+
+	ft::pair<ft::map<int, int>::iterator, ft::map<int, int>::iterator> equal_range4 = bound_map.equal_range(320);
+	std::cout << "equal_range.lower_bound4 same as end? " << (equal_range4.first == bound_map.end()) << std::endl;
+	std::cout << "equal_range.upper_bound4 same as end? " << (equal_range4.second == bound_map.end()) << std::endl;
+
+	std::cout << "\n---	ft::pair<const_iterator,const_iterator> equal_range( const Key& key ) const; ---" << std::endl;
+	ft::pair<ft::map<int, int>::const_iterator, ft::map<int, int>::const_iterator> const_equal_range1 = bound_map.equal_range(-1);
+	std::cout << "const_equal_range.lower_bound1 is " << const_equal_range1.first->first << std::endl;
+	std::cout << "const_equal_range.upper_bound1 is " << const_equal_range1.second->first << std::endl;
+
+	ft::pair<ft::map<int, int>::const_iterator, ft::map<int, int>::const_iterator> const_equal_range2 = bound_map.equal_range(17);
+	std::cout << "const_equal_range.lower_bound2 is " << const_equal_range2.first->first << std::endl;
+	std::cout << "const_equal_range.upper_bound2 is " << const_equal_range2.second->first << std::endl;
+
+	ft::pair<ft::map<int, int>::const_iterator, ft::map<int, int>::const_iterator> const_equal_range3 = bound_map.equal_range(30);
+	std::cout << "const_equal_range.lower_bound3 is " << const_equal_range3.first->first << std::endl;
+	std::cout << "const_equal_range.upper_bound3 same as end? " << (const_equal_range3.first == bound_map.end()) << std::endl;
+
+	ft::pair<ft::map<int, int>::const_iterator, ft::map<int, int>::const_iterator> const_equal_range4 = bound_map.equal_range(320);
+	std::cout << "const_equal_range.lower_bound4 same as end? " << (const_equal_range4.first == bound_map.end()) << std::endl;
+	std::cout << "const_equal_range.upper_bound4 same as end? " << (const_equal_range4.second == bound_map.end()) << std::endl;	
+}
+
+void test_observers()
+{
+	std::cout << "\n|---Testing Observers---|\n" << std::endl;
+	std::cout << "\n---	key_compare key_comp() const; ---" << std::endl;
+	ft::map<int, char, Compare> observ_map;
+	ft::pair<int, char> a(1, 'a');
+	ft::pair<int, char> b(2, 'b');
+	ft::pair<int, char> c(3, 'c');
+	ft::pair<int, char> d(4, 'd');
+	ft::pair<int, char> e(5, 'e');
+	observ_map.insert(a);
+	observ_map.insert(b);
+	observ_map.insert(c);
+	observ_map.insert(d);
+	observ_map.insert(e);
+	ft::map<int, char, Compare>::key_compare comp_func = observ_map.key_comp();
+    for (ft::map<int, char, Compare>::iterator it = observ_map.begin(); it != observ_map.end(); it++) {
+        bool before = comp_func(it->first, 100);
+        bool after = comp_func(100, it->first);
+        std::cout << '(' << it->first << ',' << it->second;
+        if (!before && !after)
+            std::cout << ") equivalent to key 100\n";
+        else if (before)
+            std::cout << ") goes before key 100\n";
+        else if (after)
+            std::cout << ") goes after key 100\n";
+    }
+
+	std::cout << "\n---	std::map::value_compare value_comp() const; ---" << std::endl;
+}
+
+void map_test_42()
 {
 	// 42 test
 	ft::map<int, int> map_int;
@@ -401,13 +573,14 @@ void    map_test_42()
 		int access = rand();
 		sum += map_int[access];
 	}
-	std::cout << "should be constant with the same seed: " << sum << std::endl;
+	std::cout << "should be constant with the same seed: " << sum
+		  << std::endl;
 	{
 		ft::map<int, int> copy = map_int;
 	}
 }
 
-void    test_map()
+void test_map()
 {
 	test_map_iterators();
 	test_map_constructors_rev_iterator();
@@ -416,5 +589,7 @@ void    test_map()
 	test_map_capacity();
 	test_modifiers();
 	test_lookup();
+	test_bounds();
+	test_observers();
 	// map_test_42();
 }

@@ -130,7 +130,7 @@ struct RedBlackTree
 			node->clr = clr;
 	}
 
-	Node<T> *find_node(typename T::first_type nbr)
+	Node<T> *find_node(typename T::first_type nbr) const
 	{
 		Node<T> *it = root;
 		while (!is_null(it))
@@ -178,6 +178,60 @@ struct RedBlackTree
 		if (location != NULL && location->data == nbr)
 			return location;
 		return (add_node(nbr, location));
+	}
+
+	Node<T> *lower_bound( typename T::first_type nbr )
+	{
+		Node<T> *it = root;
+		Node<T> *not_less = NULL;
+		while (!is_null(it))
+		{
+			if (_cmp(nbr, it->data.first))
+			{
+				not_less = it;
+				it = it->left;
+			} else if (_cmp(it->data.first, nbr))
+			{
+				it = it->right;
+			} else
+				return it;
+		}
+		if (!not_less)
+		{
+			return _end;
+		}
+		return not_less;
+	}
+	const Node<T> *lower_bound( typename T::first_type key ) const
+	{
+		return(lower_bound(key));
+	}
+
+	Node<T> *upper_bound( typename T::first_type nbr )
+	{
+		Node<T> *it = root;
+		Node<T> *not_less = NULL;
+		while (!is_null(it))
+		{
+			if (_cmp(nbr, it->data.first))
+			{
+				not_less = it;
+				it = it->left;
+			} else if (_cmp(it->data.first, nbr))
+			{
+				it = it->right;
+			} else
+				break;
+		}
+		if (!not_less)
+		{
+			return _end;
+		}
+		return not_less;
+	}
+	const Node<T> *upper_bound( typename T::first_type key ) const
+	{
+		return(upper_bound(key));
 	}
 
 	Node<T> * add_node(T nbr, Node<T> *location)
@@ -504,7 +558,7 @@ struct RedBlackTree
 		to_fix->clr = Node<T>::BLACK;
 	}
 
-	bool is_null(const Node<T> *ptr)
+	bool is_null(const Node<T> *ptr) const
 	{
 		return (ptr == NULL || ptr == _end);
 	}
@@ -556,6 +610,7 @@ struct RedBlackTree
 			return 0;
 		return 1 + count(node->left) + count(node->right);
 	}
+
 	// https://42born2code.slack.com/archives/CMX2R5JSW/p1652788063716189
 	size_t max_size() const { return (_node_alloc.max_size()); }
 };

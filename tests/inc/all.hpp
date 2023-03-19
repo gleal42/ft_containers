@@ -20,6 +20,7 @@
 #include "ft.hpp"
 #include "utils.hpp"
 #include "MutantStack.hpp"
+#include "Compare.hpp"
 
 #include <stdlib.h>
 #include <typeinfo>

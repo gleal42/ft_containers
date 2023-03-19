@@ -186,6 +186,15 @@ class map
 		_map_alloc = x._map_alloc;
 		x._map_alloc = temp_alloc;
 	}
+
+	size_type count( const Key& key ) const
+	{
+		Node<value_type> *found_node = tree.find_node(key);
+		if (found_node == NULL || found_node == tree._end)
+			return 0;
+		return 1;
+	}
+
 	iterator find( const Key& key )
 	{
 		Node<value_type> *found_node = tree.find_node(key);
@@ -199,6 +208,48 @@ class map
 		if (found_node == NULL || found_node == tree._end)
 			return tree.end();
 		return const_iterator(found_node);
+	}
+	iterator lower_bound( const Key& key )
+	{
+		return tree.lower_bound(key);
+	}
+	const_iterator lower_bound( const Key& key ) const
+	{
+		return tree.lower_bound(key);
+	}
+	iterator upper_bound( const Key& key )
+	{
+		return tree.upper_bound(key);
+	}
+	const_iterator upper_bound( const Key& key ) const
+	{
+		return tree.upper_bound(key);
+	}
+	ft::pair<iterator,iterator> equal_range( const Key& key )
+	{
+		iterator upper = tree.upper_bound(key);
+		if (upper == tree.begin())
+			return ft::pair<iterator,iterator>(upper, upper);
+		iterator lower = upper;
+		--lower;
+		if (lower->first == key)
+			return ft::pair<iterator,iterator>(lower, upper);
+		return ft::pair<iterator,iterator>(upper, upper);
+	}
+	ft::pair<const_iterator,const_iterator> equal_range( const Key& key ) const
+	{
+		const_iterator upper = tree.upper_bound(key);
+		if (upper == tree.begin())
+			return ft::pair<const_iterator,const_iterator>(upper, upper);
+		const_iterator lower = upper;
+		--lower;
+		if (lower->first == key)
+			return ft::pair<const_iterator,const_iterator>(lower, upper);
+		return ft::pair<const_iterator,const_iterator>(upper, upper);
+	}
+	key_compare key_comp() const
+	{
+		return(tree._cmp);
 	}
       private:
 	RedBlackTree<value_type, key_compare, Allocator> tree;
