@@ -80,7 +80,7 @@ class vector
         LOG ("range constructor called" << std::endl);
         // LOG( (is_const<T>::value ? "It IS constant " : "It is NOT constant")
         // << std::endl);
-        alloc_empty (last - first);
+        alloc_empty (range_difference(first, last));
         copy_contents_range_to_end (first, last);
     }
     vector (const vector &other)
@@ -132,7 +132,7 @@ class vector
     {
         LOG ("assign( InputIt first, InputIt last) called" << std::endl);
 
-        size_type count = last - first;
+        size_type count = range_difference(first, last);
         destroy_contents ();
         if (count > this->capacity ()) {
             dealloc ();
@@ -266,10 +266,10 @@ class vector
     insert (iterator position, InputIterator first, InputIterator last,
             typename enable_if<!is_integral<InputIterator>::value>::type * = 0)
     {
-        size_type n = last - first;
+        size_type n = range_difference(first, last);
         insert_realloc (position, n);
         move_contents_forward_from (position, n);
-        while (first < last) {
+        while (first != last) {
             set_contents (1, *first, &(*position));
             first++;
             position++;
@@ -373,7 +373,7 @@ private:
         InputIt first, InputIt last,
         typename enable_if<!is_integral<InputIt>::value>::type * = 0)
     {
-        while ((last - first) > 0) {
+        while (range_difference(first, last) > 0) {
             _alloc.construct (_finish, *first);
             _finish++;
             first++;
@@ -417,7 +417,7 @@ private:
         }
     }
 
-    std::string at_error (size_type pos)
+    std::string at_error (size_type pos) const
     {
         std::stringstream ss;
         ss << "vector::_M_range_check: __n (which is " << pos
@@ -425,6 +425,17 @@ private:
         return (ss.str ());
     }
 
+    template <class InputIterator>
+    size_t range_difference(InputIterator first, InputIterator last)
+    {
+        size_t range_diff = 0;
+        while (first != last)
+        {
+            ++first;
+            ++range_diff;
+        }
+        return range_diff;
+    }
     /* ---------------------------- Member Variables
      * ---------------------------- */
     pointer _start;
