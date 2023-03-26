@@ -26,8 +26,9 @@ template <class T1, class T2> struct pair
 
     pair& operator=( const pair& other )
     {
-        this->first = other->first;
-        this->second = other->second;
+        this->first = other.first;
+        this->second = other.second;
+        return *this;
     }
 }; // class pair
 
