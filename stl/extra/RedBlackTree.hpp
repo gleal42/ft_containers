@@ -180,17 +180,17 @@ struct RedBlackTree
 		return (add_node(nbr, location));
 	}
 
-	Node<T> *lower_bound( typename T::first_type nbr )
+	Node<T> *lower_bound( typename T::first_type key )
 	{
 		Node<T> *it = root;
 		Node<T> *not_less = NULL;
 		while (!is_null(it))
 		{
-			if (_cmp(nbr, it->data.first))
+			if (_cmp(key, it->data.first))
 			{
 				not_less = it;
 				it = it->left;
-			} else if (_cmp(it->data.first, nbr))
+			} else if (_cmp(it->data.first, key))
 			{
 				it = it->right;
 			} else
@@ -204,20 +204,38 @@ struct RedBlackTree
 	}
 	const Node<T> *lower_bound( typename T::first_type key ) const
 	{
-		return(lower_bound(key));
+		Node<T> *it = root;
+		Node<T> *not_less = NULL;
+		while (!is_null(it))
+		{
+			if (_cmp(key, it->data.first))
+			{
+				not_less = it;
+				it = it->left;
+			} else if (_cmp(it->data.first, key))
+			{
+				it = it->right;
+			} else
+				return it;
+		}
+		if (!not_less)
+		{
+			return _end;
+		}
+		return not_less;
 	}
 
-	Node<T> *upper_bound( typename T::first_type nbr )
+	Node<T> *upper_bound( typename T::first_type key )
 	{
 		Node<T> *it = root;
 		Node<T> *not_less = NULL;
 		while (!is_null(it))
 		{
-			if (_cmp(nbr, it->data.first))
+			if (_cmp(key, it->data.first))
 			{
 				not_less = it;
 				it = it->left;
-			} else if (_cmp(it->data.first, nbr))
+			} else if (_cmp(it->data.first, key))
 			{
 				it = it->right;
 			} else
@@ -231,7 +249,25 @@ struct RedBlackTree
 	}
 	const Node<T> *upper_bound( typename T::first_type key ) const
 	{
-		return(upper_bound(key));
+		Node<T> *it = root;
+		Node<T> *not_less = NULL;
+		while (!is_null(it))
+		{
+			if (_cmp(key, it->data.first))
+			{
+				not_less = it;
+				it = it->left;
+			} else if (_cmp(it->data.first, key))
+			{
+				it = it->right;
+			} else
+				break;
+		}
+		if (!not_less)
+		{
+			return _end;
+		}
+		return not_less;
 	}
 
 	Node<T> * add_node(T nbr, Node<T> *location)

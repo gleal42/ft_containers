@@ -99,6 +99,7 @@ struct map_const_bidirectional_iterator
 	typedef const T* pointer;
 	typedef typename std::ptrdiff_t difference_type;
 
+	map_const_bidirectional_iterator() : node_ptr(node_pointer()) {}
 	map_const_bidirectional_iterator(const node_pointer node) : node_ptr(node) {}
 	map_const_bidirectional_iterator(const map_const_bidirectional_iterator<T> &old_it)
 	    : node_ptr(old_it.node_ptr)

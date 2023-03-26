@@ -44,6 +44,20 @@ class map
 	typedef typename std::size_t size_type;
 	typedef typename std::ptrdiff_t difference_type;
 
+    class value_compare
+	: public std::binary_function<value_type, value_type, bool>
+	{
+		friend class map;
+		public:
+			bool operator () ( const value_type & lhs, const value_type & rhs ) const
+			{
+				return compare(lhs.first, rhs.first);
+			}
+		protected:
+			key_compare compare;
+			value_compare( key_compare comp ) : compare(comp) {}
+	};
+
 	map() : tree(), _map_alloc() {}
 
 	explicit map(const Compare &comp, const Allocator &alloc = Allocator())
@@ -250,6 +264,10 @@ class map
 	key_compare key_comp() const
 	{
 		return(tree._cmp);
+	}
+	value_compare value_comp() const
+	{
+		return value_compare(tree._cmp);
 	}
       private:
 	RedBlackTree<value_type, key_compare, Allocator> tree;
