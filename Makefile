@@ -30,8 +30,7 @@ SRCS := main.cpp \
 		test_rebind.cpp \
 		red_black_tree.cpp \
 		Compare.cpp \
-		all.cpp \
-		test_reverse_vector_iterator.cpp
+		all.cpp
 
 
 OBJS := $(SRCS:.cpp=.o)
