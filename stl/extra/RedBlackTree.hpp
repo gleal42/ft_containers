@@ -54,15 +54,11 @@ struct RedBlackTree
 		_node_alloc.construct(_end, Node<T>(T(), NULL));
 		_end->clr = Node<T>::BLACK;
 	}
-
 	void destroy_nodes()
 	{
 		Node<T> **it = &root;
 		if (is_null(root))
 		{
-			_node_alloc.destroy(_end);
-			_node_alloc.deallocate(_end, 1);
-			_end = NULL;
 			return;
 		}
 
