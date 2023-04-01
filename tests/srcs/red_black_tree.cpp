@@ -17,25 +17,25 @@ void test_red_black_tree()
 {
 	std::less<int> cmp;
 	RedBlackTree<std::pair<int, int>, std::less<int>, std::allocator<int> > tree(cmp);
-	tree.add_node(std::pair<int, int>(5, 5));
+	tree.find_add_node_is_in_tree(std::pair<int, int>(5, 5));
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
-	tree.add_node(std::pair<int, int>(2, 2));
+	tree.find_add_node_is_in_tree(std::pair<int, int>(2, 2));
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
-	tree.add_node(std::pair<int, int>(10, 10));
+	tree.find_add_node_is_in_tree(std::pair<int, int>(10, 10));
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
-	tree.add_node(std::pair<int, int>(8, 8));
+	tree.find_add_node_is_in_tree(std::pair<int, int>(8, 8));
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
-	tree.add_node(std::pair<int, int>(12, 12));
+	tree.find_add_node_is_in_tree(std::pair<int, int>(12, 12));
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
-	tree.add_node(std::pair<int, int>(6, 6));
+	tree.find_add_node_is_in_tree(std::pair<int, int>(6, 6));
 	tree.print(tree.root, "ROOT", "");
 	std::cout << "\n\n";
-	tree.add_node(std::pair<int, int>(9, 9));
+	tree.find_add_node_is_in_tree(std::pair<int, int>(9, 9));
 	tree.print(tree.root, "ROOT", "");
 
 	std::cout << "After 2 comes [" << tree.find_node(2)->next()->data.first

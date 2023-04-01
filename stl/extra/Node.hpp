@@ -75,7 +75,7 @@ template <typename T> struct Node
 			ptr = ptr_parent;
 			ptr_parent = ptr->parent;
 		}
-		return parent;
+		return ptr_parent;
 	}
 
 	const Node<T> *const_prev() const
@@ -90,7 +90,7 @@ template <typename T> struct Node
 			ptr = ptr_parent;
 			ptr_parent = ptr->parent;
 		}
-		return parent;
+		return ptr_parent;
 	}
 
 	Node<T> *next()
