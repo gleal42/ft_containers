@@ -72,7 +72,7 @@ class map
 	{
 		for (InputIt copy_it = first; copy_it != last; copy_it++)
 		{
-			tree.add_node(*copy_it);
+			tree.find_add_node_is_in_tree(*copy_it);
 		}
 	}
 	map(const map &x) : tree(x.tree._cmp), _map_alloc(x._map_alloc)
@@ -80,7 +80,7 @@ class map
 		for (const_iterator copy_it = x.begin(); copy_it != x.end();
 		     copy_it++)
 		{
-			tree.add_node(*copy_it);
+			tree.find_add_node_is_in_tree(*copy_it);
 		}
 	}
 	// Dealloc and destroy done automatically in RBT destructor
@@ -92,7 +92,7 @@ class map
 		for (const_iterator copy_it = other.begin();
 		     copy_it != other.end(); copy_it++)
 		{
-			tree.add_node(*copy_it);
+			tree.find_add_node_is_in_tree(*copy_it);
 		}
 		return *this;
 	}
@@ -120,7 +120,7 @@ class map
 		if (found_node == NULL || found_node == tree._end)
 		{
 			value_type temp = ft::pair<const Key, T>(key, T());
-			tree.add_node(temp);
+			tree.find_add_node_is_in_tree(temp);
 			return (tree.find_node(key)->data.second);
 		}
 		return found_node->data.second;
@@ -160,17 +160,20 @@ class map
 		tree.destroy_nodes();
 	}
 
-	void insert(const value_type &value) { tree.add_node(value); }
+	pair<iterator,bool> insert(const value_type &value)
+	{
+		return (tree.find_add_node_is_in_tree(value));
+	}
 	iterator insert( iterator pos, const value_type& value )
 	{
-		return (tree.add_node(pos, value));
+		return (tree.find_add_node_hint(pos, value));
 	}
 	template< class InputIt >
 	void insert( InputIt first, InputIt last )
 	{
 		while (first != last)
 		{
-			tree.add_node(*first);
+			tree.find_add_node_is_in_tree(*first);
 			first++;
 		}
 	}

@@ -19,6 +19,7 @@
 #include "Node.hpp"
 #include "map_iterator.hpp"
 #include "rebind.hpp"
+#include "pair.hpp"
 
 // TODO: remove last from node so that max_size() is correct
 
@@ -168,14 +169,6 @@ struct RedBlackTree
 		return find_location_node(root, nbr);
 	}
 
-	Node<T> *add_node(T nbr)
-	{
-		Node<T> *location = find_location_node(nbr.first);
-		if (location != NULL && location->data == nbr)
-			return location;
-		return (add_node(nbr, location));
-	}
-
 	Node<T> *lower_bound( typename T::first_type key )
 	{
 		Node<T> *it = root;
@@ -266,7 +259,20 @@ struct RedBlackTree
 		return not_less;
 	}
 
-	Node<T> * add_node(T nbr, Node<T> *location)
+	ft::pair<Node<T> *,bool> find_add_node_is_in_tree(T node)
+	{
+		Node<T> *location = find_location_node(node.first);
+		bool already_exists = false;
+		if (!is_null(location) && location->data.first == node.first)
+		{
+			already_exists = true;
+			if (location->data == node)
+				return ft::make_pair(location, !already_exists);
+		}
+		return ft::make_pair(update_node(node, location), !already_exists);
+	}
+
+	Node<T> * update_node(T nbr, Node<T> *location)
 	{
 		if (is_null(location))
 		{
@@ -293,14 +299,20 @@ struct RedBlackTree
 		return location;
 	}
 
-	Node<T> * add_node(iterator hint, const T& value)
+	// if hint is too low in subtrees we try to find location from root
+
+	Node<T> * find_add_node_hint(iterator hint, const T& value)
 	{
 		Node<T> *location = find_location_node(hint.node_ptr, value.first);
-		if (is_null(location))
+		if (is_null(location) || location->data.first != value.first)
 		{
-			return(add_node(value));
+			return(find_add_node_is_in_tree(value).first);
 		}
-		return(add_node(value, location));
+		if (location != NULL && location->data == value)
+		{
+			return location;
+		}
+		return(update_node(value, location));
 	}
 
 	void update_end(Node<T> *last)
