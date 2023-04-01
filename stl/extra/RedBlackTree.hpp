@@ -332,8 +332,15 @@ struct RedBlackTree
 		delete_node(to_delete.node_ptr);
 	}
 
+	// print(root, "ROOT", "");
 	void delete_node(Node<T> * to_delete)
 	{
+		bool is_last_node = is_last(to_delete);
+		Node<T> *new_last = NULL;
+		if (is_last_node)
+		{
+			new_last = to_delete->prev();
+		}
 		Node<T> *y = to_delete;
 		Node<T> *x;
 		typename Node<T>::Color y_color = y->clr;
@@ -367,11 +374,13 @@ struct RedBlackTree
 			y->left->parent = y;
 			y->clr = to_delete->clr;
 		}
-		if (is_last(to_delete))
+		if (is_last_node)
 		{
-			Node<T> *new_last = to_delete->prev();
 			_end->parent = new_last;
-			new_last->right = _end;
+			if (new_last)
+			{
+				new_last->right = _end;
+			}
 		}
 		_node_alloc.destroy(to_delete);
 		_node_alloc.deallocate(to_delete, 1);
@@ -632,7 +641,7 @@ struct RedBlackTree
 
 	bool is_last(node_pointer ptr)
 	{
-		return (!is_null(root) && ptr == root->maximum_subtree());
+		return (!is_null(root) && ptr == maximum(root));
 	}
 	bool empty() const { return (root == NULL); }
 	size_t size() const { return (count(root)); }
