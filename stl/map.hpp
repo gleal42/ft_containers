@@ -18,6 +18,8 @@
 #include "pair.hpp"
 #include "reverse_iterator.hpp"
 #include <memory>
+#include "equal.hpp"
+#include "lexicographical_compare.hpp"
 
 namespace ft {
 
@@ -235,27 +237,27 @@ class map
 	{
 		return tree.upper_bound(key);
 	}
-	ft::pair<iterator,iterator> equal_range( const Key& key )
+	pair<iterator,iterator> equal_range( const Key& key )
 	{
 		iterator upper = tree.upper_bound(key);
 		if (upper == tree.begin())
-			return ft::pair<iterator,iterator>(upper, upper);
+			return pair<iterator,iterator>(upper, upper);
 		iterator lower = upper;
 		--lower;
 		if (lower->first == key)
-			return ft::pair<iterator,iterator>(lower, upper);
-		return ft::pair<iterator,iterator>(upper, upper);
+			return pair<iterator,iterator>(lower, upper);
+		return pair<iterator,iterator>(upper, upper);
 	}
-	ft::pair<const_iterator,const_iterator> equal_range( const Key& key ) const
+	pair<const_iterator,const_iterator> equal_range( const Key& key ) const
 	{
 		const_iterator upper = tree.upper_bound(key);
 		if (upper == tree.begin())
-			return ft::pair<const_iterator,const_iterator>(upper, upper);
+			return pair<const_iterator,const_iterator>(upper, upper);
 		const_iterator lower = upper;
 		--lower;
 		if (lower->first == key)
-			return ft::pair<const_iterator,const_iterator>(lower, upper);
-		return ft::pair<const_iterator,const_iterator>(upper, upper);
+			return pair<const_iterator,const_iterator>(lower, upper);
+		return pair<const_iterator,const_iterator>(upper, upper);
 	}
 	key_compare key_comp() const
 	{
@@ -269,6 +271,49 @@ class map
 	RedBlackTree<value_type, key_compare, Allocator> tree;
 	Allocator _map_alloc;
 }; // class map
+
+// return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), compare_utils::Equal());
+template< class Key, class T, class Compare, class Alloc >
+bool operator==( const map<Key, T, Compare, Alloc>& lhs,
+                 const map<Key, T, Compare, Alloc>& rhs )
+{
+	return (lhs.size() == rhs.size() && equal(lhs.begin(), lhs.end(), rhs.begin()));
+}
+
+template< class Key, class T, class Compare, class Alloc >
+bool operator!=( const map<Key, T, Compare, Alloc>& lhs,
+                 const map<Key, T, Compare, Alloc>& rhs )
+{
+	return !(lhs == rhs);
+}
+
+template< class Key, class T, class Compare, class Alloc >
+bool operator<( const map<Key, T, Compare, Alloc>& lhs,
+                const map<Key, T, Compare, Alloc>& rhs )
+{
+	return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template< class Key, class T, class Compare, class Alloc >
+bool operator>( const map<Key, T, Compare, Alloc>& lhs,
+                const map<Key, T, Compare, Alloc>& rhs )
+{
+	return (rhs < lhs);
+}
+
+template< class Key, class T, class Compare, class Alloc >
+bool operator<=( const map<Key, T, Compare, Alloc>& lhs,
+                 const map<Key, T, Compare, Alloc>& rhs )
+{
+	return !(lhs > rhs);
+}
+
+template< class Key, class T, class Compare, class Alloc >
+bool operator>=( const map<Key, T, Compare, Alloc>& lhs,
+                 const map<Key, T, Compare, Alloc>& rhs )
+{
+	return !(lhs < rhs);
+}
 
 } // namespace ft
 
