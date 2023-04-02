@@ -13,7 +13,7 @@
 #ifndef STACK_HPP
 # define STACK_HPP
 
-#include "all.hpp"
+#include "vector.hpp"
 
 /* 
     Requirements to be added:
@@ -24,7 +24,7 @@
 
 namespace ft
 {
-    template<class T, class Container = std::deque<T> > class stack
+    template<class T, class Container = vector<T> > class stack
     {
         private:
 
