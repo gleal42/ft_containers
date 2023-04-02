@@ -47,6 +47,7 @@ namespace ft
 		Reverse_Iterator& operator=( const Reverse_Iterator<U>& other )
 		{
 			base_iterator = other.base();
+			return *this;
 		}
 		iterator_type base() const
 		{
