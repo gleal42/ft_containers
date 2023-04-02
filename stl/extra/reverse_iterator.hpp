@@ -39,7 +39,7 @@ namespace ft
 		
 		/* ------------------------------ CONSTRUCTORS ------------------------------ */
 				  
-		Reverse_Iterator( void ) : base_iterator(pointer()) {}
+		Reverse_Iterator( void ) : base_iterator() {}
 		explicit Reverse_Iterator( iterator_type x ) : base_iterator(x) {}
 		template< class U >
 		Reverse_Iterator( const Reverse_Iterator<U>& other ) : base_iterator(other.base()) {}
