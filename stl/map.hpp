@@ -116,14 +116,7 @@ class map
 	}
 	T &operator[](const Key &key)
 	{
-		Node<value_type> *found_node = tree.find_node(key);
-		if (found_node == NULL || found_node == tree._end)
-		{
-			value_type temp = ft::pair<const Key, T>(key, T());
-			tree.find_add_node_is_in_tree(temp);
-			return (tree.find_node(key)->data.second);
-		}
-		return found_node->data.second;
+		return (tree.find_value_for_key(key));
 	}
     // Iterators 
 	iterator begin() { return tree.begin(); }

@@ -259,6 +259,16 @@ struct RedBlackTree
 		return not_less;
 	}
 
+	typename T::second_type &find_value_for_key(typename T::first_type key)
+	{
+		Node<T> *location = find_location_node(key);
+		if (!is_null(location) && location->data.first == key)
+		{
+			return location->data.second;
+		}
+		return update_node(T(key, typename T::second_type()), location)->data.second;
+	}
+
 	ft::pair<Node<T> *,bool> find_add_node_is_in_tree(T node)
 	{
 		Node<T> *location = find_location_node(node.first);
@@ -271,6 +281,9 @@ struct RedBlackTree
 		}
 		return ft::make_pair(update_node(node, location), !already_exists);
 	}
+
+	// if check which find_nodes can be deleted
+	// (get location from construct node)
 
 	Node<T> * update_node(T nbr, Node<T> *location)
 	{
@@ -285,7 +298,7 @@ struct RedBlackTree
 		{
 			location->left = _node_alloc.allocate(1);
 			construct_node(location->left, nbr, location);
-			return location->left;
+			return find_node(nbr.first);
 		} else if (_cmp(location->data.first, nbr.first))
 		{
 			location->right = _node_alloc.allocate(1);
@@ -294,9 +307,9 @@ struct RedBlackTree
 			{
 				update_end(location->right);
 			}
-			return location->right;
+			return find_node(nbr.first);
 		}
-		return location;
+		return find_node(nbr.first);
 	}
 
 	// if hint is too low in subtrees we try to find location from root
