@@ -378,6 +378,23 @@ void test_modifiers()
 		std::cout << "it->first " << it->first << std::endl;
 		std::cout << "it->second " << it->second << std::endl;
 	}
+
+	std::cout << "\n---	quick test for iterator validation ---" << std::endl;
+
+	ft::map<char, int> validated_map;
+	validated_map.insert(a);
+
+	ft::map<char, int>::iterator val_it = validated_map.begin();
+	validated_map.insert(d);
+	validated_map.insert(e);
+	ft::map<char, int>::iterator e_fst = validated_map.find(e.first);
+	validated_map.erase(e_fst);
+	validated_map.insert(c);
+	validated_map.insert(b);
+	for (;val_it != validated_map.end();val_it++)
+	{
+		std::cout << val_it->first << std::endl;
+	}
 }
 
 void test_lookup()
