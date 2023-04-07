@@ -12,17 +12,14 @@
 
 #include "all.hpp"
 
-// Apagarrr
-#include <map>
-
 void test_stack_gen()
 {
 	ft::stack<int> stack_int;
 	stack_int.push(2);
 	const ft::stack<int> stack_int_cpy(stack_int);
 
-	std::deque<int>::reference ref_top = stack_int.top();
-	std::deque<int>::const_reference cref_top = stack_int_cpy.top();
+	ft::vector<int>::reference ref_top = stack_int.top();
+	ft::vector<int>::const_reference cref_top = stack_int_cpy.top();
 	std::cout << "Original top " << ref_top << std::endl;
 	std::cout << "Copy top " << cref_top << std::endl;
 
@@ -69,18 +66,18 @@ void	test_stack_mem_types()
 
 void test_stack_class()
 {
-	ft::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;	
+	ft::stack<Buffer, ft::vector<Buffer> > stack_deq_buffer;
 }
 
 // Not possible to use push using stack from standard library because map has no push_back
 
 void test_stack_map()
 {
-	std::map<std::string, int> map1;
+	ft::map<std::string, int> map1;
 	map1["something"] = 69;
 	map1["anything"] = 199;
 	map1["that thing"] = 50;
-	ft::stack<std::map<std::string, int>::value_type, std::map<std::string, int> > stack_map_buffer(map1);
+	ft::stack<ft::map<std::string, int>::value_type, ft::map<std::string, int> > stack_map_buffer(map1);
 	// stack_map_buffer.push(4);
 }
 

@@ -13,13 +13,12 @@
 #ifndef MAP_HPP
 #define MAP_HPP
 
-#include "RedBlackTree.hpp"
-#include "iterator_traits.hpp"
-#include "pair.hpp"
-#include "reverse_iterator.hpp"
+#include "extra/RedBlackTree.hpp"
+#include "extra/pair.hpp"
+#include "extra/reverse_iterator.hpp"
 #include <memory>
-#include "equal.hpp"
-#include "lexicographical_compare.hpp"
+#include "extra/equal.hpp"
+#include "extra/lexicographical_compare.hpp"
 
 namespace ft {
 

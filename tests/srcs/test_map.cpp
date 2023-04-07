@@ -554,8 +554,6 @@ void test_observers()
         else if (after)
             std::cout << ") goes after key 100\n";
     }
-
-	std::cout << "\n---	std::map::value_compare value_comp() const; ---" << std::endl;
 }
 
 void test_comparators()

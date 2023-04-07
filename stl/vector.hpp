@@ -13,12 +13,11 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#include "enable_if.hpp"
-#include "vector_iterator.hpp"
-#include "reverse_iterator.hpp"
+#include "extra/enable_if.hpp"
+#include "extra/vector_iterator.hpp"
+#include "extra/reverse_iterator.hpp"
 #include <memory>
 #include <sstream>
-#include <typeinfo>
 
 namespace ft
 {
@@ -264,8 +263,6 @@ class vector
         return (ret_val);
     }
 
-    // TODO: T must meet the requirements of CopyInsertable in order to use
-    // overload (1).
     void push_back (const T &value) { insert (end (), 1, value); }
 
     void pop_back () { erase (end () - 1); }
