@@ -11,8 +11,8 @@
 # **************************************************************************** #
 
 CXX := c++
-CXXFLAGS := -Wall -Wextra -Werror -std=c++98 -g  -fsanitize=address
-CPPFLAGS := -Istl -Itests/inc -Istl/extra -g -fsanitize=address
+CXXFLAGS := -Wall -Wextra -Werror -std=c++98
+CPPFLAGS := -Istl -Itests/inc -Istl/extra
 FT := -DFT=1
 STD := -DFT=0
 
@@ -84,4 +84,4 @@ resetclean: fclean clean
 
 re: fclean all
 
-.PHONY: all debug clean fclean resetclean re debug_ft debug_std CXXFLAGS+=-DDEBUG
+.PHONY: all debug clean fclean resetclean re
