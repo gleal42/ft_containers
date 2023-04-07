@@ -14,9 +14,6 @@
 #define VECTOR_HPP
 
 #include "enable_if.hpp"
-#include "is_const.hpp"
-#include "macros.hpp"
-#include "utils.hpp"
 #include "vector_iterator.hpp"
 #include "reverse_iterator.hpp"
 #include <memory>
@@ -55,19 +52,12 @@ class vector
     explicit vector (const allocator_type &alloc = allocator_type ())
         : _start (0), _finish (0), _end_of_storage (0), _alloc (alloc)
     {
-        LOG ("default constructor called for vector of type ["
-             << typeid (T).name () << "]" << std::endl);
-        LOG ((is_const<T>::value ? "It IS constant " : "It is NOT constant")
-             << std::endl);
     }
 
     explicit vector (size_type n, const value_type &val = value_type (),
                      const allocator_type &alloc = allocator_type ())
         : _alloc (alloc)
     {
-        LOG ("fill constructor called" << std::endl);
-        LOG ((is_const<T>::value ? "It IS constant " : "It is NOT constant")
-             << std::endl);
         alloc_empty (n);
         set_contents (n, val);
     }
@@ -77,26 +67,17 @@ class vector
             typename enable_if<!is_integral<InputIterator>::value>::type * = 0)
         : _alloc (alloc)
     {
-        LOG ("range constructor called" << std::endl);
-        // LOG( (is_const<T>::value ? "It IS constant " : "It is NOT constant")
-        // << std::endl);
         alloc_empty (range_difference(first, last));
         copy_contents_range_to_end (first, last);
     }
     vector (const vector &other)
     {
-        LOG ("copy constructor called" << std::endl);
-        LOG ((is_const<T>::value ? "It IS constant " : "It is NOT constant")
-             << std::endl);
         alloc_empty (other.size ());
         copy_contents_range_to_end (other.begin (), other.end ());
     }
 	/* ------------------------------ (destructor) ------------------------------ */
     ~vector ()
     {
-        LOG ("destructor called" << std::endl);
-        LOG ((is_const<T>::value ? "It IS constant " : "It is NOT constant")
-             << std::endl);
         destroy_contents ();
         dealloc ();
     }
@@ -104,8 +85,6 @@ class vector
     // TODO: Test with empty vector before
     vector &operator= (const vector &x)
     {
-        LOG ("Assignment operator called" << std::endl);
-        LOG ((is_const<T>::value ? "It IS constant " : "It is NOT constant"));
         destroy_contents ();
         if (x.size () > capacity ()) {
             dealloc ();
@@ -117,7 +96,6 @@ class vector
 
     void assign (size_type count, const T &value)
     {
-        LOG ("Assign(size_type count, const T& value) called" << std::endl);
         destroy_contents ();
         if (count > this->capacity ()) {
             dealloc ();
@@ -130,8 +108,6 @@ class vector
     void assign (InputIt first, InputIt last,
                  typename enable_if<!is_integral<InputIt>::value>::type * = 0)
     {
-        LOG ("assign( InputIt first, InputIt last) called" << std::endl);
-
         size_type count = range_difference(first, last);
         destroy_contents ();
         if (count > this->capacity ()) {
@@ -188,23 +164,19 @@ class vector
 	/* ---------------------------------- begin --------------------------------- */
     iterator begin ()
     {
-        LOG ("iterator begin() called" << std::endl);
         return (iterator (_start));
     }
     const_iterator begin () const
     {
-        LOG ("const_iterator begin() called" << std::endl);
         return (const_iterator (_start));
     }
 	/* ----------------------------------- end ---------------------------------- */
     iterator end ()
     {
-        LOG ("iterator end() called" << std::endl);
         return (iterator (_finish));
     }
     const_iterator end () const
     {
-        LOG ("const_iterator end() called" << std::endl);
         return (const_iterator (_finish));
     }
 

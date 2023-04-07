@@ -16,9 +16,6 @@
 #include "vector.hpp"
 
 /* 
-    Requirements to be added:
-    1 - It will use your vector class as default underlying container (Still need
-    to change)
     2 - Reference and Const reference not clear if 98
 */
 
@@ -36,16 +33,46 @@ namespace ft
             typedef typename Container::reference           reference;
             typedef typename Container::const_reference     const_reference;
     /* ---------------------------- Member Functions ---------------------------- */
-            explicit stack( const Container& cont = Container() );
-            stack( const stack& other );
-            // ~stack();
-            stack& operator=( const stack& other );
-            reference top();
-            const_reference top() const;
-            bool empty() const;
-            size_type size() const;
-            void push( const value_type& value );
-            void pop();
+            explicit stack( const Container& cont = Container() )
+            : c(cont)
+            {
+
+            }
+            stack( const stack& other )
+             : c(other.c)
+            {
+            }
+            ~stack()
+            {
+            }
+            stack& operator=( const stack& other )
+            {
+                this->c=other.c;
+            }
+            reference top()
+            {
+                return (this->c.back());
+            }
+            const_reference top() const
+            {
+                return (this->c.back());
+            }
+            bool empty() const
+            {
+                return (this->c.empty());
+            }
+            size_type size() const
+            {
+                return (this->c.size());
+            }
+            void push( const value_type& value )
+            {
+                this->c.push_back(value);
+            }
+            void pop()
+            {
+                this->c.pop_back();
+            }
     /* --------------------------------- Friends -------------------------------- */
             template<class T1, class Container1>
             friend bool operator==( const stack<T1,Container1>& lhs, const stack<T1,Container1>& rhs );
@@ -63,61 +90,6 @@ namespace ft
             protected:
                 Container c;
     };
-
-    template<class T, class Container>
-    stack<T, Container>::stack(const Container& cont) : c(cont)
-    {
-    }
-
-    template<class T, class Container>
-    stack<T, Container>::stack( const stack& other ) : c(other.c)
-    {
-    }
-
-    template<class T, class Container>
-    stack<T, Container>& stack<T, Container>::operator=( const stack<T, Container> &other)
-    {
-        this->c=other.c;
-    }
-
-    template<class T, class Container>
-    typename stack<T, Container>::reference stack<T, Container>::top()
-    {
-        // std::cout << "ref_top" << std::endl;
-        return (this->c.back());
-    }
-
-    template<class T, class Container>
-    typename stack<T, Container>::const_reference stack<T, Container>::top() const
-    {
-        // std::cout << "cref_top" << std::endl;
-        return (this->c.back());
-    }
-
-    template<class T, class Container>
-    void stack<T, Container>::push(const value_type& value)
-    {
-        this->c.push_back(value);
-    }
-
-
-    template<class T, class Container>
-    bool stack<T, Container>::empty() const
-    {
-        return (this->c.empty());
-    }
-
-    template<class T, class Container>
-    typename stack<T, Container>::size_type stack<T, Container>::size() const
-    {
-        return (this->c.size());
-    }
-
-    template<class T, class Container>
-    void stack<T, Container>::pop()
-    {
-        this->c.pop_back();
-    }
 
     template< class T, class Container >
     bool operator==( const stack<T,Container>& lhs, const stack<T,Container>& rhs )

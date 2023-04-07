@@ -11,10 +11,6 @@ template <class T> struct map_bidirectional_iterator
 	public:
 	/* ------------------------------ Member Types *
 	 * ------------------------------ */
-	template<typename> friend class CompareHelper;
-	template<typename> friend class FindHelper;
-	template<typename> friend struct map_const_bidirectional_iterator;
-
 	typedef std::bidirectional_iterator_tag iterator_category;
 	typedef T value_type;
 	typedef T* pointer;
@@ -145,57 +141,6 @@ struct map_const_bidirectional_iterator
 	// DATA
 	node_pointer node_ptr;
 };
-
-/* 
-Friend compare helper class to be able to access private node_ptr indirectly
-if user tries to create Compare Helper it will not be possible to redifine
-This way we prevent having many operator overloader methods
-HOWEVER: The following would be impossible:
-insert with hint they give us the iterator and we need to check if Node is correct
-erase with iterators (we can't just have access to data pointer,
-we need to access node in order to use de deallocate)
-and we would need the Node<ptr> which would be private
-
-template<typename T>
-class CompareHelper
-{
-	public:
-	typename map_const_bidirectional_iterator<T>::node_pointer m_first;
-	typename map_const_bidirectional_iterator<T>::node_pointer m_second;
-
-	CompareHelper(const map_bidirectional_iterator<T> &a,
-		const map_bidirectional_iterator<T> &b)
-		: m_first(a.node_ptr), m_second(b.node_ptr)
-	{
-
-	}
-	CompareHelper(const map_bidirectional_iterator<T> &a,
-		const map_const_bidirectional_iterator<T> &b)
-		: m_first(a.node_ptr), m_second(b.node_ptr)
-	{
-
-	}
-	CompareHelper(const map_const_bidirectional_iterator<T> &a,
-		const map_bidirectional_iterator<T> &b)
-		: m_first(a.node_ptr), m_second(b.node_ptr)
-	{
-
-	}
-	CompareHelper(const map_const_bidirectional_iterator<T> &a,
-		const map_const_bidirectional_iterator<T> &b)
-		: m_first(a.node_ptr), m_second(b.node_ptr)
-	{
-
-	}
-	bool equal() const
-	{
-		return m_first==m_second;
-	}
-	bool different() const
-	{
-		return !equal();
-	}
-}; */
 
 template <class T>
 bool operator==(const map_bidirectional_iterator<T> &a,

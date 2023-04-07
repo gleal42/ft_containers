@@ -272,7 +272,6 @@ class map
 	Allocator _map_alloc;
 }; // class map
 
-// return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end(), compare_utils::Equal());
 template< class Key, class T, class Compare, class Alloc >
 bool operator==( const map<Key, T, Compare, Alloc>& lhs,
                  const map<Key, T, Compare, Alloc>& rhs )
