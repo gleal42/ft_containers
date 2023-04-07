@@ -591,5 +591,5 @@ void test_map()
 	test_lookup();
 	test_bounds();
 	test_observers();
-	// map_test_42();
+	map_test_42();
 }

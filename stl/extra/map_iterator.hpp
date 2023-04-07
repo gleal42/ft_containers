@@ -83,10 +83,6 @@ template <class T> struct map_bidirectional_iterator
 template <class T>
 struct map_const_bidirectional_iterator
 {
-	template<typename> friend class CompareHelper;
-	template<typename> friend class FindHelper;
-	template<typename> friend struct map_bidirectional_iterator;
-
 	typedef std::bidirectional_iterator_tag iterator_category;
 	typedef const Node<T> node;
 	typedef node *node_pointer;
