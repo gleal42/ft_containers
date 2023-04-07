@@ -558,6 +558,32 @@ void test_observers()
 	std::cout << "\n---	std::map::value_compare value_comp() const; ---" << std::endl;
 }
 
+void test_comparators()
+{
+	ft::map<int, char> comp_map;
+	ft::pair<int, char> a(1, 'a');
+	ft::pair<int, char> b(2, 'b');
+	ft::pair<int, char> c(3, 'c');
+	ft::pair<int, char> d(4, 'd');
+	ft::pair<int, char> e(5, 'e');
+	comp_map.insert(a);
+	comp_map.insert(b);
+	comp_map.insert(c);
+	comp_map.insert(d);
+	comp_map.insert(e);
+
+	ft::map<int, char> other_map(comp_map);
+	
+	other_map.erase(--other_map.end());
+
+	std::cout << "Maps equal?" << (comp_map==other_map)  << std::endl;
+	std::cout << "Maps different?" << (comp_map!=other_map)  << std::endl;
+	std::cout << "Maps less?" << (comp_map<other_map)  << std::endl;
+	std::cout << "Maps less equal?" << (comp_map<=other_map)  << std::endl;
+	std::cout << "Maps greater?" << (comp_map>other_map)  << std::endl;
+	std::cout << "Maps greater equal?" << (comp_map>=other_map)  << std::endl;
+}
+
 void map_test_42()
 {
 	// 42 test
@@ -591,5 +617,6 @@ void test_map()
 	test_lookup();
 	test_bounds();
 	test_observers();
+	test_comparators();
 	map_test_42();
 }
