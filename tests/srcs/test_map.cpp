@@ -554,6 +554,20 @@ void test_observers()
         else if (after)
             std::cout << ") goes after key 100\n";
     }
+
+	std::cout << "\n---	value_compare value_comp() const; ---" << std::endl;
+
+	ft::map<char,int> mymap;
+	mymap['x']=1001;
+	mymap['y']=2002;
+	mymap['z']=3003;
+	std::cout << "mymap contains:\n";
+	ft::pair<char,int> highest = *mymap.rbegin();
+	ft::map<char,int>::iterator it = mymap.begin();
+	while (mymap.value_comp()(*it++, highest))
+	{
+		std::cout << it->first << " => " << it->second << '\n';
+	}
 }
 
 void test_comparators()

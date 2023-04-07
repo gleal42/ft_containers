@@ -565,6 +565,8 @@ void	vector_swap()
 	vec_1.push_back(3);
 	print_stats(vec_1);
 
+	ft::vector<int>::iterator it_vec1 = vec_1.begin();
+
 	std::cout << "--------------------" << std::endl;
 	std::cout << "VECTOR 2 before SWAP" << std::endl;
 	std::cout << "--------------------" << std::endl;
@@ -578,6 +580,12 @@ void	vector_swap()
 	print_stats(vec_1);
 	std::cout << "VECTOR 2 after swap" << std::endl;
 	print_stats(vec_2);
+
+	std::cout << (it_vec1 == vec_2.begin()) << std::endl;
+	ft::vector<int>::iterator vec2 = vec_2.begin();
+	ft::vector<int>::const_iterator const_it_vec1 = it_vec1;
+
+	std::cout << (const_it_vec1 == vec2) << std::endl;
 }
 
 void vector_external_swap()
@@ -686,10 +694,6 @@ void	vector_reverse_iterator()
 		std::cout << *rev_it << std::endl;
 	}
 }
-
-/**
- * TODO: Test Destructor somehow. Maybe call manually?
- */
 
 void vector_custom_tests()
 {
