@@ -269,12 +269,26 @@ class vector
 
     void resize (size_type n, value_type val = value_type ())
     {
-        while (n < size ()) {
-            _alloc.destroy (_finish);
-            _finish--;
+        if (n < size())
+        {
+            while (n < size ()) {
+                _alloc.destroy (_finish);
+                _finish--;
+            }
         }
-        if (n > capacity ())
-            set_capacity (n);
+        else if (n > size ())
+        {
+            if (n > (size() * 2))
+                set_capacity (n);
+            else
+                {
+                    size_type i = n - size();
+                    for (; i > 0; i--) {
+                        this->push_back(val);
+                    }
+                }
+
+        }
         set_contents (n - size (), val);
     }
     void swap (vector &other)
@@ -323,6 +337,9 @@ private:
     }
     void set_capacity (size_t n)
     {
+        if (n > max_size()){
+            throw std::length_error("vector::reserve");
+        }
         pointer new_start = _alloc.allocate (n);
         pointer new_finish = new_start;
         const_pointer iterate_current = _start;

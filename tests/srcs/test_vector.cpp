@@ -697,9 +697,7 @@ void vector_custom_tests()
 	vector_fill_constructor();
 	vector_range_constructor();
 	vector_copy_constructor();
-
 	vector_assignment_operator();
-
 	vector_assign();
 	vector_insert();
 	vector_clear();
@@ -707,18 +705,9 @@ void vector_custom_tests()
 	vector_pop_back();
 	vector_resize();
 	vector_swap();
-	
-	// (destructor)
-	// ~vector();
-
 	vector_external_swap();
 	vector_comparisons();
 	vector_reverse_iterator();
-
-	// Iterators
-	// iterator begin();
-
-	// const_iterator begin() const;
 }
 
 int test_vector()
@@ -726,7 +715,6 @@ int test_vector()
 	std::cout << "\nRunning custom tests\n" << std::endl;
 	vector_custom_tests();
 	// main from 42
-	// test_vec_42();
-	// test_vector_iterator();
+	test_vec_42();
 	return (0);
 }
