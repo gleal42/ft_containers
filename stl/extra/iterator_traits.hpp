@@ -16,8 +16,6 @@
 #include <cstddef>
 #include <iterator>
 
-// Criar testes a usar std::distance/std::advance para provar a utilidade dos tags
-
 namespace ft
 {
     /* ---------------------------------- Tags ---------------------------------- */
