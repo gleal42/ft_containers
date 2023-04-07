@@ -26,12 +26,12 @@ int main(int argc, char** argv) {
 	}
 	const int seed = atoi(argv[1]);
 	srand(seed);
-	// test_stack();
-	// test_vector();
-	// test_red_black_tree();
-	// test_pair();
+	test_stack();
+	test_vector();
+	test_red_black_tree();
+	test_pair();
 	test_map();
-	// test_rebind();
+	test_rebind();
 	
 	return (0);
 }
